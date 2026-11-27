@@ -1,6 +1,6 @@
 # RC Riding Club
 
-Jogo de motas em pixel art ao estilo GTA 2: uma cidade de Londres com o Tamisa, missões do clube nas cabines telefónicas, polícia, corridas contra os Big Bikes Only, garagem com 19 motas (de 125cc a 2458cc, marcas fictícias) e mini-jogos 3D (oficina, bombas, café e arrancada).
+Jogo de motas em pixel art ao estilo GTA 2: Londres com o Tamisa e mais 10 cidades pela autoestrada M1 (Luton, Peterborough, Corby, Sutton Bridge, Kettering, Harlow, Lincoln, High Wycombe, Wisbech e Watford), 20 membros do clube com missões próprias, 3 saves, missões do clube nas cabines telefónicas, polícia, corridas contra os Big Bikes Only, garagem com 19 motas (de 125cc a 2458cc, marcas fictícias) e mini-jogos 3D (oficina, bombas, café e arrancada).
 
 ## Onde está cada coisa
 - **Jogo:** `www/index.html` + `www/three.min.js`.
