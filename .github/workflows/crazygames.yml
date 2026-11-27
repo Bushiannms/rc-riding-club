@@ -10,13 +10,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Juntar o SDK da CrazyGames e criar o ZIP
+      - name: Criar as versoes Basic Launch (sem anuncios) e Full Launch (com anuncios)
         run: |
-          mkdir -p out
-          cp www/three.min.js out/
-          sed 's#<link rel="preconnect" href="https://fonts.googleapis.com">#<script src="https://sdk.crazygames.com/crazygames-sdk-v3.js"></script>\n<link rel="preconnect" href="https://fonts.googleapis.com">#' www/index.html > out/index.html
-          grep -q crazygames-sdk-v3 out/index.html
+          mkdir -p basic full
+          for d in basic full; do cp www/three.min.js $d/; sed 's#<link rel="preconnect" href="https://fonts.googleapis.com">#<script src="https://sdk.crazygames.com/crazygames-sdk-v3.js"></script>\n<link rel="preconnect" href="https://fonts.googleapis.com">#' www/index.html > $d/index.html; grep -q crazygames-sdk-v3 $d/index.html; done
+          sed -i 's#const CFG={ads:true,#const CFG={ads:false,#' basic/index.html
+          grep -q 'ads:false' basic/index.html
       - uses: actions/upload-artifact@v4
         with:
-          name: rc-riding-club-crazygames
-          path: out/
+          name: crazygames-basic-launch-sem-anuncios
+          path: basic/
+      - uses: actions/upload-artifact@v4
+        with:
+          name: crazygames-full-launch-com-anuncios
+          path: full/
