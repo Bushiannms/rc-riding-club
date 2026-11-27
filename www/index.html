@@ -100,6 +100,7 @@ body #slots .it{border-left-color:#ffd02a}
 body .ov.on{place-items:safe center}
 @media(max-height:520px){#logo{width:150px;margin-top:4px}body .panel h1{font-size:34px}}
 body .buy[disabled]{background:#3a443d}
+#nameIn{width:100%;font:700 22px 'Pixelify Sans',monospace;padding:10px;border:3px solid #000;background:#f2f2f2;color:#111;margin:6px 0;text-align:center}
 #pager.mini #pgTxt{display:none}
 body.ui-open .pad,body.ui-open #act,body.ui-open #offer,body.ui-open #gauge{display:none!important}
 @media(max-height:460px){#pager{top:auto;bottom:8px;width:min(46vw,420px)}}
@@ -148,7 +149,7 @@ body.ui-open .pad,body.ui-open #act,body.ui-open #offer,body.ui-open #gauge{disp
   <div id="info" class="ts"></div>
   <button class="hb" id="phoneB" type="button">📱</button>
   <button class="hb" id="menuB" type="button">Menu</button>
-  <button class="hb" id="zoomB" type="button">Zoom</button>
+  
 </div>
 <div id="pager" class="hide"><div class="pt"><span id="pgWho"></span><span id="pgTime"></span></div><div id="pgTxt"></div><div id="pgExtra"></div></div>
 <canvas id="gauge" class="hide" width="72" height="66"></canvas>
@@ -191,6 +192,7 @@ body.ui-open .pad,body.ui-open #act,body.ui-open #offer,body.ui-open #gauge{disp
   <button class="go alt" id="mSnd" type="button">Som: ligado</button>
   <button class="go alt" id="mSave" type="button">Gravar agora</button>
   <button class="go alt" id="mSlots" type="button">Mudar de save</button>
+  <button class="go alt" id="zoomB" type="button">Zoom: normal</button>
   <button class="go alt" id="mCtrl" type="button">Controlos: setas</button>
   <label id="sensL" style="display:block;margin:8px 0;font:700 15px 'Pixelify Sans',monospace;color:#fff"><span id="sensT">Sensibilidade a virar</span>: <b id="sensV">130%</b><input id="sens" type="range" min="50" max="250" step="10" value="130" style="width:100%;accent-color:#3f8f3b;height:28px"></label>
   <button class="go alt" id="mLang" type="button">Language: English</button>
@@ -214,9 +216,10 @@ body.ui-open .pad,body.ui-open #act,body.ui-open #offer,body.ui-open #gauge{disp
   <div id="tlist" class="items"></div>
   <button class="go alt" id="tClose" type="button">Ficar aqui</button>
 </div></div>
+<div class="ov" id="nameOv"><div class="panel"><h2>O teu nome</h2><p>Como te chamas no grupo do RC Riding Club?</p><input id="nameIn" maxlength="16" autocomplete="off" placeholder="Ex.: Ruben"><button class="go" id="nameOk" type="button">Começar</button></div></div>
 <div class="ov" id="dlg"><div class="panel"><p class="stat" id="dlgWho"></p><p id="dlgTxt" class="dlgT"></p><div id="dlgOpts"></div></div></div>
 <div class="ov" id="phone"><div class="panel phone">
-  <div class="phTop"><b>RC Phone</b><span id="phStat"></span></div>
+  <div class="phTop"><b id="phName">RC Phone</b><span id="phStat"></span></div>
   <div class="tabs" id="phTabs"><button class="tab" data-p="mis" type="button">Missões</button><button class="tab" data-p="grupo" type="button">Grupo</button><button class="tab" data-p="clube" type="button">Clube</button><button class="tab" data-p="hist" type="button">História</button><button class="tab" data-p="riv" type="button">Rivais</button><button class="tab" data-p="eats" type="button">RC Eats</button></div>
   <div id="phBody" class="items"></div>
   <div class="phRow"><button class="go alt" id="phMap" type="button">Mapa</button><button class="go alt" id="phTravel" type="button">Viajar</button></div>
@@ -278,7 +281,7 @@ const TR_P=[
 ["Versão de demonstração: na versão publicada aparece aqui um vídeo. A recompensa é dada no fim.","Demo version: the published game shows a video here. The reward is given at the end."],
 ["Escolhe o destino. A viagem gasta gasolina e o relógio anda.","Choose a destination. The trip uses fuel and time passes."],
 ["Mapa da cidade","City map"],["Gravar agora","Save now"],["Mudar de save","Switch save"],["Voltar à estrada","Back to the road"],["Ficar aqui","Stay here"],
-["Garagem do Tiago","Tiago's Garage"],["Oficina do Tiago","Tiago's Workshop"],["Som: ligado","Sound: on"],["Som: desligado","Sound: off"],["Missões","Missions"],["Grupo","Group"],["Clube","Club"],["História","Story"],["Rivais","Rivals"],["Viajar","Travel"],["Como jogar","How to play"],["Escolhe missões no telemóvel, desafia rivais, ganha libras, melhora a tua 125 na Garagem do Tiago e não percas o respeito da malta.","Pick missions on your phone, challenge rivals, earn pounds, upgrade your 125 at Tiago's Garage and don't lose the crew's respect."],["Pista de piões","Donut pad"],["Cavalinho","Wheelie"],["Desististe.","You gave up."],["Controlos: setas","Controls: arrows"],["Sensibilidade a virar","Steering sensitivity"],["Controlos: joystick","Controls: joystick"],["Som:","Sound:"],
+["Garagem do Tiago","Tiago's Garage"],["Oficina do Tiago","Tiago's Workshop"],["Som: ligado","Sound: on"],["Som: desligado","Sound: off"],["Missões","Missions"],["Grupo","Group"],["Clube","Club"],["História","Story"],["Rivais","Rivals"],["Viajar","Travel"],["Como jogar","How to play"],["O teu nome","Your name"],["Como te chamas no grupo do RC Riding Club?","What's your name in the RC Riding Club group?"],["Começar","Start"],["Ex.: Ruben","E.g. Ruben"],["Escolhe missões no telemóvel, desafia rivais, ganha libras, melhora a tua 125 na Garagem do Tiago e não percas o respeito da malta.","Pick missions on your phone, challenge rivals, earn pounds, upgrade your 125 at Tiago's Garage and don't lose the crew's respect."],["Pista de piões","Donut pad"],["Cavalinho","Wheelie"],["Desististe.","You gave up."],["Controlos: setas","Controls: arrows"],["Sensibilidade a virar","Steering sensitivity"],["Controlos: joystick","Controls: joystick"],["Som:","Sound:"],
 ["Continuar","Continue"],["Novo jogo","New game"],["Apagar","Delete"],["Confirmar","Confirm"],["Vazio","Empty"],["Pausa","Pause"],["Fechar","Close"],["Cancelar","Cancel"],
 ["Desbloquear","Unlock"],["Compra","Purchase"],["Dinheiro:","Money:"],["Anúncio com recompensa","Rewarded ad"],["Intervalo publicitário","Ad break"],["Anúncio","Ad"],
 ["Motas","Bikes"],["Melhorias","Upgrades"],["Pintura","Paint"],["Oficina","Workshop"],["Loja RC","RC Shop"],["Merch","Merch"],
@@ -311,7 +314,7 @@ const TR_P=[
 ["Já podes conduzir motas até 700cc","You can now ride bikes up to 700cc"],["Já podes conduzir qualquer cilindrada","You can now ride any engine size"],["CARTA","LICENCE"],
 // avisos
 ["MISSÃO CUMPRIDA","MISSION COMPLETE"],["MISSÃO FALHADA","MISSION FAILED"],["APANHADO!","BUSTED!"],["MOTA DESFEITA","BIKE WRECKED"],["EXPULSO DO GRUPO!","KICKED OUT OF THE CLUB!"],["CRACHÁ RC","RC BADGE"],["TODOS OS CRACHÁS!","ALL BADGES!"],["AJUDASTE A MALTA","YOU HELPED THE CREW"],["PRÉMIO DIÁRIO","DAILY REWARD"],["PRÉMIO DUPLICADO","REWARD DOUBLED"],["POLÍCIA FORA DE COMBATE","POLICE CAR DOWN"],["PINTURA NOVA","NEW PAINT JOB"],["POLÍCIA DESPISTADA","POLICE SHAKEN OFF"],["MOTA REPARADA","BIKE REPAIRED"],["DEPÓSITO CHEIO","FULL TANK"],["RECOMPENSA DUPLICADA","REWARD DOUBLED"],["DESBLOQUEADO","UNLOCKED"],["CAFÉ SERVIDO","COFFEE SERVED"],["ARRANCADA GANHA","DRAG RACE WON"],["ARRANCADA PERDIDA","DRAG RACE LOST"],["JÁ!","GO!"],["VAI!","GO!"],
-["Respeito acima de tudo! −5 respeito","Respect above all! −5 respect"],["Respeito acima de tudo","Respect above all"],["respeito","respect"],["Multa de","Fine of"],["Reboque e oficina:","Tow and repair:"],["O Marco Machado deu-te outra chance.","Marco Machado gave you another chance."],["É assim que o grupo cresce","That's how the club grows"],
+["Respeito acima de tudo! −5 respeito","Respect above all! −5 respect"],["Respeito acima de tudo","Respect above all"],["respeito","respect"],["Multa de","Fine of"],["Reboque e oficina:","Tow and repair:"],["O Marco Martins deu-te outra chance.","Marco Martins gave you another chance."],["É assim que o grupo cresce","That's how the club grows"],
 ["Grátis com o anúncio","Free with the ad"],["Obrigado por veres o anúncio","Thanks for watching the ad"],["A polícia perdeu-te o rasto","The police lost your trail"],["Aproveita e foge!","Make your escape!"],["Bem-vindo de volta","Welcome back"],
 ["Condução responsável! −1 respeito","Ride responsibly! −1 respect"],["Passaste no vermelho! −1 respeito","You ran a red light! −1 respect"],["Atropelaste um peão.","You hit a pedestrian."],["Sinal vermelho.","Red light."],["Bateste num carro da polícia.","You hit a police car."],["A polícia viu!","The police saw it!"],["Despistaste a polícia.","You lost the police."],["Carro da polícia atordoado!","Police car stunned!"],["Bateu contra um prédio!","It crashed into a building!"],
 ["A malta esconde-te entre as motas…","The crew hides you among the bikes…"],["Precisas de £100 para pintar a mota.","You need £100 to respray the bike."],["Sem gasolina! Vai a um posto.","Out of fuel! Go to a petrol station."],["A abastecer…","Refuelling…"],["Não tens dinheiro para gasolina.","You don't have money for fuel."],
@@ -337,7 +340,7 @@ const TR_P=[
 ["Um spammer de cripto anda a encher o grupo de anúncios. A carrinha CRYPTO anda pela cidade: bate-lhe 3 vezes!","A crypto spammer is flooding the group with ads. The CRYPTO van is driving around town: hit it 3 times!"],["Bate na carrinha CRYPTO 3 vezes.","Hit the CRYPTO van 3 times."],
 ["Vamos fazer um encontro! Apanha 3 membros e trá-los ao ponto de encontro. Eles vêm atrás de ti: nada de pancadas.","Let's have a meet-up! Pick up 3 members and bring them to the meeting point. They ride behind you: no crashes."],["Apanha o Zé (1/3).","Pick up Zé (1/3)."],["Apanha o Tó (2/3).","Pick up Tó (2/3)."],["Apanha a Joana (3/3).","Pick up Joana (3/3)."],["Leva a malta ao ponto de encontro.","Take the crew to the meeting point."],
 ["Um dos Big Bikes Only anda a dizer que as 125 não são motas. Apanha-o e encosta-lhe 3 vezes. Sem insultos, só condução.","One of the Big Bikes Only says 125s aren't real bikes. Catch him and bump him 3 times. No insults, just riding."],["Apanha o troll e toca-lhe 3 vezes.","Catch the troll and bump him 3 times."],
-["O Marco Machado quer três cafés bem tirados no Café Lusitano antes da reunião do clube.","Marco Machado wants three well-made coffees at Café Lusitano before the club meeting."],["Vai ao Café Lusitano e tira os cafés.","Go to Café Lusitano and make the coffees."],["Leva os cafés à reunião no ponto de encontro. Não entornes!","Take the coffees to the meeting point. Don't spill them!"],
+["O Marco Martins quer três cafés bem tirados no Café Lusitano antes da reunião do clube.","Marco Martins wants three well-made coffees at Café Lusitano before the club meeting."],["Vai ao Café Lusitano e tira os cafés.","Go to Café Lusitano and make the coffees."],["Leva os cafés à reunião no ponto de encontro. Não entornes!","Take the coffees to the meeting point. Don't spill them!"],
 ["O grupo faz anos! Vai buscar o bolo à Mercearia Portuguesa e leva-o ao ponto de encontro. É frágil!","It's the club's birthday! Pick up the cake at the Portuguese Deli and take it to the meeting point. It's fragile!"],["Apanha o bolo na Mercearia Portuguesa.","Pick up the cake at the Portuguese Deli."],["Leva o bolo ao ponto de encontro. Sem pancadas!","Take the cake to the meeting point. No crashes!"],
 ["Chegaram as t-shirts! Apanha a caixa na loja e entrega 3 encomendas. O merchandise também está no site.","The t-shirts are here! Pick up the box at the shop and deliver 3 orders. The merch is also on the website."],["Apanha as t-shirts na Loja RC.","Pick up the t-shirts at the RC Shop."],["Entrega a encomenda (1/3).","Deliver the order (1/3)."],["Entrega a encomenda (2/3).","Deliver the order (2/3)."],["Entrega a encomenda (3/3).","Deliver the order (3/3)."],
 ["Uma caixa de pastéis de nata para o encontro da malta. Frágeis! Mercearia, depois café.","A box of custard tarts for the crew's meet-up. Fragile! Deli first, then the café."],["Apanha os pastéis na Mercearia.","Pick up the tarts at the Deli."],["Leva os pastéis ao Café Lusitano. Com cuidado!","Take the tarts to Café Lusitano. Carefully!"],
@@ -1064,7 +1067,7 @@ const MIS={
   {t:'Spam no grupo',brief:'Um spammer de cripto anda a encher o grupo de anúncios. A carrinha CRYPTO anda pela cidade: bate-lhe 3 vezes!',time:110,pay:180,rp:6,steps:()=>[{chase:'van',need:3,say:'Bate na carrinha CRYPTO 3 vezes.'}]},
   {t:'Junta a malta',brief:'Vamos fazer um encontro! Apanha 3 membros e trá-los ao ponto de encontro. Eles vêm atrás de ti: nada de pancadas.',time:180,pay:240,rp:8,maxCrash:4,steps:()=>[{go:RP(250),stop:1,crew:'#d04a3a',say:'Apanha o Zé (1/3).'},{go:RP(250),stop:1,crew:'#2f5fa8',say:'Apanha o Tó (2/3).'},{go:RP(250),stop:1,crew:'#e0b028',say:'Apanha a Joana (3/3).'},{go:places.encontro,stop:1,say:'Leva a malta ao ponto de encontro.'}]},
   {t:'O troll',brief:'Um dos Big Bikes Only anda a dizer que as 125 não são motas. Apanha-o e encosta-lhe 3 vezes. Sem insultos, só condução.',time:120,pay:230,rp:8,steps:()=>[{chase:'troll',need:3,say:'Apanha o troll e toca-lhe 3 vezes.'}]},
-  {t:'Bica para o presidente',brief:'O Marco Machado quer três cafés bem tirados no Café Lusitano antes da reunião do clube.',time:120,pay:220,rp:7,steps:()=>[{go:places.cafe,stop:1,mg:'cafe',need:2,cargo:1,say:'Vai ao Café Lusitano e tira os cafés.'},{go:places.encontro,stop:1,say:'Leva os cafés à reunião no ponto de encontro. Não entornes!'}]},
+  {t:'Bica para o presidente',brief:'O Marco Martins quer três cafés bem tirados no Café Lusitano antes da reunião do clube.',time:120,pay:220,rp:7,steps:()=>[{go:places.cafe,stop:1,mg:'cafe',need:2,cargo:1,say:'Vai ao Café Lusitano e tira os cafés.'},{go:places.encontro,stop:1,say:'Leva os cafés à reunião no ponto de encontro. Não entornes!'}]},
   {t:'Bolo de aniversário',brief:'O grupo faz anos! Vai buscar o bolo à Mercearia Portuguesa e leva-o ao ponto de encontro. É frágil!',time:140,pay:290,rp:10,steps:()=>[{go:places.mercearia,stop:1,cargo:1,say:'Apanha o bolo na Mercearia Portuguesa.'},{go:places.encontro,stop:1,say:'Leva o bolo ao ponto de encontro. Sem pancadas!'}]}],
  loja:[
   {t:'T-shirts novas',brief:'Chegaram as t-shirts! Apanha a caixa na loja e entrega 3 encomendas. O merchandise também está no site.',time:150,pay:180,rp:5,steps:()=>[{go:places.loja,stop:1,say:'Apanha as t-shirts na Loja RC.'},{go:RP(300),stop:1,say:'Entrega a encomenda (1/3).'},{go:RP(300),stop:1,say:'Entrega a encomenda (2/3).'},{go:RP(300),stop:1,say:'Entrega a encomenda (3/3).'}]},
@@ -1220,7 +1223,7 @@ function update(dt){
     manageCops(dt);
     if(wanted>0){const close=V.some(c=>c.kind=='cop'&&c.mode=='chase'&&!(c.stun>0)&&hyp(c.x-P.x,c.y-P.y)<24);if(close&&sp<20)bustT+=dt;else bustT=Math.max(0,bustT-dt*2);if(bustT>2)busted()}
     if(P.hp<=0){const cost=Math.min(money,100);money-=cost;if(M)missionEnd(false,'A mota ficou desfeita.');P.hp=ST.hpMax;P.vx=P.vy=0;P.x=gp.x;P.y=gp.y-T*1.2;wanted=0;bigToast('MOTA DESFEITA',`Reboque e oficina: −£${cost}`);sfx('fail');shopLatch=true}
-    if(rep<=0){const lost=Math.floor(money/2);money-=lost;rep=40;if(M)missionEnd(false,'');bigToast('EXPULSO DO GRUPO!',`O Marco Machado deu-te outra chance. −£${lost}`);sfx('fail')}
+    if(rep<=0){const lost=Math.floor(money/2);money-=lost;rep=40;if(M)missionEnd(false,'');bigToast('EXPULSO DO GRUPO!',`O Marco Martins deu-te outra chance. −£${lost}`);sfx('fail')}
     money=Math.max(0,Math.round(money*100)/100);
   }else{P.a+=dt*.15;P.vx=Math.cos(P.a)*40;P.vy=Math.sin(P.a)*40;P.x=clamp(P.x+P.vx*dt,200,N*T-200);P.y=clamp(P.y+P.vy*dt,200,N*T-200)}
   if(started){rivalTick();idleStep(dt)}
@@ -1550,7 +1553,7 @@ const LICO={A1:1,A2:2,A:3};
 const REQ={clube:[[1],[1],[2],[3],[4],[5]],loja:[[1],[2],[3],[4],[5],[6]],estrada:[[2],[3],[4],[2],[5,'A2'],[8,'A2']]};
 const npcReq=i=>2+(i%6);
 const STORY=[
- {t:['O grupo do Facebook','The Facebook group'],x:['Tudo começou com 12 amigos num grupo do Facebook. O Marco Machado quer mais: faz missões e chega aos 60 membros.','It all started with 12 friends in a Facebook group. Marco Machado wants more: do missions and reach 60 members.'],g:[['members',60]]},
+ {t:['O grupo do Facebook','The Facebook group'],x:['Tudo começou com 12 amigos num grupo do Facebook. Eu quero mais: faz missões e ajuda-me a chegar aos 60 membros.','It all started with 12 friends in a Facebook group. I want more: do missions and help me reach 60 members.'],g:[['members',60]]},
  {t:['Primeiro encontro oficial','First official meet-up'],x:['Já somos muitos, mas na rua ninguém nos leva a sério. Ganha um desafio a um motoqueiro rival e chega aos 200 membros.','We are many now, but nobody on the street takes us seriously. Beat a rival rider in a challenge and reach 200 members.'],g:[['members',200],['wins',1]]},
  {t:['A guerra das 125','The 125 war'],x:['Os Big Bikes Only dizem que as 125 não são motas. Prova o contrário: chega ao nível 6, vence 4 rivais e chega aos 600 membros.','The Big Bikes Only say 125s are not real bikes. Prove them wrong: reach level 6, beat 4 rivals and reach 600 members.'],g:[['level',6],['wins',4],['members',600]]},
  {t:['Pelo Reino Unido fora','Across the UK'],x:['O clube tem de crescer fora de Londres. Ajuda membros em 4 cidades, tira a licença RC Eats para pagar as viagens e chega aos 1500 membros.','The club has to grow outside London. Help members in 4 towns, get the RC Eats licence to pay for the trips and reach 1,500 members.'],g:[['towns',4],['eats',1],['members',1500]]},
@@ -1560,7 +1563,7 @@ const GN={members:['membros','members'],wins:['desafios de rivais ganhos','rival
 function gval(k){return k=='members'?save.members:k=='wins'?save.wins:k=='level'?level():k=='towns'?new Set(NPC_DATA.filter(n=>(save.npcDone||{})[n.n]).map(n=>n.town)).size:k=='eats'?(save.eats.lic?1:0):0}
 function storyCheck(){const c=STORY[save.ch];if(!c)return;if(!c.g.every(([k,v])=>gval(k)>=v))return;const r=500*(save.ch+1);money+=r;save.ch++;happy();
   setTimeout(()=>{bigToast(LL('CAPÍTULO CONCLUÍDO','CHAPTER COMPLETE'),`${LL(c.t[0],c.t[1])} · +£${r}`);sfx('win');const n=STORY[save.ch];
-    setTimeout(()=>{if(n){$('pgWho').textContent='Marco Machado';$('pgTxt').textContent=LL(n.x[0],n.x[1]);bigToast(LL('NOVO CAPÍTULO','NEW CHAPTER'),LL(n.t[0],n.t[1]));const tk=()=>{if(paused||mg.on||!started)return setTimeout(tk,1500);chapterTalk()};setTimeout(tk,2500)}else bigToast(LL('O MAIOR CLUBE DO MUNDO!','THE BIGGEST CLUB IN THE WORLD!'),LL('Respeito acima de tudo. Obrigado!','Respect above all. Thank you!'))},3500)},2600)}
+    setTimeout(()=>{if(n){$('pgWho').textContent='Marco Martins';$('pgTxt').textContent=LL(n.x[0],n.x[1]);bigToast(LL('NOVO CAPÍTULO','NEW CHAPTER'),LL(n.t[0],n.t[1]));const tk=()=>{if(paused||mg.on||!started)return setTimeout(tk,1500);chapterTalk()};setTimeout(tk,2500)}else bigToast(LL('O MAIOR CLUBE DO MUNDO!','THE BIGGEST CLUB IN THE WORLD!'),LL('Respeito acima de tudo. Obrigado!','Respect above all. Thank you!'))},3500)},2600)}
 
 // ---------- rivais ----------
 const RIVS=[{n:'Rex "Big Bore"',g:'Big Bikes Only',c:['#1a1a1a','#c8241a'],k:'race'},{n:'Duda Cavalinho',g:'Scooter Mafia',c:['#e0b028','#111'],k:'cavalinho'},{n:'Nuno Pião',g:'Os Cromados',c:['#c0c0c0','#2f5fa8'],k:'pioes'},{n:'Viper',g:'Lobos da Noite',c:['#2a2a3a','#8e5cc2'],k:'race'},{n:'Tia Lena',g:'Scooter Mafia',c:['#e85d9a','#111'],k:'cavalinho'},{n:'Kiko Turbo',g:'Big Bikes Only',c:['#7a1010','#111'],k:'race'},{n:'Mestre Zé',g:'Os Cromados',c:['#d8d8d8','#c8372d'],k:'pioes'},{n:'Lobo Alfa',g:'Lobos da Noite',c:['#111','#8e5cc2'],k:'cavalinho'}];
@@ -1649,7 +1652,13 @@ $('dlgOpts').addEventListener('click',e=>{const b=e.target.closest('button');if(
 function talkNpc(n){const pool=DLG[Math.min(save.ch,DLG.length-1)],d=pool[(hash(n.n.length,save.ch+n.n.charCodeAt(0))*pool.length)|0]||pool[0];
   dialog(n.n,d[0],d[1],()=>startNpc(n))}
 function talkRival(v){const r=v.rival,d=RDLG[(hash(r.n.length,save.wins)*RDLG.length)|0]||RDLG[0];dialog(r.n+' · '+r.g,d[0],d[1],k=>{if(k=='bad')r.angry=1;startRival(v)})}
-function chapterTalk(){const c=STORY[save.ch];if(!c)return;dialog('Marco Machado · '+LL('Presidente','President'),c.x,MDLG,null)}
+function chapterTalk(){const c=STORY[save.ch];if(!c)return;const nm=save.name||'';dialog('Marco Martins · '+LL('Presidente do grupo','Group president'),[(nm?nm+'! ':'')+c.x[0],(nm?nm+'! ':'')+c.x[1]],MDLG,null)}
+const esc=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function askName(){paused=true;P.vx=P.vy=0;$('nameIn').placeholder=LL('Ex.: Ruben','E.g. Ruben');$('nameOv').classList.add('on');setTimeout(()=>{try{$('nameIn').focus()}catch(_){}},200)}
+$('nameIn').addEventListener('keydown',e=>{e.stopPropagation();if(e.key=='Enter')$('nameOk').click()});$('nameIn').addEventListener('keyup',e=>e.stopPropagation());
+$('nameOk').onclick=()=>{const v=$('nameIn').value.trim().replace(/\s+/g,' ').slice(0,16)||'Rider';save.name=v;$('nameOv').classList.remove('on');paused=false;
+  addPost('Marco Martins',`Bem-vindo ao grupo, ${v}! Capacete na cabeça e respeito acima de tudo. 🏍️`,`Welcome to the group, ${v}! Helmet on and respect above all. 🏍️`,8);store();
+  if(!save.intro){save.intro=1;setTimeout(()=>{if(!paused)chapterTalk()},900)}};
 
 // ---------- grupo do Facebook ----------
 const FN=['Zé','Tó','Joana','Rita','Bruno','Carla','Nelson','Sara','Hugo','Inês','Paulo','Marta','Diogo','Vera','Luís','Patrícia','Kevin','Sónia','Fábio','Tânia'];
@@ -1661,8 +1670,8 @@ let feedNext=40,joinMark=0;
 function feedTick(dt){feedNext-=dt;if(feedNext<=0){feedNext=rnd(70,140);const f=pick(FPOST);addPost(Math.random()<.3?pick(NPC_DATA).n:fname(),f[0],f[1])}
   const step=save.members<200?10:save.members<2000?100:save.members<20000?1000:5000,m=Math.floor(save.members/step);if(!joinMark)joinMark=m;
   if(m>joinMark){const n=(m-joinMark)*step;joinMark=m;const a=fname(),b=fname();addPost('RC Riding Club',`${a}, ${b} e mais ${n} pessoas juntaram-se ao grupo. Bem-vindos! Total: ${save.members.toLocaleString('pt-PT')} membros.`,`${a}, ${b} and ${n} more people joined the group. Welcome! Total: ${save.members.toLocaleString('en-GB')} members.`,n)}}
-function feedWin(m){if(m.def.rival)addPost('Marco Machado',`${m.def.rival} perdeu um desafio contra o RC. Já está a pedir desforra 😂`,`${m.def.rival} lost a challenge against the RC. Already asking for a rematch 😂`,30);
-  else if(!m.def.eats&&Math.random()<.6)addPost(m.npc||m.who||'Marco Machado',`Missão cumprida: ${m.def.t}. Obrigado, és uma lenda! 🏍️`,`Mission complete: ${m.def.t}. Thank you, you're a legend! 🏍️`)}
+function feedWin(m){if(m.def.rival)addPost('Marco Martins',`${m.def.rival} perdeu um desafio contra o RC. Já está a pedir desforra 😂`,`${m.def.rival} lost a challenge against the RC. Already asking for a rematch 😂`,30);
+  else if(!m.def.eats&&Math.random()<.6)addPost(m.npc||m.who||'Marco Martins',`${save.name||'O novato'} cumpriu a missão «${m.def.t}». Obrigado, és uma lenda! 🏍️`,`${save.name||'The rookie'} completed «${m.def.t}». Thank you, you're a legend! 🏍️`)}
 
 // ---------- clube idle ----------
 const IUP=[{k:'fb',n:['Anúncios no Facebook','Facebook ads'],d:['+membros por minuto','+members per minute'],c:150,g:1.6},{k:'ev',n:['Encontros mensais','Monthly meet-ups'],d:['+muitos membros por minuto','+lots of members per minute'],c:500,g:1.65},{k:'merch',n:['Loja online de merch','Online merch shop'],d:['+£ por cada 1000 membros','+£ per 1,000 members'],c:350,g:1.6},{k:'pat',n:['Patrocínios','Sponsorships'],d:['+£ fixo e +membros','+flat £ and +members'],c:1200,g:1.7},{k:'sede',n:['Sede do clube','Clubhouse'],d:['multiplica tudo ×1,25 por nível','multiplies everything ×1.25 per level'],c:2500,g:1.9}];
@@ -1680,20 +1689,20 @@ let phTab='mis';
 function openPhone(){if(!started||mg.on)return;paused=true;P.vx=P.vy=0;$('phone').classList.add('on');renderPhone()}
 function closePhone(){$('phone').classList.remove('on');paused=false}
 const prow=(t,sub,btn,dis,data)=>`<div class="it p"><div><b>${t}</b><span>${sub}</span></div>${btn?`<button class="buy" type="button" ${data||''} ${dis?'disabled':''}>${btn}</button>`:''}</div>`;
-function renderPhone(){const lv=level(),a=XPN(lv),b=XPN(lv+1);
+function renderPhone(){const lv=level(),a=XPN(lv),b=XPN(lv+1);$('phName').textContent=save.name?'📱 '+save.name:'RC Phone';
   $('phStat').innerHTML=`${LL('Nível','Level')} ${lv} · ${save.members.toLocaleString(LANG=='pt'?'pt-PT':'en-GB')} ${LL('membros','members')}<span class="xpb"><i style="width:${Math.round((save.xp-a)/(b-a)*100)}%"></i></span>`;
   document.querySelectorAll('#phTabs .tab').forEach(x=>x.classList.toggle('on',x.dataset.p==phTab));
   let h='';const lk=x=>'🔒 '+x,Lv=LL('Nível','Level'),busy=LL('Ocupado','Busy'),acc=LL('Aceitar','Accept');
   if(M)h+=prow(LL('Missão em curso','Mission in progress')+': '+M.def.t,M.steps[M.i].say,LL('Desistir','Give up'),0,'data-a="quit"');
   if(phTab=='mis'){const lic0=LICO[lic()];
-    for(const[k,nm]of[['clube','Marco Machado · '+LL('Clube','Club')],['loja','Loja RC'],['estrada','Paula · '+LL('Estrada','Road')]]){h+=`<h3>${nm}</h3>`;
+    for(const[k,nm]of[['clube','Marco Martins · '+LL('Clube','Club')],['loja','Loja RC'],['estrada','Paula · '+LL('Estrada','Road')]]){h+=`<h3>${nm}</h3>`;
       MIS[k].forEach((d,i)=>{const[rl,rc]=REQ[k][i],n=save.mdone[d.t]||(i<save.prog[k]?1:0),lL=lv<rl,lC=rc&&lic0<LICO[rc];
         h+=prow(d.t+(n?' ✓':''),`${d.brief}<br>£${d.pay} · ${Lv} ${rl}${rc?' · '+LL('Carta','Licence')+' '+rc:''}`,lL?lk(Lv+' '+rl):lC?lk(LL('Carta','Licence')+' '+rc):M?busy:acc,lL||lC||M,`data-a="m" data-k="${k}" data-i="${i}"`)})}
     h+=`<h3>${LL('Membros noutras cidades','Members in other towns')}</h3>`;
     NPC_DATA.forEach((n,i)=>{const rl=npcReq(i),here=n.town==W_.id,lock=lv<rl,dn=(save.npcDone||{})[n.n],np=npcs.find(q=>q.n==n.n);
       h+=prow(n.m.t+(dn?' ✓':''),`${n.n} · ${TOWNS[n.town].name}<br>${n.m.brief}<br>£${n.m.pay} · ${Lv} ${rl}`,lock?lk(Lv+' '+rl):M?busy:here?acc:LL('Viajar','Travel'),lock||M||(here&&!(np&&npcOK(np))),`data-a="${here?'npc':'trav'}" data-n="${i}"`)})}
   else if(phTab=='grupo'){h+=`<div class="fbh"><b>RC Riding Club</b><span>${LL('Grupo público','Public group')} · ${save.members.toLocaleString(LANG=='pt'?'pt-PT':'en-GB')} ${LL('membros','members')}</span></div>`;
-    (save.feed||[]).forEach((f,i)=>{const ago=Math.max(1,Math.round((Date.now()-f.t)/60000));h+=`<div class="fbp"><div class="fbn"><i>${f.w[0]}</i><b>${f.w}</b><small>${ago<60?ago+' min':Math.round(ago/60)+' h'}</small></div><p>${LL(f.p,f.e)}</p><button type="button" class="fbl${f.me?' on':''}" data-a="like" data-i="${i}">👍 ${f.l}</button></div>`})}
+    (save.feed||[]).forEach((f,i)=>{const ago=Math.max(1,Math.round((Date.now()-f.t)/60000));h+=`<div class="fbp"><div class="fbn"><i>${esc(f.w[0])}</i><b>${esc(f.w)}</b><small>${ago<60?ago+' min':Math.round(ago/60)+' h'}</small></div><p>${esc(LL(f.p,f.e))}</p><button type="button" class="fbl${f.me?' on':''}" data-a="like" data-i="${i}">👍 ${f.l}</button></div>`})}
   else if(phTab=='clube'){h+=prow(LL('O teu clube','Your club'),LL(`${save.members.toLocaleString('pt-PT')} membros · +${(idleMem()*60).toFixed(1)} membros/min · +£${(idleInc()*60).toFixed(1)}/min<br>O clube cresce e dá dinheiro sozinho, mesmo quando não estás a jogar (até 4 horas).`,`${save.members.toLocaleString('en-GB')} members · +${(idleMem()*60).toFixed(1)} members/min · +£${(idleInc()*60).toFixed(1)}/min<br>The club grows and earns money on its own, even when you're not playing (up to 4 hours).`));
     IUP.forEach(u=>{const c=iCost(u);h+=prow(`${LL(u.n[0],u.n[1])} · ${LL('nível','level')} ${IU(u.k)}`,LL(u.d[0],u.d[1]),'£'+c.toLocaleString(),money<c,`data-a="iup" data-k="${u.k}"`)})}
   else if(phTab=='hist'){STORY.forEach((c,i)=>{const done=i<save.ch,cur=i==save.ch;if(i>save.ch){h+=prow(`${i+1}. ???`,LL('Bloqueado','Locked'));return}
@@ -1716,7 +1725,7 @@ function renderPhone(){const lv=level(),a=XPN(lv),b=XPN(lv+1);
 $('phTabs').addEventListener('click',e=>{const b=e.target.closest('.tab');if(!b)return;phTab=b.dataset.p;if(phTab!='eats')qz=null;renderPhone();$('phBody').scrollTop=0});
 $('phBody').addEventListener('click',e=>{const b=e.target.closest('button');if(!b||b.disabled)return;const a=b.dataset.a;
   if(a=='quit'){closePhone();if(M)missionEnd(false,LL('Desististe.','You gave up.'));return}
-  if(a=='m'){closePhone();startCustom(MIS[b.dataset.k][+b.dataset.i],b.dataset.k,{clube:'Marco Machado',loja:'Loja RC',estrada:'Paula'}[b.dataset.k]);M.first=+b.dataset.i>=save.prog[b.dataset.k]&&+b.dataset.i==save.prog[b.dataset.k];return}
+  if(a=='m'){closePhone();startCustom(MIS[b.dataset.k][+b.dataset.i],b.dataset.k,{clube:'Marco Martins',loja:'Loja RC',estrada:'Paula'}[b.dataset.k]);M.first=+b.dataset.i>=save.prog[b.dataset.k]&&+b.dataset.i==save.prog[b.dataset.k];return}
   if(a=='npc'){const n=npcs.find(q=>q.n==NPC_DATA[+b.dataset.n].n);if(n){closePhone();talkNpc(n)}return}
   if(a=='trav'){closePhone();openTravel();return}
   if(a=='map'){closePhone();openMap();return}
@@ -1793,7 +1802,7 @@ function openMap(){$('mapT').textContent=W_.name;const c=$('bigmap'),x=c.getCont
   $('mapOv').classList.add('on');paused=true}
 $('mini').onclick=()=>{if(started)openMap()};$('mMap').onclick=()=>{$('menu').classList.remove('on');openMap()};
 $('mapClose').onclick=()=>{$('mapOv').classList.remove('on');paused=false};
-$('menuB').onclick=()=>{if(!started)return;paused=true;$('mStats').textContent=`${rankName()} · ${save.done} missões · ${(save.miles*1.609).toFixed(1)} km · carta ${lic()} · crachás ${save.badges.length}/20`;$('mSnd').textContent='Som: '+(save.sound?'ligado':'desligado');$('menu').classList.add('on')};
+$('menuB').onclick=()=>{if(!started)return;paused=true;zoomLbl();$('mStats').textContent=`${rankName()} · ${save.done} missões · ${(save.miles*1.609).toFixed(1)} km · carta ${lic()} · crachás ${save.badges.length}/20`;$('mSnd').textContent='Som: '+(save.sound?'ligado':'desligado');$('menu').classList.add('on')};
 $('mCont').onclick=()=>{$('menu').classList.remove('on');paused=false};
 $('mSnd').onclick=()=>{save.sound=save.sound?0:1;if(master)master.gain.value=vol();$('mSnd').textContent='Som: '+(save.sound?'ligado':'desligado');store()};
 $('mSave').onclick=()=>{store();toast(`Gravado no save ${slot}.`);$('mSave').textContent='Gravado!';setTimeout(()=>$('mSave').textContent='Gravar agora',1500)};
@@ -1807,7 +1816,7 @@ function begin(fresh){if(fresh){save=DEF();try{STORE.removeItem(KEY())}catch(e){
   if((save.town||'londres')!=W_.id){genWorld(TOWNS[save.town]||TOWNS.londres);spawnTraffic();initLife();peds=[];for(let i=0;i<95;i++)peds.push(spawnPed())}
   money=save.money;rep=save.rep;P.hp=save.hp;P.fuel=save.fuel;P.pass=null;refreshBike();
   const gp=places.garagem;P.x=gp.x;P.y=gp.y-T*1.3;P.a=-PI/2;P.vx=P.vy=0;P.ltx=Math.floor(P.x/T);P.lty=Math.floor(P.y/T);cam.x=P.x;cam.y=P.y;shopLatch=true;
-  makePickups();idleOffline();if(fresh||!save.feed||!save.feed.length)addPost('Marco Machado','Bem-vindos ao grupo do RC Riding Club! Regras: respeito acima de tudo, capacete sempre e nada de spam de cripto.','Welcome to the RC Riding Club group! Rules: respect above all, helmets always and no crypto spam.',12);
+  makePickups();idleOffline();if(fresh||!save.feed||!save.feed.length)addPost('Marco Martins','Bem-vindos ao grupo do RC Riding Club! Regras: respeito acima de tudo, capacete sempre e nada de spam de cripto.','Welcome to the RC Riding Club group! Rules: respect above all, helmets always and no crypto spam.',12);
   started=true;paused=false;audioInit();if(AC&&AC.state=='suspended')AC.resume();
   ['hudL','hudR','pager','gauge','padL','padR'].forEach(i=>$(i).classList.remove('hide'));document.body.classList.add('pager-on');$('start').classList.remove('on');
   $('pgWho').textContent='Telefone';$('pgTxt').textContent=idleTxt();
@@ -1815,14 +1824,15 @@ function begin(fresh){if(fresh){save=DEF();try{STORE.removeItem(KEY())}catch(e){
   const today=new Date().toISOString().slice(0,10),yest=new Date(Date.now()-864e5).toISOString().slice(0,10);
   if(save.lastDay!=today){save.streak=save.lastDay==yest?Math.min(7,(save.streak||0)+1):1;save.lastDay=today;const g=50*save.streak+50;money+=g;
     setTimeout(()=>{bigToast('PRÉMIO DIÁRIO',`Dia ${save.streak} seguido · +£${g}`);sfx('win')},3200);dailyOffer={k:'day',once:1,t:`Ver anúncio · +£${g} extra`,until:clockR+25,fn:()=>{money+=g;bigToast('PRÉMIO DUPLICADO',`+£${g}`)}};store()}
-  if(!save.intro){save.intro=1;setTimeout(()=>{if(!paused)chapterTalk()},4200)}
+  if(!save.name)setTimeout(askName,1200);else if(!save.intro){save.intro=1;setTimeout(()=>{if(!paused)chapterTalk()},4200)}
   if(!save.tut){save.tut=1;const tips=[LL('Toca no 📱 para abrir o telemóvel e escolher missões.','Tap 📱 to open your phone and pick missions.'),'Para nos sítios com marcador para abastecer, tirar cafés ou entrar na garagem.','Foge à polícia pelos parques: os carros não entram.'];tips.forEach((t,i)=>setTimeout(()=>toast(t),6500+i*4200))}
 }
 $('play').onclick=()=>begin(false);$('newG').onclick=()=>begin(true);
 addEventListener('keydown',e=>{if(mg.on){if(e.code=='Space'||e.code=='Enter'){if(!e.repeat)mg.press=true;mg.hold=true;e.preventDefault()}if(e.code=='Escape')$('mgB').click();return}keys[e.code]=true;if(e.code.startsWith('Arrow')||e.code=='Space')e.preventDefault();if(started&&!paused&&e.code=='KeyE')doAct();if(started&&e.code=='KeyZ')$('zoomB').click();
   if(!started)return;if(e.code=='KeyP'||e.code=='Escape'){if($('menu').classList.contains('on'))$('mCont').click();else if(!paused)$('menuB').click()}if(e.code=='KeyM'){if($('mapOv').classList.contains('on'))$('mapClose').click();else if(!paused)openMap()}});
 addEventListener('keyup',e=>{keys[e.code]=false;if(e.code=='Space'||e.code=='Enter')mg.hold=false});
-$('zoomB').onclick=()=>{save.zoom=((save.zoom==null?1:save.zoom)+1)%ZL.length;resize();toast('Zoom '+['afastado','normal','aproximado'][save.zoom]);store()};
+const zoomLbl=()=>{$('zoomB').textContent='Zoom: '+LL(['afastado','normal','aproximado'][save.zoom==null?1:save.zoom],['far','normal','close'][save.zoom==null?1:save.zoom])};
+$('zoomB').onclick=()=>{save.zoom=((save.zoom==null?1:save.zoom)+1)%ZL.length;resize();zoomLbl();store()};
 addEventListener('blur',()=>{for(const k in keys)keys[k]=false;for(const k in inp)inp[k]=false});
 [['kL','L'],['kR','R'],['kG','gas'],['kB','brk'],['kH','horn']].forEach(([id,k])=>{const b=$(id);
   const on=e=>{e.preventDefault();inp[k]=true;b.classList.add('on');try{b.setPointerCapture(e.pointerId)}catch(_){}},off=()=>{inp[k]=false;b.classList.remove('on')};
