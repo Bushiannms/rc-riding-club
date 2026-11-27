@@ -1336,6 +1336,7 @@ function render(){
     ctx.globalAlpha=1;ctx.globalCompositeOperation='source-over'}
   const h=save.time/60;if(h>16.5&&h<19.5){ctx.setTransform(1,0,0,1,0,0);ctx.fillStyle=`rgba(255,120,40,${.1*Math.sin((h-16.5)/3*PI)})`;ctx.fillRect(0,0,VW,VH);ctx.setTransform(1,0,0,1,ox,oy)}
   // objetivo por cima
+  if(started){ctx.save();ctx.translate(Math.round(P.x+Math.cos(P.a)*17),Math.round(P.y+Math.sin(P.a)*17));ctx.rotate(P.a);ctx.globalAlpha=.9;ctx.fillStyle='#000';ctx.beginPath();ctx.moveTo(8,0);ctx.lineTo(-4,-6);ctx.lineTo(-4,6);ctx.closePath();ctx.fill();ctx.fillStyle='#fff';ctx.beginPath();ctx.moveTo(6,0);ctx.lineTo(-3,-4);ctx.lineTo(-3,4);ctx.closePath();ctx.fill();ctx.restore()}
   if(started){const tg=target();if(tg){ring(tg.x,tg.y,'#ffd02a',12+pulse*3);arrowTo(tg,'#ffd02a')}
     else if(!M){let b=null,bd=1e9;for(const q of booths.concat(npcs.filter(npcOK).map(n=>({x:n.x,y:n.y,col:'#7dffb0'})))){const d=hyp(q.x-P.x,q.y-P.y);if(d<bd){bd=d;b=q}}if(b)arrowTo(b,b.col)}
     if(helpEv&&!M)ring(helpEv.x,helpEv.y,'#9fe39a',10);
