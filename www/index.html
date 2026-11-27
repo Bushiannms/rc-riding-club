@@ -712,7 +712,7 @@ const CG=()=>window.CrazyGames&&window.CrazyGames.SDK||null,CAP=()=>window.Capac
 let adBusy=false,lastMid=Date.now(),offer=null,offerKey='',gpState=null,dailyOffer=null;
 let sdkReady=false,cgMute=false;
 const vol=()=>save.sound&&!cgMute?.45:0;
-async function sdkInit(){if(sdkReady)return;sdkReady=true;try{if(CG()){await CG().init();const g=CG().game;cgMute=!!(g.settings&&g.settings.muteAudio);g.addSettingsChangeListener&&g.addSettingsChangeListener(st=>{cgMute=!!st.muteAudio;if(master)master.gain.value=vol()})}}catch(e){}try{if(CAP()&&CAP().AdMob)await CAP().AdMob.initialize({})}catch(e){}}
+async function sdkInit(){if(sdkReady)return;sdkReady=true;try{if(CG()){await CG().init();const g=CG().game;try{g.loadingStart()}catch(_){}cgMute=!!(g.settings&&g.settings.muteAudio);g.addSettingsChangeListener&&g.addSettingsChangeListener(st=>{cgMute=!!st.muteAudio;if(master)master.gain.value=vol()})}}catch(e){}try{if(CAP()&&CAP().AdMob)await CAP().AdMob.initialize({})}catch(e){}}
 function demoAd(kind){return new Promise(res=>{const o=$('adOv');let t=kind=='rewarded'?5:3;$('adT').textContent=kind=='rewarded'?'Anúncio com recompensa':'Intervalo publicitário';$('adS').textContent=t;o.classList.add('on');const iv=setInterval(()=>{t--;$('adS').textContent=t;if(t<=0){clearInterval(iv);o.classList.remove('on');res(true)}},1000)})}
 async function showAd(kind){if(adBusy)return false;adBusy=true;const was=paused;paused=true;if(master)master.gain.value=0;let ok=false;
   try{if(CG())ok=await new Promise(res=>CG().ad.requestAd(kind,{adStarted:()=>{},adFinished:()=>res(true),adError:()=>res(false)}));
@@ -1366,7 +1366,7 @@ async function init(){
   fontsOK=true;for(const b of blds)b.img=roofImg(b);
   resize();renderSlots();
   ST=stats();P.x=N*T/2;P.y=N*T/2;cam.x=P.x;cam.y=P.y;spawnTraffic();initLife();peds=[];for(let i=0;i<95;i++)peds.push(spawnPed());
-  weatherNext=90;requestAnimationFrame(loop);
+  weatherNext=90;requestAnimationFrame(loop);try{if(CG())CG().game.loadingStop()}catch(e){}
 }
 init();
 }
