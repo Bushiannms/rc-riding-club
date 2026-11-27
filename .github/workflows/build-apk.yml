@@ -31,7 +31,7 @@ jobs:
 
       - name: Gerar ícone da app
         continue-on-error: true
-        run: npx @capacitor/assets generate --android --iconBackgroundColor '#16251b' --splashBackgroundColor '#16251b'
+        run: npx @capacitor/assets generate --android --iconBackgroundColor '#000000' --splashBackgroundColor '#16251b'
 
       - name: Copiar o jogo para a app
         run: npx cap sync android
