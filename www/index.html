@@ -63,6 +63,11 @@ html,body{margin:0;height:100%;background:#0e1510;color:#fff;overflow:hidden;fon
  #act{left:8px;transform:none;bottom:calc(max(12px,env(safe-area-inset-bottom)) + min(80px,20vw) + 90px);font-size:15px;max-width:calc(100vw - 118px);white-space:normal;text-align:left;min-height:46px}
  .pad button{width:min(64px,16vw);height:min(64px,16vw)}.pad .gas{width:min(80px,20vw);height:min(80px,20vw)}.pad .sm{width:min(46px,11.5vw);height:min(46px,11.5vw);font-size:9px}
  .pad{gap:8px}.pad.l{left:8px}.pad.r{right:8px}}
+#joy{display:none;width:132px;height:132px;border-radius:50%;border:3px solid rgba(255,255,255,.85);background:rgba(0,0,0,.4);position:relative;touch-action:none}
+#joyK{position:absolute;left:50%;top:50%;width:56px;height:56px;margin:-28px 0 0 -28px;border-radius:50%;background:rgba(255,255,255,.8);box-shadow:0 0 0 3px #000}
+#joy.on #joyK{background:#9fe39a}
+body.joy #joy{display:block}body.joy #kL,body.joy #kR{display:none}
+@media(max-width:700px){#joy{width:min(100px,25vw);height:min(100px,25vw)}body.joy #pager{bottom:calc(max(12px,env(safe-area-inset-bottom)) + min(100px,25vw) + 8px)}body.joy #gauge{bottom:calc(max(12px,env(safe-area-inset-bottom)) + min(100px,25vw) + 84px)}body.joy #act{bottom:calc(max(12px,env(safe-area-inset-bottom)) + min(100px,25vw) + 90px)}#joyK{width:min(52px,13vw);height:min(52px,13vw);margin:calc(min(52px,13vw)/-2) 0 0 calc(min(52px,13vw)/-2)}}
 #pager.mini #pgTxt{display:none}
 body.ui-open .pad,body.ui-open #act,body.ui-open #offer,body.ui-open #gauge{display:none!important}
 @media(max-height:460px){#pager{top:auto;bottom:8px;width:min(46vw,420px)}}
@@ -118,6 +123,7 @@ body.ui-open .pad,body.ui-open #act,body.ui-open #offer,body.ui-open #gauge{disp
 <div id="toast" class="ts"></div>
 <div id="big" class="ts"><div id="bigT"></div><div id="bigS"></div></div>
 <div class="pad l hide" id="padL">
+  <div id="joy"><div id="joyK"></div></div>
   <button id="kL" aria-label="Esquerda"><svg viewBox="0 0 24 24"><path d="M15 4 7 12l8 8" stroke="#fff" stroke-width="3.5" fill="none" stroke-linecap="square"/></svg></button>
   <button id="kR" aria-label="Direita"><svg viewBox="0 0 24 24"><path d="m9 4 8 8-8 8" stroke="#fff" stroke-width="3.5" fill="none" stroke-linecap="square"/></svg></button>
 </div>
@@ -150,6 +156,7 @@ body.ui-open .pad,body.ui-open #act,body.ui-open #offer,body.ui-open #gauge{disp
   <button class="go alt" id="mSnd" type="button">Som: ligado</button>
   <button class="go alt" id="mSave" type="button">Gravar agora</button>
   <button class="go alt" id="mSlots" type="button">Mudar de save</button>
+  <button class="go alt" id="mCtrl" type="button">Controlos: setas</button>
   <button class="go alt" id="mLang" type="button">Language: English</button>
 </div></div>
 
@@ -227,7 +234,7 @@ const TR_P=[
 ["Versão de demonstração: na versão publicada aparece aqui um vídeo. A recompensa é dada no fim.","Demo version: the published game shows a video here. The reward is given at the end."],
 ["Escolhe o destino. A viagem gasta gasolina e o relógio anda.","Choose a destination. The trip uses fuel and time passes."],
 ["Mapa da cidade","City map"],["Gravar agora","Save now"],["Mudar de save","Switch save"],["Voltar à estrada","Back to the road"],["Ficar aqui","Stay here"],
-["Garagem do Tiago","Tiago's Garage"],["Oficina do Tiago","Tiago's Workshop"],["Som: ligado","Sound: on"],["Som: desligado","Sound: off"],["Som:","Sound:"],
+["Garagem do Tiago","Tiago's Garage"],["Oficina do Tiago","Tiago's Workshop"],["Som: ligado","Sound: on"],["Som: desligado","Sound: off"],["Controlos: setas","Controls: arrows"],["Controlos: joystick","Controls: joystick"],["Som:","Sound:"],
 ["Continuar","Continue"],["Novo jogo","New game"],["Apagar","Delete"],["Confirmar","Confirm"],["Vazio","Empty"],["Pausa","Pause"],["Fechar","Close"],["Cancelar","Cancel"],
 ["Desbloquear","Unlock"],["Compra","Purchase"],["Dinheiro:","Money:"],["Anúncio com recompensa","Rewarded ad"],["Intervalo publicitário","Ad break"],["Anúncio","Ad"],
 ["Motas","Bikes"],["Melhorias","Upgrades"],["Pintura","Paint"],["Oficina","Workshop"],["Loja RC","RC Shop"],["Merch","Merch"],
@@ -1060,7 +1067,7 @@ function update(dt){
   weatherNext-=dt;if(weatherNext<=0){weatherNext=rnd(80,160);rain=started&&Math.random()<.3}
   const ca=Math.cos(P.a),sa=Math.sin(P.a);let fwd=P.vx*ca+P.vy*sa,lat=-P.vx*sa+P.vy*ca;
   if(started){
-    const gas=(keys.ArrowUp||keys.KeyW||inp.gas)&&!P.lock,brk=keys.ArrowDown||keys.KeyS||keys.Space||inp.brk,steer=((keys.ArrowRight||keys.KeyD||inp.R)?1:0)-((keys.ArrowLeft||keys.KeyA||inp.L)?1:0);
+    const gas=(keys.ArrowUp||keys.KeyW||inp.gas)&&!P.lock,brk=keys.ArrowDown||keys.KeyS||keys.Space||inp.brk,steer=Math.max(-1,Math.min(1,((keys.ArrowRight||keys.KeyD||inp.R)?1:0)-((keys.ArrowLeft||keys.KeyA||inp.L)?1:0)+(inp.jx||0)));
     if((keys.KeyH||inp.horn)&&hornT<-.3){hornT=.4;sfx('horn')}
     const tt=tile(Math.floor(P.x/T),Math.floor(P.y/T));let max=ST.max;if((tt==3||tt==10)&&!ST.trail)max*=.55;if(P.fuel<=0)max=Math.min(max,42);if(P.pass)max*=.93;
     if(gas){if(fwd<0)fwd+=ST.brake*dt;else fwd+=ST.acc*dt*Math.max(0,1-fwd/max)}
@@ -1492,6 +1499,15 @@ addEventListener('blur',()=>{for(const k in keys)keys[k]=false;for(const k in in
 [['kL','L'],['kR','R'],['kG','gas'],['kB','brk'],['kH','horn']].forEach(([id,k])=>{const b=$(id);
   const on=e=>{e.preventDefault();inp[k]=true;b.classList.add('on');try{b.setPointerCapture(e.pointerId)}catch(_){}},off=()=>{inp[k]=false;b.classList.remove('on')};
   b.addEventListener('pointerdown',on);b.addEventListener('pointerup',off);b.addEventListener('pointercancel',off);b.addEventListener('lostpointercapture',off)});
+{const J=$('joy'),K=$('joyK');let id=null;
+ const mv=e=>{const r=J.getBoundingClientRect(),R=r.width/2;let dx=e.clientX-r.left-R,dy=e.clientY-r.top-R;const d=Math.hypot(dx,dy),m=R*.62;if(d>m){dx*=m/d;dy*=m/d}
+  K.style.transform=`translate(${dx}px,${dy}px)`;let x=dx/m;x=Math.abs(x)<.12?0:Math.sign(x)*Math.min(1,(Math.abs(x)-.12)/.75);inp.jx=x};
+ const up=()=>{id=null;inp.jx=0;K.style.transform='';J.classList.remove('on')};
+ J.addEventListener('pointerdown',e=>{e.preventDefault();id=e.pointerId;J.classList.add('on');try{J.setPointerCapture(id)}catch(_){}mv(e)});
+ J.addEventListener('pointermove',e=>{if(e.pointerId===id)mv(e)});['pointerup','pointercancel','lostpointercapture'].forEach(t=>J.addEventListener(t,up));
+ let joy=false;try{joy=localStorage.getItem('rc-ctrl')=='joy'}catch(_){}
+ const set=()=>{document.body.classList.toggle('joy',joy);$('mCtrl').textContent=joy?'Controlos: joystick':'Controlos: setas';up()};
+ $('mCtrl').onclick=()=>{joy=!joy;try{localStorage.setItem('rc-ctrl',joy?'joy':'btn')}catch(_){}set()};set()}
 document.addEventListener('visibilitychange',()=>{if(document.hidden&&started){store();if(!paused)$('menuB').click()}});
 setInterval(()=>{if(started)store()},20000);
 
