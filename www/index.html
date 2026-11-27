@@ -851,6 +851,7 @@ const CG=()=>window.CrazyGames&&window.CrazyGames.SDK||null,CAP=()=>window.Capac
 let adBusy=false,lastMid=Date.now(),offer=null,offerKey='',gpState=null,dailyOffer=null;
 let sdkReady=false,cgMute=false;
 const vol=()=>save.sound&&!cgMute?.45:0;
+function happy(){try{if(CG())CG().game.happytime()}catch(e){}}
 async function sdkInit(){if(sdkReady)return;sdkReady=true;try{if(CG()){await CG().init();const g=CG().game;try{g.loadingStart()}catch(_){}cgMute=!!(g.settings&&g.settings.muteAudio);g.addSettingsChangeListener&&g.addSettingsChangeListener(st=>{cgMute=!!st.muteAudio;if(master)master.gain.value=vol()})}}catch(e){}try{if(CAP()&&CAP().AdMob)await CAP().AdMob.initialize({})}catch(e){}}
 function demoAd(kind){return new Promise(res=>{const o=$('adOv');let t=kind=='rewarded'?5:3;$('adT').textContent=kind=='rewarded'?'Anúncio com recompensa':'Intervalo publicitário';$('adS').textContent=t;o.classList.add('on');const iv=setInterval(()=>{t--;$('adS').textContent=t;if(t<=0){clearInterval(iv);o.classList.remove('on');res(true)}},1000)})}
 async function showAd(kind){if(adBusy)return false;adBusy=true;const was=paused;paused=true;if(master)master.gain.value=0;let ok=false;
@@ -984,7 +985,7 @@ function stepDone(){const s=M.steps[M.i];
 function cleanupMission(){if(M){if(M.ent)V=V.filter(v=>v!==M.ent);if(M.race)V=V.filter(v=>!v.racer)}crew=[];if(P.pass){P.pass=null;refreshBike()}P.lock=false}
 function missionEnd(win,why){
   const m=M;cleanupMission();M=null;if(m.npc)npcCD[m.npc]=clockR+(win?90:15);shopLatch=true;boothCD=4;
-  if(win){const pay=Math.round(m.def.pay*mult()*(ST.scoot&&m.bk=='loja'?1.25:1));money+=pay;rep=Math.min(100,rep+m.def.rp);P.lastWin={k:'win',once:1,t:`Ver anúncio · +£${pay}`,until:clockR+14,fn:()=>{money+=pay;bigToast('RECOMPENSA DUPLICADA',`+£${pay}`)}};if(m.npc){save.npcDone=save.npcDone||{};save.npcDone[m.npc]=(save.npcDone[m.npc]||0)+1}if(m.first)save.prog[m.bk]++;const L0=lic();save.done++;if(lic()!=L0)setTimeout(()=>bigToast('CARTA '+lic()+'!',lic()=='A'?'Já podes conduzir qualquer cilindrada':'Já podes conduzir motas até 700cc'),3000);bigToast('MISSÃO CUMPRIDA',`+£${pay} · +${m.def.rp} respeito`);sfx('win')}
+  if(win){const pay=Math.round(m.def.pay*mult()*(ST.scoot&&m.bk=='loja'?1.25:1));money+=pay;rep=Math.min(100,rep+m.def.rp);P.lastWin={k:'win',once:1,t:`Ver anúncio · +£${pay}`,until:clockR+14,fn:()=>{money+=pay;bigToast('RECOMPENSA DUPLICADA',`+£${pay}`)}};if(m.npc){save.npcDone=save.npcDone||{};save.npcDone[m.npc]=(save.npcDone[m.npc]||0)+1}if(m.first)save.prog[m.bk]++;const L0=lic();save.done++;if(lic()!=L0)setTimeout(()=>bigToast('CARTA '+lic()+'!',lic()=='A'?'Já podes conduzir qualquer cilindrada':'Já podes conduzir motas até 700cc'),3000);happy();bigToast('MISSÃO CUMPRIDA',`+£${pay} · +${m.def.rp} respeito`);sfx('win')}
   else{rep-=4;bigToast('MISSÃO FALHADA',why||'');sfx('fail')}
   $('pgWho').textContent='Telefone';$('pgTxt').textContent=idleTxt();$('pgTime').textContent='';$('pgExtra').textContent='';store();if(!win)setTimeout(midgame,3000);
 }
@@ -1088,7 +1089,7 @@ function update(dt){
     if(M)missionUpdate(dt,sp);
     // pickups
     for(const p of pickups){if(p.gone)continue;if(hyp(p.x-P.x,p.y-P.y)<14){
-      if(p.t=='badge'){save.badges.push(p.id);p.gone=1;money+=50;sfx('win');bigToast('CRACHÁ RC',`${save.badges.length}/20 · +£50`);if(save.badges.length==20){money+=2000;bigToast('TODOS OS CRACHÁS!','+£2000');}store()}
+      if(p.t=='badge'){save.badges.push(p.id);p.gone=1;money+=50;sfx('win');bigToast('CRACHÁ RC',`${save.badges.length}/20 · +£50`);if(save.badges.length==20){money+=2000;happy();bigToast('TODOS OS CRACHÁS!','+£2000');}store()}
       else if(p.t=='wrench'&&P.hp<ST.hpMax){P.hp=ST.hpMax;p.gone=1;p.back=clockR+90;sfx('pick');toast('Mota reparada!')}
       else if(p.t=='cash'){money+=p.v;p.gone=1;p.back=clockR+70;sfx('pick');toast(`+£${p.v}`)}}
       if(p.gone&&p.back&&clockR>p.back){p.gone=0;p.back=0}}
@@ -1276,7 +1277,7 @@ function doAct(){if(!act||paused||!started||mg.on)return;const k=act.k;actKey=''
   else if(k=='cafe')mgOpen('cafe',{},r=>{if(r.quit&&!r.hits)return;cafeCD=90;const g=r.hits*15;money+=g;rep=Math.min(100,rep+r.hits);bigToast('CAFÉ SERVIDO',`+£${g} · +${r.hits} respeito`)});
   else if(k=='viajar'){if(M){toast('Acaba a missão primeiro.',1);return}openTravel()}
   else if(k=='npc')startNpc(act.npc);
-  else if(k=='drag'){const bet=Math.min(100,Math.floor(money));mgOpen('drag',{},r=>{if(r.quit)return;if(r.win){money+=bet;rep=Math.min(100,rep+2);bigToast('ARRANCADA GANHA',`+£${bet} · +2 respeito`)}else{money-=bet;bigToast('ARRANCADA PERDIDA',`−£${bet}`)}})}
+  else if(k=='drag'){const bet=Math.min(100,Math.floor(money));mgOpen('drag',{},r=>{if(r.quit)return;if(r.win){money+=bet;rep=Math.min(100,rep+2);happy();bigToast('ARRANCADA GANHA',`+£${bet} · +2 respeito`)}else{money-=bet;bigToast('ARRANCADA PERDIDA',`−£${bet}`)}})}
 }
 $('act').onclick=doAct;
 
