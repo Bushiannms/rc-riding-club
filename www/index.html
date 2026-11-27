@@ -66,6 +66,8 @@ html,body{margin:0;height:100%;background:#0e1510;color:#fff;overflow:hidden;fon
 #pager.mini #pgTxt{display:none}
 body.ui-open .pad,body.ui-open #act,body.ui-open #offer,body.ui-open #gauge{display:none!important}
 @media(max-height:460px){#pager{top:auto;bottom:8px;width:min(46vw,420px)}}
+@media(max-height:460px) and (hover:hover) and (pointer:fine){#gauge{left:auto;right:8px;transform:none;bottom:8px;width:120px;height:110px}}
+@media(max-height:460px) and (pointer:coarse){#gauge{top:4px;bottom:auto;width:96px;height:88px}}
 .ov{position:fixed;inset:0;background:rgba(6,10,8,.82);display:none;place-items:center;padding:14px;z-index:9;overflow:auto;touch-action:auto}
 .ov.on{display:grid}
 .panel{max-width:480px;width:100%;background:var(--p);border:3px solid #000;box-shadow:0 0 0 3px var(--g),8px 8px 0 #000;padding:20px;text-align:center}
@@ -136,6 +138,7 @@ body.ui-open .pad,body.ui-open #act,body.ui-open #offer,body.ui-open #gauge{disp
   </ul>
   <p style="font-size:13px">Teclado: setas/WASD · espaço trava · H buzina · M mapa · P pausa</p>
   <div id="slots" class="items" style="text-align:left"></div>
+  <button class="go alt" id="sLang" type="button" style="margin-top:6px">Language: English</button>
   <button class="hide" id="play" type="button"></button><button class="hide" id="newG" type="button"></button>
 </div></div>
 
@@ -147,6 +150,7 @@ body.ui-open .pad,body.ui-open #act,body.ui-open #offer,body.ui-open #gauge{disp
   <button class="go alt" id="mSnd" type="button">Som: ligado</button>
   <button class="go alt" id="mSave" type="button">Gravar agora</button>
   <button class="go alt" id="mSlots" type="button">Mudar de save</button>
+  <button class="go alt" id="mLang" type="button">Language: English</button>
 </div></div>
 
 <div class="ov" id="mapOv"><div class="panel">
@@ -202,11 +206,146 @@ body.ui-open .pad,body.ui-open #act,body.ui-open #offer,body.ui-open #gauge{disp
 .mgBtns .go{width:auto;margin:0}#mgA{flex:1;max-width:340px;min-height:76px;font-size:26px;touch-action:none}#mgB{min-width:110px;font-size:16px}
 </style>
 <script>
+
 {
 'use strict';
 // ================= básicos =================
 const T=32,N=66,DX=[1,0,-1,0],DY=[0,1,0,-1],PI=Math.PI;
 const $=id=>document.getElementById(id);
+// ================= idiomas (inglês obrigatório na CrazyGames) =================
+let LANG='pt';
+const TR_P=[
+// interface
+["Cidade · 125cc · Londres","City · 125cc · London"],
+["Faz missões para o grupo nas cabines telefónicas, ganha libras, melhora a tua 125 na Garagem do Tiago e não percas o respeito da malta.","Do missions for the club at the phone boxes, earn pounds, upgrade your 125 at Tiago's Garage and don't lose the crew's respect."],
+["Respeito acima de tudo:","Respect above all:"],
+["atropelar peões e passar no vermelho tira respeito.","hitting pedestrians and running red lights costs respect."],
+["Polícia:","Police:"],
+["se te virem a fazer asneiras, vêm atrás de ti. Foge pelos parques, jardins e calçadas (os carros não entram), pinta a mota na Garagem do Tiago (£100) ou esconde-te no ponto de encontro. Dois toques fortes deixam um carro da polícia fora de combate.","if they see you misbehave, they come after you. Escape through parks, gardens and plazas (cars can't follow), respray your bike at Tiago's Garage (£100) or hide at the meeting point. Two hard hits take a police car out."],
+["Conduz pela esquerda. Abastece nos postos. Há 20 crachás escondidos.","Drive on the left. Fill up at petrol stations. There are 20 hidden badges."],
+["Teclado: setas/WASD · espaço trava · H buzina · M mapa · P pausa","Keyboard: arrows/WASD · space brakes · H horn · M map · P pause"],
+["Versão de demonstração: na versão publicada aparece aqui um vídeo. A recompensa é dada no fim.","Demo version: the published game shows a video here. The reward is given at the end."],
+["Escolhe o destino. A viagem gasta gasolina e o relógio anda.","Choose a destination. The trip uses fuel and time passes."],
+["Mapa da cidade","City map"],["Gravar agora","Save now"],["Mudar de save","Switch save"],["Voltar à estrada","Back to the road"],["Ficar aqui","Stay here"],
+["Garagem do Tiago","Tiago's Garage"],["Oficina do Tiago","Tiago's Workshop"],["Som: ligado","Sound: on"],["Som: desligado","Sound: off"],["Som:","Sound:"],
+["Continuar","Continue"],["Novo jogo","New game"],["Apagar","Delete"],["Confirmar","Confirm"],["Vazio","Empty"],["Pausa","Pause"],["Fechar","Close"],["Cancelar","Cancel"],
+["Desbloquear","Unlock"],["Compra","Purchase"],["Dinheiro:","Money:"],["Anúncio com recompensa","Rewarded ad"],["Intervalo publicitário","Ad break"],["Anúncio","Ad"],
+["Motas","Bikes"],["Melhorias","Upgrades"],["Pintura","Paint"],["Oficina","Workshop"],["Loja RC","RC Shop"],["Merch","Merch"],
+["Respeito","Respect"],["Gasolina","Fuel"],["Mota","Bike"],["Objetivo","Objective"],["Clube","Club"],["Loja","Shop"],["Estrada","Road"],["Garagem","Garage"],["Membros","Members"],["Mapa","Map"],
+["ACELERA","GAS"],["TRAVA","BRAKE"],["BUZINA","HORN"],["APERTAR","TIGHTEN"],["ENCHER","FILL"],["TIRAR","POUR"],["MUDAR","SHIFT"],["Sair","Exit"],["Desistir","Give up"],["Pagar e sair","Pay and leave"],
+["Telefone","Phone"],["Londres","London"],["LONDRES","LONDON"],["chuva","rain"],["Crachás","Badges"],["crachás","badges"],
+["Segue a seta até uma cabine telefónica: verde é o clube, laranja a loja, vermelha os passeios e corridas.","Follow the arrow to a phone box: green is the club, orange the shop, red the rides and races."],
+["Vai a uma cabine telefónica ou fala com os membros marcados a verde.","Go to a phone box or talk to the members marked in green."],
+["Segue a seta: as cabines telefónicas dão missões.","Follow the arrow: phone boxes give missions."],
+["Para nos sítios com marcador para abastecer, tirar cafés ou entrar na garagem.","Stop at marked spots to refuel, make coffee or enter the garage."],
+["Foge à polícia pelos parques: os carros não entram.","Escape the police through parks: cars can't follow."],
+["Entrar na garagem","Enter the garage"],["Abastecer","Refuel"],["Tirar bicas","Make coffees"],["Falar com","Talk to"],["Arrancada · aposta £","Drag race · bet £"],["Autoestrada M1 · viajar","M1 motorway · travel"],["Autoestrada M1","M1 motorway"],
+["Ver anúncio · depósito cheio","Watch ad · full tank"],["Ver anúncio · limpar estrelas","Watch ad · clear stars"],["Ver anúncio · reparar mota","Watch ad · repair bike"],["Ver anúncio","Watch ad"],
+["Missões nas cabines telefónicas","Missions at the phone boxes"],["estás aqui","you are here"],["Sem gasolina","Not enough fuel"],["Aqui","Here"],["Ir","Go"],
+// garagem
+["A tua carta:","Your licence:"],["missões feitas","missions done"],["125cc · carta A1","125cc · A1 licence"],["Média cilindrada · carta A2 ·","Mid-size · A2 licence ·"],["Grande cilindrada · carta A ·","Big bikes · A licence ·"],
+["resistência","toughness"],["Em uso","In use"],["Usar","Use"],["Carta","Licence"],["carta","licence"],["missões","missions"],
+["+ velocidade e aceleração","+ speed and acceleration"],["Trava mais depressa","Brakes faster"],["+ aderência e direção","+ grip and steering"],["+ gasolina","+ fuel"],["+ resistência","+ toughness"],
+["Motor","Engine"],["Travões","Brakes"],["Pneus","Tyres"],["Depósito","Tank"],["Chassis","Frame"],["Máximo","Max"],
+["Cor da mota · £60","Bike colour · £60"],["Cor do capacete · grátis","Helmet colour · free"],["Casaco · grátis","Jacket · free"],
+["Reparar a mota","Repair the bike"],["Estado:","Condition:"],["Está nova","Like new"],["Arranjar tu mesmo","Fix it yourself"],["Mini-jogo 3D na oficina. Grátis, se tiveres mão firme.","3D mini-game in the workshop. Free, if your hand is steady."],
+["Reparação com anúncio","Repair with an ad"],["Vê um vídeo curto e o Tiago arranja tudo de graça.","Watch a short video and Tiago fixes everything for free."],["Progresso","Progress"],
+["Merch oficial do clube","Official club merch"],["T-shirts, hoodies e autocolantes reais do RC Riding Club, à venda no site do clube.","Real RC Riding Club t-shirts, hoodies and stickers, sold on the club website."],["Abrir a loja do clube","Open the club shop"],["Link da loja em breve.","Shop link coming soon."],
+["As compras estão disponíveis na versão Android.","Purchases are available in the Android version."],["Só cosmética e libras do jogo: nada que estrague a justiça das corridas.","Cosmetics and in-game pounds only: nothing that makes races unfair."],["Tens","Owned"],
+["Pinturas especiais","Special paints"],["Cromado, dourado, néon e carbono para todas as motas.","Chrome, gold, neon and carbon for every bike."],["Capacetes especiais","Special helmets"],["Dourado, cromado, rosa néon e verde RC.","Gold, chrome, neon pink and RC green."],
+["Casacos do clube","Club jackets"],["Casaco RC branco, couro castanho, racing vermelho e dourado.","White RC jacket, brown leather, red racing and gold."],["Pack Lenda","Legend Pack"],["£25 000 para começar, mais pintura, capacete e casaco dourados.","£25,000 to start, plus gold paint, helmet and jacket."],
+[" Na versão Android isto abre o pagamento do Google Play. Aqui podes desbloquear grátis para testar."," In the Android version this opens Google Play billing. Here you can unlock it for free to test."],
+["Novato","Rookie"],["Membro","Member"],["Veterano","Veteran"],["Capitão de Estrada","Road Captain"],["Lenda do RC","RC Legend"],
+["A tua primeira 125. Honesta e barata.","Your first 125. Honest and cheap."],["Scooter ágil. +25% nas missões da Loja.","Nimble scooter. +25% on Shop missions."],["Trail. Não abranda na relva dos parques.","Trail bike. Doesn't slow down on park grass."],["Naked equilibrada e resistente.","Balanced, tough naked bike."],["A mais rápida das 125.","The fastest 125."],["Leve e nervosa. Curva como ninguém.","Light and lively. Corners like nothing else."],["Desportiva de entrada.","Entry-level sports bike."],["Fiável para o dia a dia e para passeios.","Reliable for commuting and rides."],["Clássica com estilo café racer.","Classic with café racer style."],["O binário de referência da carta A2.","The torque benchmark of the A2 licence."],["Tricilíndrica afiada.","Sharp three-cylinder."],["Muito binário. Cuidado com o acelerador.","Loads of torque. Careful with the throttle."],["Aventureira robusta. Não abranda na relva.","Tough adventure bike. Doesn't slow down on grass."],["Pesada, larga e quase indestrutível.","Heavy, wide and nearly indestructible."],["Superbike de pista.","Track superbike."],["Lenda da velocidade máxima.","Top-speed legend."],["Pura emoção italiana.","Pure Italian emotion."],["Turbo de fábrica. A mais rápida do jogo.","Factory turbo. The fastest in the game."],["A maior cilindrada do jogo: 2458cc.","The biggest engine in the game: 2458cc."],
+["Já podes conduzir motas até 700cc","You can now ride bikes up to 700cc"],["Já podes conduzir qualquer cilindrada","You can now ride any engine size"],["CARTA","LICENCE"],
+// avisos
+["MISSÃO CUMPRIDA","MISSION COMPLETE"],["MISSÃO FALHADA","MISSION FAILED"],["APANHADO!","BUSTED!"],["MOTA DESFEITA","BIKE WRECKED"],["EXPULSO DO GRUPO!","KICKED OUT OF THE CLUB!"],["CRACHÁ RC","RC BADGE"],["TODOS OS CRACHÁS!","ALL BADGES!"],["AJUDASTE A MALTA","YOU HELPED THE CREW"],["PRÉMIO DIÁRIO","DAILY REWARD"],["PRÉMIO DUPLICADO","REWARD DOUBLED"],["POLÍCIA FORA DE COMBATE","POLICE CAR DOWN"],["PINTURA NOVA","NEW PAINT JOB"],["POLÍCIA DESPISTADA","POLICE SHAKEN OFF"],["MOTA REPARADA","BIKE REPAIRED"],["DEPÓSITO CHEIO","FULL TANK"],["RECOMPENSA DUPLICADA","REWARD DOUBLED"],["DESBLOQUEADO","UNLOCKED"],["CAFÉ SERVIDO","COFFEE SERVED"],["ARRANCADA GANHA","DRAG RACE WON"],["ARRANCADA PERDIDA","DRAG RACE LOST"],["JÁ!","GO!"],["VAI!","GO!"],
+["Respeito acima de tudo! −5 respeito","Respect above all! −5 respect"],["Respeito acima de tudo","Respect above all"],["respeito","respect"],["Multa de","Fine of"],["Reboque e oficina:","Tow and repair:"],["O Marco Machado deu-te outra chance.","Marco Machado gave you another chance."],["É assim que o grupo cresce","That's how the club grows"],
+["Grátis com o anúncio","Free with the ad"],["Obrigado por veres o anúncio","Thanks for watching the ad"],["A polícia perdeu-te o rasto","The police lost your trail"],["Aproveita e foge!","Make your escape!"],["Bem-vindo de volta","Welcome back"],
+["Condução responsável! −1 respeito","Ride responsibly! −1 respect"],["Passaste no vermelho! −1 respeito","You ran a red light! −1 respect"],["Atropelaste um peão.","You hit a pedestrian."],["Sinal vermelho.","Red light."],["Bateste num carro da polícia.","You hit a police car."],["A polícia viu!","The police saw it!"],["Despistaste a polícia.","You lost the police."],["Carro da polícia atordoado!","Police car stunned!"],["Bateu contra um prédio!","It crashed into a building!"],
+["A malta esconde-te entre as motas…","The crew hides you among the bikes…"],["Precisas de £100 para pintar a mota.","You need £100 to respray the bike."],["Sem gasolina! Vai a um posto.","Out of fuel! Go to a petrol station."],["A abastecer…","Refuelling…"],["Não tens dinheiro para gasolina.","You don't have money for fuel."],
+["Mota reparada!","Bike repaired!"],["Um membro precisa de ajuda! Vê o mapa.","A member needs help! Check the map."],["Boa!","Nice!"],["Caixa apanhada!","Box collected!"],["Faltam","Left:"],["Acertaste!","Hit!"],["Toques","Hits"],["Carga","Cargo"],["Pancadas","Crashes"],
+["Prepara-te…","Get ready…"],["Lugar","Position"],["Ponto","Checkpoint"],["Já tens uma missão ativa","You already have an active mission"],["Acaba a missão primeiro.","Finish the mission first."],
+["O anúncio não carregou. Tenta mais tarde.","The ad didn't load. Try again later."],["Mini-jogo indisponível agora.","Mini-game unavailable right now."],["Gravado!","Saved!"],
+["A carga ficou destruída.","The cargo was destroyed."],["A malta desistiu de ti. Conduz com cuidado!","The crew gave up on you. Ride carefully!"],["Acabou o tempo.","Time's up."],["Foste apanhado pela polícia.","You got busted by the police."],["A mota ficou desfeita.","The bike was wrecked."],["Perdeste a arrancada.","You lost the drag race."],["Não ficou bem feito.","It wasn't done right."],
+// mini-jogos
+["Posto de gasolina","Petrol station"],["Mantém ENCHER premido e larga na zona verde. Atesto perfeito: 15% de desconto.","Hold FILL and release in the green zone. Perfect fill: 15% off."],["Transbordou! Limpeza: +£10","It overflowed! Cleaning: +£10"],["Atesto perfeito! −15%","Perfect fill! −15%"],["Já não tens dinheiro para mais.","You can't afford any more."],["Pagaste","You paid"],["de gasolina.","for fuel."],
+["Toca em APERTAR com a agulha no verde!","Tap TIGHTEN when the needle is in the green!"],["Apertado!","Tight!"],["A chave escorregou!","The wrench slipped!"],["Mota impecável!","Bike in perfect shape!"],["parafusos apertados","bolts tightened"],["Mãos de manteiga…","Butterfingers…"],["apertados","tightened"],["falhas","misses"],
+["Roda da frente","Front wheel"],["Roda de trás","Rear wheel"],["Escape","Exhaust"],["Guiador","Handlebar"],
+["Mantém TIRAR premido e larga com o café na marca verde.","Hold POUR and release when the coffee hits the green mark."],["Transbordou!","It overflowed!"],["Curto demais!","Too short!"],["Comprido demais!","Too long!"],["no ponto!","just right!"],["a seguir!","next!"],["Três cafés perfeitos! A malta agradece.","Three perfect coffees! The crew thanks you."],["cafés bem tirados","coffees made right"],["bem tirados","made right"],
+["Bica","Espresso"],["Pingo","Macchiato"],["Galão","Latte"],
+["Arrancada · 400 m","Drag race · 400 m"],["Espera pelo verde…","Wait for green…"],["Partida falsa! Penalização.","False start! Penalty."],["Reação","Reaction"],["Mudança perfeita!","Perfect shift!"],["Cedo demais","Too early"],["Tarde","Late"],["Mudança","Gear"],["faltam","to go"],["Ganhaste!","You won!"],["Perdeste por","You lost by"],["O rival chegou muito antes.","The rival finished way ahead."],
+// lugares
+["Café Lusitano","Café Lusitano"],["Mercearia Portuguesa","Portuguese Deli"],["Ponto de encontro","Meeting point"],["Esquadra","Police station"],["Aeroporto","Airport"],["Catedral","Cathedral"],["Castelo","Castle"],["Siderurgia","Steelworks"],["Central","Power station"],["Parque Wicksteed","Wicksteed Park"],["Jardins de Água","Water Gardens"],["Fábrica","Factory"],["Estádio","Stadium"],["Centro comercial","Shopping centre"],["Cais","Pier"],
+["AEROPORTO","AIRPORT"],["CENTRAL ELÉTRICA","POWER STATION"],["CENTRO COMERCIAL","SHOPPING CENTRE"],["FÁBRICA DE CADEIRAS","CHAIR FACTORY"],["GARAGEM","GARAGE"],["GASOLINA","PETROL"],["MERCEARIA","DELI"],["POLÍCIA","POLICE"],["SIDERURGIA","STEELWORKS"],["TAMISA","THAMES"],["RIO","RIVER"],
+// missões: títulos
+["Bem-vindo ao grupo","Welcome to the club"],["Spam no grupo","Spam in the group"],["Junta a malta","Round up the crew"],["O troll","The troll"],["Bica para o presidente","Coffee for the president"],["Bolo de aniversário","Birthday cake"],["T-shirts novas","New t-shirts"],["Pastéis de nata","Custard tarts"],["Autocolantes","Stickers"],["Peças urgentes","Urgent parts"],["Mota de cliente","Customer's bike"],["Hoodies de inverno","Winter hoodies"],["Rookie avariada","Broken-down rookie"],["Corrida: Big Bikes Only","Race: Big Bikes Only"],["Passeio de domingo","Sunday ride"],["Sem gasolina","Out of fuel"],["Arrancada no cais","Drag race at the pier"],["Corrida final","Final race"],
+["Voo apanhado à justa","Just in time for the flight"],["O bolo da Suzana","Suzana's cake"],["Volta à catedral","Around the cathedral"],["Cafés para o convívio","Coffees for the get-together"],["Peças da siderurgia","Parts from the steelworks"],["Spam em Corby","Spam in Corby"],["Encontro em Corby","Corby meet-up"],["Arrancada da siderurgia","Steelworks drag race"],["Antes que a ponte abra","Before the bridge opens"],["Passeio ao Wicksteed","Ride to Wicksteed"],["Fotos nos Jardins","Photos at the Gardens"],["O depósito do Alberto","Alberto's tank"],["Entregas em Ealing","Deliveries in Ealing"],["O troll de Finsbury Park","The Finsbury Park troll"],["Subida à catedral","Up to the cathedral"],["A mota do Arthur","Arthur's bike"],["Cadeiras de Wycombe","Wycombe chairs"],["As bicas da Solange","Solange's espressos"],["Corrida do Nene","Nene race"],["Dia de jogo","Match day"],
+// missões: textos
+["Bem-vindo ao RC Riding Club! Primeiro encontro no Café Lusitano. Entra no marcador e trava.","Welcome to RC Riding Club! First meet-up at Café Lusitano. Ride into the marker and brake."],["Vai ao Café Lusitano e para no marcador.","Go to Café Lusitano and stop on the marker."],
+["Um spammer de cripto anda a encher o grupo de anúncios. A carrinha CRYPTO anda pela cidade: bate-lhe 3 vezes!","A crypto spammer is flooding the group with ads. The CRYPTO van is driving around town: hit it 3 times!"],["Bate na carrinha CRYPTO 3 vezes.","Hit the CRYPTO van 3 times."],
+["Vamos fazer um encontro! Apanha 3 membros e trá-los ao ponto de encontro. Eles vêm atrás de ti: nada de pancadas.","Let's have a meet-up! Pick up 3 members and bring them to the meeting point. They ride behind you: no crashes."],["Apanha o Zé (1/3).","Pick up Zé (1/3)."],["Apanha o Tó (2/3).","Pick up Tó (2/3)."],["Apanha a Joana (3/3).","Pick up Joana (3/3)."],["Leva a malta ao ponto de encontro.","Take the crew to the meeting point."],
+["Um dos Big Bikes Only anda a dizer que as 125 não são motas. Apanha-o e encosta-lhe 3 vezes. Sem insultos, só condução.","One of the Big Bikes Only says 125s aren't real bikes. Catch him and bump him 3 times. No insults, just riding."],["Apanha o troll e toca-lhe 3 vezes.","Catch the troll and bump him 3 times."],
+["O Marco Machado quer três cafés bem tirados no Café Lusitano antes da reunião do clube.","Marco Machado wants three well-made coffees at Café Lusitano before the club meeting."],["Vai ao Café Lusitano e tira os cafés.","Go to Café Lusitano and make the coffees."],["Leva os cafés à reunião no ponto de encontro. Não entornes!","Take the coffees to the meeting point. Don't spill them!"],
+["O grupo faz anos! Vai buscar o bolo à Mercearia Portuguesa e leva-o ao ponto de encontro. É frágil!","It's the club's birthday! Pick up the cake at the Portuguese Deli and take it to the meeting point. It's fragile!"],["Apanha o bolo na Mercearia Portuguesa.","Pick up the cake at the Portuguese Deli."],["Leva o bolo ao ponto de encontro. Sem pancadas!","Take the cake to the meeting point. No crashes!"],
+["Chegaram as t-shirts! Apanha a caixa na loja e entrega 3 encomendas. O merchandise também está no site.","The t-shirts are here! Pick up the box at the shop and deliver 3 orders. The merch is also on the website."],["Apanha as t-shirts na Loja RC.","Pick up the t-shirts at the RC Shop."],["Entrega a encomenda (1/3).","Deliver the order (1/3)."],["Entrega a encomenda (2/3).","Deliver the order (2/3)."],["Entrega a encomenda (3/3).","Deliver the order (3/3)."],
+["Uma caixa de pastéis de nata para o encontro da malta. Frágeis! Mercearia, depois café.","A box of custard tarts for the crew's meet-up. Fragile! Deli first, then the café."],["Apanha os pastéis na Mercearia.","Pick up the tarts at the Deli."],["Leva os pastéis ao Café Lusitano. Com cuidado!","Take the tarts to Café Lusitano. Carefully!"],
+["As caixas de autocolantes caíram da carrinha! Apanha as 5 caixas pela cidade e leva-as à loja.","The sticker boxes fell off the van! Collect the 5 boxes around town and take them to the shop."],["Apanha as 5 caixas de autocolantes.","Collect the 5 sticker boxes."],["Leva as caixas à loja.","Take the boxes to the shop."],
+["O Tiago precisa de uma corrente para a mota de um membro. Apanha a peça e leva-a à garagem. Depressa!","Tiago needs a chain for a member's bike. Pick up the part and take it to the garage. Quick!"],["Apanha a corrente no fornecedor.","Pick up the chain at the supplier."],["Leva a peça à Garagem do Tiago.","Take the part to Tiago's Garage."],
+["Um cliente deixou a mota com parafusos soltos. Apanha as chaves na loja e aperta tudo na Garagem do Tiago.","A customer left a bike with loose bolts. Get the keys at the shop and tighten everything at Tiago's Garage."],["Apanha as chaves na loja.","Get the keys at the shop."],["Na garagem, aperta os parafusos da mota do cliente.","At the garage, tighten the bolts on the customer's bike."],
+["Pré-venda de hoodies esgotada! Quatro entregas antes que a malta fique com frio.","Hoodie pre-sale sold out! Four deliveries before the crew gets cold."],["Apanha os hoodies na loja.","Pick up the hoodies at the shop."],["Entrega (1/4).","Deliver (1/4)."],["Entrega (2/4).","Deliver (2/4)."],["Entrega (3/4).","Deliver (3/4)."],["Entrega (4/4).","Deliver (4/4)."],["Entrega (1/3).","Deliver (1/3)."],["Entrega (2/3).","Deliver (2/3)."],["Entrega (3/3).","Deliver (3/3)."],
+["A Sofia tirou a carta e a 125 dela não pega. Vai buscá-la e leva-a à garagem do Tiago.","Sofia just got her licence and her 125 won't start. Pick her up and take her to Tiago's garage."],["Vai buscar a Sofia.","Go and get Sofia."],["Leva a Sofia à Garagem do Tiago.","Take Sofia to Tiago's Garage."],
+["Os Big Bikes Only acham que as 125 não são motas. Ganha-lhes uma corrida pela cidade!","The Big Bikes Only think 125s aren't real bikes. Beat them in a race through town!"],["Vai à linha de partida.","Go to the starting line."],["Corrida! Passa nos pontos e chega em 1º.","Race! Hit the checkpoints and finish 1st."],["Corrida! Chega em 1º.","Race! Finish 1st."],["Corrida final! Chega em 1º.","Final race! Finish 1st."],
+["Passeio do grupo! Vai ao ponto de encontro, lidera a malta pelos pontos e acaba no café. Capacete sempre, condução responsável.","Club ride! Go to the meeting point, lead the crew through the checkpoints and finish at the café. Helmets always, ride responsibly."],["A malta está no ponto de encontro. Vai liderar!","The crew is at the meeting point. Go lead them!"],["A malta está no ponto de encontro.","The crew is at the meeting point."],["Lidera o passeio: ponto","Lead the ride: checkpoint"],["Acaba o passeio no Café Lusitano.","Finish the ride at Café Lusitano."],
+["O Rui ficou sem gasolina no meio da estrada. Enche um jerrican no posto e vai lá ter.","Rui ran out of fuel in the middle of the road. Fill a jerrycan at the station and bring it to him."],["Enche um jerrican no posto.","Fill a jerrycan at the station."],["Leva o jerrican ao Rui.","Take the jerrycan to Rui."],
+["Os Big Bikes Only desafiam-te para 400 metros junto ao Tamisa. Espera pelo verde e acerta nas mudanças.","The Big Bikes Only challenge you to 400 metres by the Thames. Wait for green and nail the gear shifts."],["Vai à linha de partida no cais do Tamisa.","Go to the starting line at the Thames pier."],
+["Final do campeonato de rua. Os Big Bikes Only vêm com tudo. Ganha e és uma lenda!","Street championship final. The Big Bikes Only are going all out. Win and you're a legend!"],
+["O primo do Marco aterrou em Luton e o voo de ligação sai daqui a nada. Vai buscá-lo e leva-o ao aeroporto a tempo!","Marco's cousin landed in Luton and his connecting flight leaves any minute. Pick him up and get him to the airport in time!"],["Apanha o primo do Marco.","Pick up Marco's cousin."],["Leva-o ao aeroporto de Luton. Depressa!","Take him to Luton airport. Quick!"],
+["A Suzana encomendou um bolo de anos de três andares na mercearia portuguesa. Nada de pancadas!","Suzana ordered a three-tier birthday cake at the Portuguese deli. No crashes!"],["Apanha o bolo na mercearia.","Pick up the cake at the deli."],["Leva o bolo à Suzana sem o estragar.","Take the cake to Suzana without ruining it."],
+["O Fábio desafia-te para uma corrida pelas ruas de Peterborough, à volta da catedral. Os Big Bikes Only também vêm.","Fábio challenges you to a race through Peterborough, around the cathedral. The Big Bikes Only are coming too."],
+["A Lulu organizou um convívio e precisa de cafés bem tirados. Tira-os no café e leva-os à malta.","Lulu organised a get-together and needs well-made coffees. Make them at the café and bring them to the crew."],["Tira os cafés no café português.","Make the coffees at the Portuguese café."],["Leva os cafés ao convívio. Não entornes!","Take the coffees to the get-together. Don't spill them!"],
+["O Pedro arranjou uma peça na siderurgia de Corby para a mota de um membro. Vai buscá-la e monta-a na garagem.","Pedro found a part at the Corby steelworks for a member's bike. Pick it up and fit it at the garage."],["Apanha a peça na siderurgia.","Pick up the part at the steelworks."],["Monta a peça na garagem.","Fit the part at the garage."],
+["Há uma carrinha a fazer publicidade de cripto à porta dos membros de Corby. O Rui quer que a ponhas a andar: 3 toques.","There's a van advertising crypto outside the Corby members' doors. Rui wants you to send it packing: 3 hits."],
+["O Tiago quer juntar a malta de Corby. Apanha três membros e leva-os ao ponto de encontro sem pancadas.","Tiago wants to get the Corby crew together. Pick up three members and take them to the meeting point without crashing."],["Apanha o primeiro membro (1/3).","Pick up the first member (1/3)."],["Apanha o segundo (2/3).","Pick up the second (2/3)."],["Apanha o terceiro (3/3).","Pick up the third (3/3)."],
+["O Pedro Esteves marcou uma arrancada de 400 metros na reta da siderurgia. Espera pelo verde!","Pedro Esteves set up a 400-metre drag race on the steelworks straight. Wait for green!"],["Vai à reta da siderurgia para a arrancada.","Go to the steelworks straight for the drag race."],
+["O Miguel perdeu caixas de material pelos campos de Sutton Bridge. Apanha as 5 e leva-as à central antes que a ponte giratória abra.","Miguel lost boxes of gear across the Sutton Bridge fields. Collect all 5 and take them to the power station before the swing bridge opens."],["Apanha as 5 caixas.","Collect the 5 boxes."],["Leva as caixas à central.","Take the boxes to the power station."],
+["O Vitor quer levar a malta de Kettering a passear até ao Parque Wicksteed. Lidera o grupo e conduz com cuidado.","Vitor wants to take the Kettering crew for a ride to Wicksteed Park. Lead the group and ride carefully."],["Acaba no Parque Wicksteed.","Finish at Wicksteed Park."],
+["A Ana está a fazer um álbum do clube. Passa pelos 4 pontos de fotografia de Harlow e acaba nos Jardins de Água.","Ana is making a club photo album. Pass the 4 photo spots in Harlow and finish at the Water Gardens."],["Passa pelos 4 pontos de fotografia.","Pass the 4 photo spots."],["Acaba nos Jardins de Água para a foto de grupo.","Finish at the Water Gardens for the group photo."],
+["O Alberto ficou sem gasolina à porta de casa. Enche um jerrican no posto e leva-lho.","Alberto ran out of fuel outside his house. Fill a jerrycan at the station and bring it to him."],["Enche o jerrican no posto.","Fill the jerrycan at the station."],["Leva o jerrican ao Alberto.","Take the jerrycan to Alberto."],
+["O Ilias tem encomendas da Loja RC para entregar em Ealing e arredores. Três entregas a contrarrelógio.","Ilias has RC Shop orders to deliver in and around Ealing. Three deliveries against the clock."],["Apanha as encomendas na Loja RC.","Pick up the orders at the RC Shop."],
+["Um dos Big Bikes Only anda a gozar com as 125 em Finsbury Park. O Marco quer que lhe dês 3 toques e o ponhas a correr.","One of the Big Bikes Only is mocking 125s in Finsbury Park. Marco wants you to bump him 3 times and send him running."],
+["Contrarrelógio do José: castelo, catedral e ponto de encontro, depressa e sem asneiras.","José's time trial: castle, cathedral and meeting point, fast and clean."],["Primeiro ao castelo.","First to the castle."],["Agora sobe à catedral!","Now up to the cathedral!"],["E desce ao ponto de encontro.","And down to the meeting point."],
+["O Arthur ficou parado com a mota avariada. Vai buscá-lo, leva-o à garagem e aperta tudo.","Arthur is stuck with a broken-down bike. Pick him up, take him to the garage and tighten everything."],["Vai buscar o Arthur.","Go and get Arthur."],["Na garagem, arranja a mota do Arthur.","At the garage, fix Arthur's bike."],
+["High Wycombe é a terra das cadeiras. O Ricardo vendeu duas e precisa que as entregues inteiras.","High Wycombe is chair town. Ricardo sold two and needs you to deliver them in one piece."],["Apanha as cadeiras na fábrica.","Pick up the chairs at the factory."],["Entrega a primeira cadeira.","Deliver the first chair."],["Entrega a segunda cadeira.","Deliver the second chair."],
+["A Solange é exigente: quer três cafés perfeitos. Nem curtos nem compridos.","Solange is picky: she wants three perfect coffees. Not too short, not too long."],["Tira três cafés perfeitos para a Solange.","Make three perfect coffees for Solange."],
+["O Guilherme desafia-te para uma corrida ao longo do rio Nene, em Wisbech.","Guilherme challenges you to a race along the River Nene, in Wisbech."],
+["Há jogo em Watford e o Pedro tem três amigos à espera no ponto de encontro. Leva-os ao estádio antes do apito inicial.","There's a match in Watford and Pedro has three friends waiting at the meeting point. Get them to the stadium before kick-off."],["Apanha os adeptos no ponto de encontro.","Pick up the fans at the meeting point."],["Leva-os ao estádio antes do apito!","Get them to the stadium before kick-off!"]
+];
+const TR_R=[
+ [/(\d+) membros têm missões para ti/,"$1 members have missions for you"],[/(\d+) membro tem missões para ti/,"$1 member has missions for you"],
+ [/^Mota (\d+)% arranjada, sem pagar nada!$/,"Bike $1% fixed, free of charge!"],[/^Não apertaste nada\.$/,"You didn't tighten anything."],
+ [/Dia (\d+) seguido/,"Day $1 in a row"],[/Ficaste em (\d+)º lugar\./,"You finished in position $1."],[/^Gravado no save (\d)\.$/,"Saved to slot $1."],
+ [/Lugar (\d)º\/4/,"Position $1/4"],[/(\d+) de gasolina/,"$1 fuel"],
+ [/^Estás em (.+)\. Fala com os membros marcados a verde para missões, ou volta pela M1\.$/,"You're in $1. Talk to the members marked in green for missions, or head back via the M1."],
+ [/^(.+) a seguir!$/,"$1 next!"],[/^Ver anúncio · \+£(\d+) extra$/,"Watch ad · +£$1 extra"]
+];
+let TR_RE=null,TR_M=null;
+function trInit(){TR_M=new Map(TR_P);const keys=[...TR_M.keys()].sort((a,b)=>b.length-a.length).map(k=>k.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'));TR_RE=new RegExp('(?<![\\p{L}\\d])(?:'+keys.join('|')+')(?![\\p{L}])','gu')}
+function TT(s){if(LANG=='pt'||!s||!TR_RE)return s;for(const[r,v]of TR_R)s=s.replace(r,v);return s.replace(TR_RE,m=>TR_M.has(m)?TR_M.get(m):m)}
+function trNode(n){if(n.nodeType==3){const t=TT(n.data);if(t!==n.data)n.data=t}else if(n.nodeType==1&&n.tagName!='SCRIPT'&&n.tagName!='STYLE'){for(const c of n.childNodes)trNode(c)}}
+function langInit(){let l=null;try{l=localStorage.getItem('rc-lang')}catch(e){}
+  if(l!='pt'&&l!='en'){let loc='';try{const u=CG()&&CG().user;loc=(u&&u.systemInfo&&u.systemInfo.locale)||''}catch(e){}if(!loc)loc=navigator.language||'en';l=/^pt/i.test(loc)?'pt':'en'}
+  LANG=l;document.documentElement.lang=l;
+  const lb=LANG=='pt'?'Language: English':'Idioma: Português';['mLang','sLang'].forEach(id=>{const b=$(id);if(b)b.textContent=lb});
+  if(LANG!='pt'){trInit();trNode(document.body);new MutationObserver(ms=>{for(const m of ms){if(m.type=='characterData')trNode(m.target);else m.addedNodes.forEach(trNode)}}).observe(document.body,{subtree:true,childList:true,characterData:true})}}
+function switchLang(){try{localStorage.setItem('rc-lang',LANG=='pt'?'en':'pt')}catch(e){}if(started)store();location.reload()}
+
+const _ft=CanvasRenderingContext2D.prototype.fillText,_st=CanvasRenderingContext2D.prototype.strokeText,_mt=CanvasRenderingContext2D.prototype.measureText,TC=new Map();
+function TTc(t){if(LANG=='pt'||typeof t!='string')return t;let v=TC.get(t);if(v===undefined){v=TT(t);if(TC.size>4000)TC.clear();TC.set(t,v)}return v}
+CanvasRenderingContext2D.prototype.fillText=function(t,...a){return _ft.call(this,TTc(t),...a)};
+CanvasRenderingContext2D.prototype.strokeText=function(t,...a){return _st.call(this,TTc(t),...a)};
+CanvasRenderingContext2D.prototype.measureText=function(t){return _mt.call(this,TTc(t))};
+
 const clamp=(v,a,b)=>v<a?a:v>b?b:v,hyp=Math.hypot;
 const angDiff=(a,b)=>{let d=(a-b)%(2*PI);if(d>PI)d-=2*PI;if(d<-PI)d+=2*PI;return d};
 let sd=20261127;const R=()=>{sd|=0;sd=sd+0x6D2B79F5|0;let t=Math.imul(sd^sd>>>15,1|sd);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296};
@@ -1363,6 +1502,7 @@ function loop(ts){const dt=Math.min(.05,(ts-last)/1000||0);last=ts;
 async function init(){
   await Promise.race([sdkInit(),new Promise(r=>setTimeout(r,4000))]);
   try{await Promise.race([document.fonts.load('700 9px "Pixelify Sans"'),new Promise(r=>setTimeout(r,1500))])}catch(e){}
+  langInit();$('mLang').onclick=switchLang;$('sLang').onclick=switchLang;
   fontsOK=true;for(const b of blds)b.img=roofImg(b);
   resize();renderSlots();
   ST=stats();P.x=N*T/2;P.y=N*T/2;cam.x=P.x;cam.y=P.y;spawnTraffic();initLife();peds=[];for(let i=0;i<95;i++)peds.push(spawnPed());
