@@ -68,6 +68,16 @@ html,body{margin:0;height:100%;background:#0e1510;color:#fff;overflow:hidden;fon
 #joy.on #joyK{background:#9fe39a}
 body.joy #joy{display:block}body.joy #kL,body.joy #kR{display:none}
 @media(max-width:700px){#joy{width:min(100px,25vw);height:min(100px,25vw)}body.joy #pager{bottom:calc(max(12px,env(safe-area-inset-bottom)) + min(100px,25vw) + 8px)}body.joy #gauge{bottom:calc(max(12px,env(safe-area-inset-bottom)) + min(100px,25vw) + 84px)}body.joy #act{bottom:calc(max(12px,env(safe-area-inset-bottom)) + min(100px,25vw) + 90px)}#joyK{width:min(52px,13vw);height:min(52px,13vw);margin:calc(min(52px,13vw)/-2) 0 0 calc(min(52px,13vw)/-2)}}
+#phone .panel{max-width:440px;border-radius:24px}
+.phTop{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;font:700 15px 'Pixelify Sans',monospace;color:var(--y);text-align:right}
+.phTop span{color:#fff;font-size:13px}.xpb{display:block;width:140px;height:7px;background:#333;border:1px solid #000;margin:4px 0 0 auto}.xpb i{display:block;height:100%;background:var(--y)}
+.it.p{grid-template-columns:minmax(0,1fr) auto}#phBody{max-height:min(52vh,460px);overflow:auto;text-align:left}#phBody h3{font:700 14px 'Pixelify Sans',monospace;color:#9fe39a;margin:8px 0 0}
+.qq{font-weight:700;color:#fff;margin:6px 0}.qo{display:block;width:100%;margin:6px 0;text-align:left}.qo.qok{background:#2f7a2a!important;color:#fff}.qo.qbad{background:#8a2a20!important;color:#fff}
+.phRow{display:flex;gap:8px}.phRow .go{flex:1}
+#dlg .panel{max-width:520px}.dlgT{font-size:17px;color:#fff;margin:8px 0 12px;line-height:1.35}
+.fbh{background:#1a3a8a;color:#fff;padding:8px 10px;border:2px solid #000}.fbh b{display:block;font:700 16px 'Pixelify Sans',monospace}.fbh span{font-size:12px}
+.fbp{background:#f2f3f5;color:#111;border:2px solid #000;padding:8px 10px}.fbp p{margin:6px 0;font-size:14px;color:#111!important;opacity:1!important}.fbn{display:flex;align-items:center;gap:6px}.fbn i{width:22px;height:22px;border-radius:50%;background:#3f8f3b;color:#fff;display:grid;place-items:center;font:700 12px sans-serif;font-style:normal}.fbn b{font-size:13px}.fbn small{color:#666;margin-left:auto}
+.fbl{border:1px solid #bbb;background:#fff;border-radius:12px;padding:3px 10px;font-size:13px;cursor:pointer}.fbl.on{background:#dbe7ff;color:#1a4fd0}
 #pager.mini #pgTxt{display:none}
 body.ui-open .pad,body.ui-open #act,body.ui-open #offer,body.ui-open #gauge{display:none!important}
 @media(max-height:460px){#pager{top:auto;bottom:8px;width:min(46vw,420px)}}
@@ -114,6 +124,7 @@ body.ui-open .pad,body.ui-open #act,body.ui-open #offer,body.ui-open #gauge{disp
 <div id="hudR" class="hide">
   <canvas id="mini" width="120" height="120" title="Abrir mapa"></canvas>
   <div id="info" class="ts"></div>
+  <button class="hb" id="phoneB" type="button">📱</button>
   <button class="hb" id="menuB" type="button">Menu</button>
   <button class="hb" id="zoomB" type="button">Zoom</button>
 </div>
@@ -136,7 +147,7 @@ body.ui-open .pad,body.ui-open #act,body.ui-open #offer,body.ui-open #gauge{disp
 <div class="ov on" id="start"><div class="panel">
   <h1>RC Riding Club</h1>
   <p class="stat">Cidade · 125cc · Londres</p>
-  <p>Faz missões para o grupo nas cabines telefónicas, ganha libras, melhora a tua 125 na Garagem do Tiago e não percas o respeito da malta.</p>
+  <p>Escolhe missões no telemóvel, desafia rivais, ganha libras, melhora a tua 125 na Garagem do Tiago e não percas o respeito da malta.</p>
   <ul>
     <li><b>Respeito acima de tudo:</b> atropelar peões e passar no vermelho tira respeito.</li>
     <li><b>Polícia:</b> se te virem a fazer asneiras, vêm atrás de ti. Foge pelos parques, jardins e calçadas (os carros não entram), pinta a mota na Garagem do Tiago (£100) ou esconde-te no ponto de encontro. Dois toques fortes deixam um carro da polícia fora de combate.</li>
@@ -178,6 +189,14 @@ body.ui-open .pad,body.ui-open #act,body.ui-open #offer,body.ui-open #gauge{disp
   <canvas id="tmap" width="200" height="200" style="width:min(70vw,300px);aspect-ratio:1;image-rendering:pixelated;display:block;margin:6px auto;border:3px solid #000"></canvas>
   <div id="tlist" class="items"></div>
   <button class="go alt" id="tClose" type="button">Ficar aqui</button>
+</div></div>
+<div class="ov" id="dlg"><div class="panel"><p class="stat" id="dlgWho"></p><p id="dlgTxt" class="dlgT"></p><div id="dlgOpts"></div></div></div>
+<div class="ov" id="phone"><div class="panel phone">
+  <div class="phTop"><b>RC Phone</b><span id="phStat"></span></div>
+  <div class="tabs" id="phTabs"><button class="tab" data-p="mis" type="button">Missões</button><button class="tab" data-p="grupo" type="button">Grupo</button><button class="tab" data-p="clube" type="button">Clube</button><button class="tab" data-p="hist" type="button">História</button><button class="tab" data-p="riv" type="button">Rivais</button><button class="tab" data-p="eats" type="button">RC Eats</button></div>
+  <div id="phBody" class="items"></div>
+  <div class="phRow"><button class="go alt" id="phMap" type="button">Mapa</button><button class="go alt" id="phTravel" type="button">Viajar</button></div>
+  <button class="go" id="phClose" type="button">Fechar</button>
 </div></div>
 <div class="ov" id="shop"><div class="panel wide">
   <h2>Garagem do Tiago</h2>
@@ -235,7 +254,7 @@ const TR_P=[
 ["Versão de demonstração: na versão publicada aparece aqui um vídeo. A recompensa é dada no fim.","Demo version: the published game shows a video here. The reward is given at the end."],
 ["Escolhe o destino. A viagem gasta gasolina e o relógio anda.","Choose a destination. The trip uses fuel and time passes."],
 ["Mapa da cidade","City map"],["Gravar agora","Save now"],["Mudar de save","Switch save"],["Voltar à estrada","Back to the road"],["Ficar aqui","Stay here"],
-["Garagem do Tiago","Tiago's Garage"],["Oficina do Tiago","Tiago's Workshop"],["Som: ligado","Sound: on"],["Som: desligado","Sound: off"],["Controlos: setas","Controls: arrows"],["Sensibilidade a virar","Steering sensitivity"],["Controlos: joystick","Controls: joystick"],["Som:","Sound:"],
+["Garagem do Tiago","Tiago's Garage"],["Oficina do Tiago","Tiago's Workshop"],["Som: ligado","Sound: on"],["Som: desligado","Sound: off"],["Missões","Missions"],["Grupo","Group"],["Clube","Club"],["História","Story"],["Rivais","Rivals"],["Viajar","Travel"],["Escolhe missões no telemóvel, desafia rivais, ganha libras, melhora a tua 125 na Garagem do Tiago e não percas o respeito da malta.","Pick missions on your phone, challenge rivals, earn pounds, upgrade your 125 at Tiago's Garage and don't lose the crew's respect."],["Pista de piões","Donut pad"],["Cavalinho","Wheelie"],["Desististe.","You gave up."],["Controlos: setas","Controls: arrows"],["Sensibilidade a virar","Steering sensitivity"],["Controlos: joystick","Controls: joystick"],["Som:","Sound:"],
 ["Continuar","Continue"],["Novo jogo","New game"],["Apagar","Delete"],["Confirmar","Confirm"],["Vazio","Empty"],["Pausa","Pause"],["Fechar","Close"],["Cancelar","Cancel"],
 ["Desbloquear","Unlock"],["Compra","Purchase"],["Dinheiro:","Money:"],["Anúncio com recompensa","Rewarded ad"],["Intervalo publicitário","Ad break"],["Anúncio","Ad"],
 ["Motas","Bikes"],["Melhorias","Upgrades"],["Pintura","Paint"],["Oficina","Workshop"],["Loja RC","RC Shop"],["Merch","Merch"],
@@ -284,7 +303,7 @@ const TR_P=[
 ["Bica","Espresso"],["Pingo","Macchiato"],["Galão","Latte"],
 ["Arrancada · 400 m","Drag race · 400 m"],["Espera pelo verde…","Wait for green…"],["Partida falsa! Penalização.","False start! Penalty."],["Reação","Reaction"],["Mudança perfeita!","Perfect shift!"],["Cedo demais","Too early"],["Tarde","Late"],["Mudança","Gear"],["faltam","to go"],["Ganhaste!","You won!"],["Perdeste por","You lost by"],["O rival chegou muito antes.","The rival finished way ahead."],
 // lugares
-["Café Lusitano","Café Lusitano"],["Mercearia Portuguesa","Portuguese Deli"],["Ponto de encontro","Meeting point"],["Esquadra","Police station"],["Aeroporto","Airport"],["Catedral","Cathedral"],["Castelo","Castle"],["Siderurgia","Steelworks"],["Central","Power station"],["Parque Wicksteed","Wicksteed Park"],["Jardins de Água","Water Gardens"],["Fábrica","Factory"],["Estádio","Stadium"],["Centro comercial","Shopping centre"],["Cais","Pier"],
+["Café Lusitano","Café Lusitano"],["Mercearia Portuguesa","Portuguese Deli"],["Ponto de encontro","Meeting point"],["Floresta","Forest"],["Esquadra","Police station"],["Aeroporto","Airport"],["Catedral","Cathedral"],["Castelo","Castle"],["Siderurgia","Steelworks"],["Central","Power station"],["Parque Wicksteed","Wicksteed Park"],["Jardins de Água","Water Gardens"],["Fábrica","Factory"],["Estádio","Stadium"],["Centro comercial","Shopping centre"],["Cais","Pier"],
 ["AEROPORTO","AIRPORT"],["CENTRAL ELÉTRICA","POWER STATION"],["CENTRO COMERCIAL","SHOPPING CENTRE"],["FÁBRICA DE CADEIRAS","CHAIR FACTORY"],["GARAGEM","GARAGE"],["GASOLINA","PETROL"],["MERCEARIA","DELI"],["POLÍCIA","POLICE"],["SIDERURGIA","STEELWORKS"],["TAMISA","THAMES"],["RIO","RIVER"],
 // missões: títulos
 ["Bem-vindo ao grupo","Welcome to the club"],["Spam no grupo","Spam in the group"],["Junta a malta","Round up the crew"],["O troll","The troll"],["Bica para o presidente","Coffee for the president"],["Bolo de aniversário","Birthday cake"],["T-shirts novas","New t-shirts"],["Pastéis de nata","Custard tarts"],["Autocolantes","Stickers"],["Peças urgentes","Urgent parts"],["Mota de cliente","Customer's bike"],["Hoodies de inverno","Winter hoodies"],["Rookie avariada","Broken-down rookie"],["Corrida: Big Bikes Only","Race: Big Bikes Only"],["Passeio de domingo","Sunday ride"],["Sem gasolina","Out of fuel"],["Arrancada no cais","Drag race at the pier"],["Corrida final","Final race"],
@@ -369,7 +388,7 @@ const tile=(x,y)=>x<0||y<0||x>=N||y>=N?2:grid[y*N+x];
 const setT=(x,y,v)=>{grid[y*N+x]=v};
 const isRoad=(x,y)=>{const t=tile(x,y);return t==0||t==6};
 const isInter=(x,y)=>x>=0&&y>=0&&x<N&&y<N&&x%8<2&&y%8<2;
-const solid=(x,y)=>{const t=tile(x,y);return t==2||t==5};
+const solid=(x,y)=>{const t=tile(x,y);return t==2||t==5||t==11};
 const blds=[],trees=[],lamps=[],sideT=[],inters=[],places={},booths=[],pumps=[],deco=[],parkSpots=[],pigeonSpots=[],beacons=[],glows=[],steamSpots=[];
 const AWN=['#c8372d','#2f6b2a','#2f5fa8','#e0a020','#7a2a5a','#1e1e22','#d06a2a'],BRICK=['#8a5a44','#9c6b5b','#a87a58','#7a4a3a','#b08a6a'];
 const WALLS=['#8a5a44','#a7a196','#6f7480','#b88a5e','#7a6a5a','#9c6b5b','#5f6a72','#a08870'];
@@ -377,9 +396,9 @@ const FLAT=['#6b6e74','#7d7468','#5c5f66','#86827a','#646a5e','#72706a'];
 const PITCH=['#7a3b2e','#5a4a48','#8b4a36','#4f4f57','#6a3a30'];
 const bp=(bx,by,lx,ly)=>({x:(bx*8+lx+.5)*T,y:(by*8+ly+.5)*T});
 const badgeSpots=[],npcs=[];let G=null,g=null,MM=null,W_=null,fontsOK=false;
-const GEN={'1,1':'cafe','5,2':'loja','2,6':'garagem','4,6':'encontro','6,5':'posto','0,2':'posto2','3,2':'esquadra','6,1':'mercearia'};
+const GEN={'1,7':'pioes','1,1':'cafe','5,2':'loja','2,6':'garagem','4,6':'encontro','6,5':'posto','0,2':'posto2','3,2':'esquadra','6,1':'mercearia'};
 const TOWNS={
- londres:{id:'londres',name:'Londres',seed:20261127,river:true,london:true,ll:[-0.13,51.51],spec:{'1,1':'cafe','5,2':'loja','2,6':'garagem','4,6':'encontro','6,5':'posto','0,2':'posto2','3,2':'esquadra','6,1':'mercearia','3,7':'parque','5,0':'igreja','6,3':'hospital','2,3':'pub','1,6':'mercado','0,6':'campo','5,7':'arm','6,7':'arm','7,6':'arm','1,5':'parque2','7,7':'parque3'}},
+ londres:{id:'londres',name:'Londres',seed:20261127,river:true,london:true,ll:[-0.13,51.51],spec:{'1,7':'pioes','1,1':'cafe','5,2':'loja','2,6':'garagem','4,6':'encontro','6,5':'posto','0,2':'posto2','3,2':'esquadra','6,1':'mercearia','3,7':'parque','5,0':'igreja','6,3':'hospital','2,3':'pub','1,6':'mercado','0,6':'campo','5,7':'arm','6,7':'arm','7,6':'arm','1,5':'parque2','7,7':'parque3'}},
  luton:{id:'luton',name:'Luton',seed:101,river:false,rural:.25,cbd:.35,ll:[-0.42,51.88],spec:{...GEN,'3,5':'aeroporto','5,4':'parque2'}},
  peterborough:{id:'peterborough',name:'Peterborough',seed:202,river:true,rural:.3,cbd:.3,ll:[-0.24,52.57],spec:{...GEN,'3,3':'catedral','5,5':'parque2'}},
  corby:{id:'corby',name:'Corby',seed:303,river:false,rural:.3,cbd:.2,ll:[-0.69,52.49],spec:{...GEN,'3,5':'siderurgia','4,5':'siderurgia','5,3':'parque2'}},
@@ -401,6 +420,7 @@ for(let y=0;y<N;y++)for(let x=0;x<N;x++){
   grid[y*N+x]=v;
 }
 for(let j=0;j<=8;j++)for(let i=0;i<=8;i++)inters.push({x:(i*8+1)*T,y:(j*8+1)*T,tx:i*8,ty:j*8});
+{const cand=inters.filter(i=>i.tx>=16&&i.tx<=48&&i.ty>=8&&i.ty<=56&&!(cfg.river&&(i.ty==32||i.ty==40)));for(let k=0;k<4&&cand.length;k++){const it=cand.splice(Math.floor(Math.random()*cand.length),1)[0];deco.push({t:'rb',x:it.x,y:it.y})}}
 const SPEC=cfg.spec;
 function addB(tx,ty,tw,th,o={}){
   const f=o.f!=null?o.f:0.05+R()*0.15;
@@ -410,9 +430,23 @@ function addB(tx,ty,tw,th,o={}){
 }
 const fill=(x,y,w,h,v)=>{for(let j=y;j<y+h;j++)for(let i=x;i<x+w;i++)setT(i,j,v)};
 const treeAt=(x,y)=>trees.push({x,y,s:Math.floor(R()*3)});
+const FOR=new Set();{
+  const ban=new Set(Object.keys(SPEC).concat(['7,0','2,1','5,5','1,3','6,6','0,3','3,7']));for(const n of NPCS)if(n.town==cfg.id&&n.spot)ban.add(n.spot[0]+','+n.spot[1]);
+  const free=(x,y)=>x>=0&&y>=0&&x<8&&y<8&&!ban.has(x+','+y)&&!(cfg.river&&(y==4));
+  const C=[[0,0],[7,0],[0,7],[7,7],[0,1],[7,6],[1,0],[6,7]].filter(([x,y])=>free(x,y));
+  if(cfg.london){for(const k of['3,0','4,0','3,1','4,1','4,2','5,1'])if(free(...k.split(',').map(Number)))FOR.add(k)}
+  else if(C.length){const want=5+Math.floor(R()*2);let bestSet=null,bestSc=-1;
+    for(const st of C.slice(0,4)){const S=new Set([st+'']);for(let it=0;it<20&&S.size<want;it++){let best=null,bs=-1;for(const k of S){const[cx,cy]=k.split(',').map(Number);for(const[dx,dy]of[[1,0],[-1,0],[0,1],[0,-1]]){const nx=cx+dx,ny=cy+dy,nk=nx+','+ny;if(!free(nx,ny)||S.has(nk))continue;let sc=R()*.5;for(const[ex,ey]of[[1,0],[-1,0],[0,1],[0,-1]])if(S.has((nx+ex)+','+(ny+ey)))sc+=1;if(sc>bs){bs=sc;best=nk}}}if(!best)break;S.add(best)}
+      let sc=S.size*2+R();for(const k of S){const[x,y]=k.split(',').map(Number);if(S.has((x+1)+','+y))sc++;if(S.has(x+','+(y+1)))sc++}if(sc>bestSc){bestSc=sc;bestSet=S}}
+    for(const k of bestSet)FOR.add(k)}}
+const LAKE=[];{const ban=new Set(Object.keys(SPEC).concat(['7,0','2,1','5,5','1,3','6,6','0,3','3,7']));for(const n of NPCS)if(n.town==cfg.id&&n.spot)ban.add(n.spot[0]+','+n.spot[1]);
+  const ok=(x,y)=>x>=1&&y>=1&&x<7&&y<7&&!ban.has(x+','+y)&&!FOR.has(x+','+y)&&!(cfg.river&&(y==4||y==3||y==5));
+  for(let t=0;t<80&&!LAKE.length;t++){const x=1+Math.floor(R()*6),y=1+Math.floor(R()*6),h=R()<.5;const x2=h?x+1:x,y2=h?y:y+1;if(ok(x,y)&&ok(x2,y2))LAKE.push([x,y],[x2,y2])}}
 for(let by=0;by<8;by++)for(let bx=0;bx<8;bx++){
   if(cfg.river&&by==4)continue;
+  if(FOR.has(bx+','+by)||LAKE.some(([a,b])=>a==bx&&b==by))continue;
   const ix=bx*8+3,iy=by*8+3,sp=SPEC[bx+','+by],P2=(dx,dy)=>({x:(ix+dx)*T,y:(iy+dy)*T});
+  if(sp=='pioes'){fill(ix,iy,4,4,4);deco.push({t:'skid',x:ix*T,y:iy*T});places.pioes={...P2(2,2),name:'Pista de piões'};continue}
   if(sp=='cafe'){addB(ix,iy+2,4,2,{f:.1,k:'cafe',label:'CAFÉ LUSITANO',roof:'#9a4a3a',wall:'#d8c9a8'});fill(ix,iy,4,2,8);places.cafe={...P2(2,1),name:'Café Lusitano'};continue}
   if(sp=='loja'){addB(ix,iy+1,4,3,{f:.13,k:'loja',label:'RC RIDING CLUB',roof:'#2f6b2a',wall:'#c9c2b2'});fill(ix,iy,4,1,8);places.loja={...P2(2,.5),name:'Loja RC'};continue}
   if(sp=='garagem'){addB(ix,iy+2,4,2,{f:.08,k:'garagem',label:'GARAGEM',roof:'#8a9096',wall:'#6f7480'});fill(ix,iy,4,2,4);parkSpots.push({type:'hatch',col:'#7a8088',x:(ix+.6)*T,y:(iy+1)*T,a:PI/2},{type:'bike',col:'#e8e8e8',x:(ix+3.5)*T,y:(iy+.5)*T,a:PI/2});places.garagem={...P2(2,1),name:'Garagem do Tiago'};continue}
@@ -458,6 +492,42 @@ for(let by=0;by<8;by++)for(let bx=0;bx<8;bx++){
   else if(r<.84){if(R()<.5){addB(ix,iy,4,2,{shop:rpick(AWN)});addB(ix,iy+2,4,2,{shop:rpick(AWN)})}else{addB(ix,iy,2,4,{shop:rpick(AWN)});addB(ix+2,iy,2,4)}}
   else{addB(ix,iy,4,2,{f:.1+R()*.1,shop:rpick(AWN)});addB(ix,iy+2,2,2,{style:'pitch',f:.05});fill(ix+2,iy+2,2,2,8);treeAt((ix+3.4)*T,(iy+3.4)*T);deco.push({t:'bench',x:(ix+2.6)*T,y:(iy+2.6)*T})}
 }
+
+// ---- floresta: blocos fundidos, sem estradas por dentro, com trilho de terra ----
+if(FOR.size){const fb=(x,y)=>FOR.has(x+','+y);
+  for(const k of FOR){const[bx,by]=k.split(',').map(Number);fill(bx*8+2,by*8+2,6,6,11);
+    if(fb(bx+1,by))fill(bx*8+8,by*8+2,2,6,11);if(fb(bx,by+1))fill(bx*8+2,by*8+8,6,2,11);
+    if(fb(bx+1,by)&&fb(bx,by+1)&&fb(bx+1,by+1))fill(bx*8+8,by*8+8,2,2,11)}
+  const ent=[];for(let y=1;y<N-1;y++)for(let x=1;x<N-1;x++)if(tile(x,y)==11)for(let d=0;d<4;d++)if(tile(x+DX[d],y+DY[d])==0&&!isInter(x+DX[d],y+DY[d])){ent.push([x,y,d]);break}
+  if(ent.length>2){const a=ent[Math.floor(R()*ent.length)];let b=a,bd=0;for(let i=0;i<40;i++){const c=ent[Math.floor(R()*ent.length)],dd=Math.abs(c[0]-a[0])+Math.abs(c[1]-a[1]);if(dd>bd){bd=dd;b=c}}
+    const ft=[];for(let y=0;y<N;y++)for(let x=0;x<N;x++)if(tile(x,y)==11&&tile(x-2,y)==11&&tile(x+2,y)==11&&tile(x,y-2)==11&&tile(x,y+2)==11)ft.push([x,y]);
+    const wp=[[a[0],a[1]]],mids=[];for(let i=0;i<3&&ft.length;i++)mids.push(ft[Math.floor(R()*ft.length)]);mids.sort((p,q)=>Math.hypot(p[0]-a[0],p[1]-a[1])-Math.hypot(q[0]-a[0],q[1]-a[1]));wp.push(...mids,[b[0],b[1]]);
+    const mid=wp[1]||wp[0];
+    const carve=(x,y)=>{for(const[dx,dy]of[[0,0],[1,0],[0,1],[1,1]])if(tile(x+dx,y+dy)==11)setT(x+dx,y+dy,12)};
+    const W=[wp[0],...wp,wp[wp.length-1]],cr=(p0,p1,p2,p3,t)=>.5*(2*p1+(-p0+p2)*t+(2*p0-5*p1+4*p2-p3)*t*t+(-p0+3*p1-3*p2+p3)*t*t*t);
+    for(let i=1;i<W.length-2;i++)for(let t=0;t<1;t+=.04){const X=cr(W[i-1][0],W[i][0],W[i+1][0],W[i+2][0],t)+.5,Y=cr(W[i-1][1],W[i][1],W[i+1][1],W[i+2][1],t)+.5;
+      for(let j=Math.floor(Y-1.2);j<=Math.ceil(Y+1.2);j++)for(let k=Math.floor(X-1.2);k<=Math.ceil(X+1.2);k++)if(Math.hypot(k+.5-X,j+.5-Y)<.8&&tile(k,j)==11)setT(k,j,12)}
+    for(const e of[a,b]){let x=e[0],y=e[1];for(let k=0;k<3&&tile(x,y)!=0;k++){carve(x,y);if(tile(x,y)!=0){x+=DX[e[2]];y+=DY[e[2]]}}}
+    // clareira com lago e cabana
+    const[mx,my]=mid;for(let j=-3;j<=3;j++)for(let i=-3;i<=3;i++)if(i*i+j*j<=6&&tile(mx+i,my+j)==11)setT(mx+i,my+j,12);
+    const px_=mx+(R()<.5?-2:2),py_=my+(R()<.5?-2:2);if(tile(px_,py_)==12)setT(px_,py_,5);
+    for(let k=0;k<3;k++)deco.push({t:'log',x:(mx+R()*2-1)*T,y:(my+R()*2-1)*T,v:R()<.5});deco.push({t:'fire',x:(mx+.5)*T,y:(my+.5)*T});
+    places.floresta={x:(mx+.5)*T,y:(my+.5)*T,name:'Floresta'};pigeonSpots.push({x:(mx+1)*T,y:(my+1)*T})}}
+
+// ---- parque do lago: dois quarteirões fundidos com lago de margens curvas ----
+if(LAKE.length){const[[ax,ay],[bx2,by2]]=LAKE,x0=ax*8+2,y0=ay*8+2,x1=bx2*8+7,y1=by2*8+7;fill(x0,y0,x1-x0+1,y1-y0+1,3);
+  const cx=(x0+x1+1)/2,cy=(y0+y1+1)/2,rx=(x1-x0+1)/2-2.2,ry=(y1-y0+1)/2-2.2,ph=R()*6;
+  for(let y=y0;y<=y1;y++)for(let x=x0;x<=x1;x++){const dx=(x+.5-cx)/rx,dy=(y+.5-cy)/ry,an=Math.atan2(dy,dx),rr=1+.18*Math.sin(an*3+ph)+.1*Math.sin(an*5-ph);if(dx*dx+dy*dy<rr*rr*.62)setT(x,y,5)}
+  for(let y=y0;y<=y1;y++)for(let x=x0;x<=x1;x++)if(tile(x,y)==3){let w=0;for(let d=0;d<4;d++)if(tile(x+DX[d],y+DY[d])==5)w=1;if(w)setT(x,y,8)}
+  for(let k=0;k<16;k++){const x=x0+R()*(x1-x0+1),y=y0+R()*(y1-y0+1);if(tile(Math.floor(x),Math.floor(y))==3)treeAt(x*T,y*T)}
+  for(let k=0;k<4;k++){const x=Math.floor(x0+R()*(x1-x0+1)),y=Math.floor(y0+R()*(y1-y0+1));if(tile(x,y)==8)deco.push({t:'bench',x:(x+.5)*T,y:(y+.5)*T})}
+  places.lago2={x:(x0+.5)*T,y:(cy)*T,name:'Lago'};pigeonSpots.push({x:(x0+1)*T,y:(y0+1)*T})}
+// ---- ruas pedonais: alguns troços de estrada viram calçada com árvores ----
+{let made=0,tries=0;const segs=[];for(let i=1;i<8;i++)for(let j=0;j<8;j++)segs.push(['v',i,j],['h',j,i]);
+  while(made<(cfg.london?4:3)&&tries++<60){const[o,i,j]=segs[Math.floor(R()*segs.length)];const x0=o=='v'?i*8:i*8+2,y0=o=='v'?j*8+2:j*8,w=o=='v'?2:6,h=o=='v'?6:2;
+    let ok=true;for(let y=y0-1;y<y0+h+1&&ok;y++)for(let x=x0-1;x<x0+w+1;x++){const t=tile(x,y);if(t==6||t==5||t==11||t==12||t==7){ok=false;break}}
+    if(cfg.river&&(o=='v'&&j==4||o=='h'&&(j==4||j==5)))ok=false;if(!ok)continue;
+    fill(x0,y0,w,h,8);made++;for(let k=0;k<3;k++){const tx=x0+(o=='v'?1:1+k*2),ty=y0+(o=='v'?1+k*2:1);treeAt(tx*T,ty*T)}deco.push({t:'bench',x:(x0+w/2)*T,y:(y0+h/2)*T});pigeonSpots.push({x:(x0+w/2)*T+10,y:(y0+h/2)*T})}}
 blds.sort((a,b)=>a.f-b.f);
 for(let y=0;y<N;y++)for(let x=0;x<N;x++){
   if(tile(x,y)!=1)continue;sideT.push([x,y]);
@@ -465,9 +535,9 @@ for(let y=0;y<N;y++)for(let x=0;x<N;x++){
 }
 places.cais=cfg.river?{x:28.5*T,y:34.5*T,name:'Cais'}:places.encontro;
 if(cfg.london){
-booths.push({k:'clube',who:'Marco Machado',col:'#3fbf3b',...bp(1,1,2,3)});
-booths.push({k:'loja',who:'Loja RC',col:'#ffb020',...bp(5,2,2,4)});
-booths.push({k:'estrada',who:'Paula',col:'#ff4a3a',...bp(4,6,2,3)});
+
+
+
 }
 // crachás
 if(cfg.london){let tries=0;while(badgeSpots.length<20&&tries<5000){tries++;const s=rpick(sideT),p={x:(s[0]+.5)*T,y:(s[1]+.5)*T};if(badgeSpots.every(q=>hyp(q.x-p.x,q.y-p.y)>T*7))badgeSpots.push(p)}}
@@ -520,8 +590,19 @@ for(let y=0;y<N;y++)for(let x=0;x<N;x++){
     g.fillStyle='#5a9a46';g.fillRect(X,Y,T,T);for(let k=0;k<T;k+=8){g.fillStyle='#539140';g.fillRect(X+k,Y,4,T)}speck(X,Y,T,T,['#4a8a3a','#66a650'],25);
     g.fillStyle='#7a5a3a';if(tile(x-1,y)!=9)g.fillRect(X,Y,1,T);g.fillRect(X+T-1,Y,1,T);if(tile(x,y-1)!=9)g.fillRect(X,Y,T,1);if(tile(x,y+1)!=9)g.fillRect(X,Y+T-1,T,1);
     if(y%8==4){g.fillStyle='#6a4a2a';g.fillRect(X,Y+T-1,T,1)}g.fillStyle='#8a6a4a';for(let k=0;k<T;k+=4){g.fillRect(X+T-1,Y+k,1,1)}
+  }else if(t==11){g.fillStyle='#1f3d1e';g.fillRect(X,Y,T,T);speck(X,Y,T,T,['#2a4a26','#183218','#335a2c'],60);
+  }else if(t==12){g.fillStyle='#8a6a42';g.fillRect(X,Y,T,T);speck(X,Y,T,T,['#7a5a36','#9a7a4e','#6a4e2e','#a88a5a'],70);
+    g.fillStyle='rgba(60,40,20,.35)';const vx=tile(x-1,y)==12||tile(x+1,y)==12;if(vx){g.fillRect(X,Y+11,T,2);g.fillRect(X,Y+19,T,2)}else{g.fillRect(X+11,Y,2,T);g.fillRect(X+19,Y,2,T)}
+    for(let d=0;d<4;d++)if(tile(x+DX[d],y+DY[d])==11){g.fillStyle='#4a7a34';if(d==0)g.fillRect(X+T-4,Y,4,T);if(d==2)g.fillRect(X,Y,4,T);if(d==1)g.fillRect(X,Y+T-4,T,4);if(d==3)g.fillRect(X,Y,T,4)}
   }else{g.fillStyle='#24252a';g.fillRect(X,Y,T,T)}
 }
+// copas das árvores da floresta (por cima do trilho, para as bordas ficarem orgânicas)
+{const TC=[['#1d4a1f','#2d6a2a','#4a8a3a'],['#244f22','#356f2c','#5a9a42'],['#173d1c','#245a26','#3a7a34'],['#2a5020','#46702a','#7aa040']];
+ for(let y=0;y<N;y++)for(let x=0;x<N;x++){if(grid[y*N+x]!=11)continue;const n=2+Math.floor(hash(x,y)*2);
+  for(let k=0;k<n;k++){const cx=x*T+4+hash(x*7+k,y*3)*24,cy=y*T+4+hash(x*3,y*7+k)*24,r=9+hash(x+k,y+k*5)*7,c=TC[Math.floor(hash(x*11+k,y*13)*4)],pine=hash(x+k*3,y*9)<.3;
+   g.fillStyle='rgba(0,0,0,.28)';g.beginPath();g.arc(cx+4,cy+5,r,0,7);g.fill();
+   if(pine){for(let a=0;a<8;a++){const an=a*PI/4;g.fillStyle=c[a%2];g.beginPath();g.moveTo(cx,cy);g.lineTo(cx+Math.cos(an-.35)*r*.55,cy+Math.sin(an-.35)*r*.55);g.lineTo(cx+Math.cos(an)*r,cy+Math.sin(an)*r);g.lineTo(cx+Math.cos(an+.35)*r*.55,cy+Math.sin(an+.35)*r*.55);g.fill()}g.fillStyle=c[2];g.fillRect(cx-1,cy-1,3,3)}
+   else{g.fillStyle=c[0];g.beginPath();g.arc(cx,cy,r,0,7);g.fill();g.fillStyle=c[1];g.beginPath();g.arc(cx-r*.2,cy-r*.2,r*.72,0,7);g.fill();g.fillStyle=c[2];g.beginPath();g.arc(cx-r*.38,cy-r*.38,r*.32,0,7);g.fill()}}}}
 // adereços no chão
 for(const l of lamps){g.fillStyle='rgba(0,0,0,.3)';g.fillRect(l.x-1,l.y+1,4,4);g.fillStyle='#3a3d42';g.fillRect(l.x-2,l.y-2,4,4);g.fillStyle='#d8d4c0';g.fillRect(l.x-1,l.y-1,2,2)}
 for(const p of pumps){g.fillStyle='rgba(0,0,0,.3)';g.fillRect(p.x-3,p.y-5,8,12);g.fillStyle='#c8372d';g.fillRect(p.x-4,p.y-6,8,11);g.fillStyle='#f2efe6';g.fillRect(p.x-3,p.y-5,6,3);g.fillStyle='#222';g.fillRect(p.x-2,p.y,4,2)}
@@ -533,7 +614,11 @@ function tomb(x,y){g.fillStyle='rgba(0,0,0,.3)';g.fillRect(x+1,y+2,5,7);g.fillSt
 function bench(x,y,v){g.fillStyle='rgba(0,0,0,.3)';if(v)g.fillRect(x-1,y-5,5,14);else g.fillRect(x-5,y-1,14,5);g.fillStyle='#6a4a2a';if(v)g.fillRect(x-2,y-7,4,14);else g.fillRect(x-7,y-2,14,4);g.fillStyle='#9a7a4a';if(v)g.fillRect(x-2,y-7,1,14);else g.fillRect(x-7,y-2,14,1)}
 function grate(x,y){g.fillStyle='#4a3a2a';g.fillRect(x-5,y-5,10,10);g.fillStyle='#2a2a2a';for(let k=0;k<10;k+=3){g.fillRect(x-5+k,y-5,1,10);g.fillRect(x-5,y-5+k,10,1)}}
 for(const d of deco){const x=Math.round(d.x),y=Math.round(d.y);
-  if(d.t=='tomb')tomb(x,y);
+  if(d.t=='skid'){const W=4*T;g.fillStyle='#2e3034';g.fillRect(x,y,W,W);for(let k=0;k<180;k++){g.fillStyle=Math.random()<.5?'#26282b':'#393b40';g.fillRect(x+(Math.random()*W|0),y+(Math.random()*W|0),2,1)}g.strokeStyle='#e8e4d8';g.lineWidth=2;g.strokeRect(x+3,y+3,W-6,W-6);g.beginPath();g.arc(x+W/2,y+W/2,44,0,7);g.stroke();g.strokeStyle='#ffd02a';g.beginPath();g.arc(x+W/2,y+W/2,22,0,7);g.stroke();g.strokeStyle='rgba(8,8,8,.55)';g.lineWidth=3;for(let k=0;k<8;k++){g.beginPath();g.arc(x+W/2+Math.random()*30-15,y+W/2+Math.random()*30-15,12+Math.random()*22,Math.random()*6,Math.random()*6+3);g.stroke()}g.lineWidth=1;for(const[cx,cy]of[[7,7],[W-7,7],[7,W-7],[W-7,W-7]]){g.fillStyle='#ff7a1a';g.fillRect(x+cx-2,y+cy-3,4,6);g.fillStyle='#fff';g.fillRect(x+cx-2,y+cy-1,4,1)}continue}
+  if(d.t=='rb'){g.strokeStyle='#f2f0e8';g.lineWidth=2;g.beginPath();g.arc(x,y,10,0,7);g.stroke();g.fillStyle='#f2f0e8';g.beginPath();g.arc(x,y,4,0,7);g.fill();g.lineWidth=1;continue}
+  if(d.t=='log'){g.fillStyle='rgba(0,0,0,.3)';if(d.v)g.fillRect(x-3,y-10,8,22);else g.fillRect(x-10,y-3,22,8);g.fillStyle='#6a4426';if(d.v)g.fillRect(x-4,y-11,7,22);else g.fillRect(x-11,y-4,22,7);g.fillStyle='#8a6038';if(d.v)g.fillRect(x-4,y-11,2,22);else g.fillRect(x-11,y-4,22,2);g.fillStyle='#c8a070';if(d.v){g.fillRect(x-3,y-11,5,2)}else{g.fillRect(x-11,y-3,2,5)}}
+  else if(d.t=='fire'){g.fillStyle='#6a6a66';for(let a=0;a<8;a++)g.fillRect(Math.round(x+Math.cos(a*PI/4)*7)-2,Math.round(y+Math.sin(a*PI/4)*7)-2,4,4);g.fillStyle='#3a2a1a';g.fillRect(x-4,y-1,8,2);g.fillRect(x-1,y-4,2,8);g.fillStyle='#e8701a';g.fillRect(x-2,y-2,4,4);g.fillStyle='#ffd040';g.fillRect(x-1,y-1,2,2);steamSpots.push({x,y:y-4})}
+  else if(d.t=='tomb')tomb(x,y);
   else if(d.t=='bench')bench(x,y);
   else if(d.t=='plane'){g.fillStyle='rgba(0,0,0,.25)';g.fillRect(x-36,y-3,76,10);g.fillRect(x-6,y-28,16,60);g.fillStyle='#e8e8ec';g.fillRect(x-38,y-5,76,10);g.fillRect(x+34,y-3,4,6);g.fillStyle='#c8ccd4';g.fillRect(x-8,y-30,16,60);g.fillRect(x-36,y-14,8,28);g.fillStyle='#2f5fa8';g.fillRect(x-38,y-1,72,2);g.fillRect(x-36,y-14,3,28);g.fillStyle='#555';g.fillRect(x-4,y-22,8,5);g.fillRect(x-4,y+17,8,5);g.fillStyle='#1c2838';g.fillRect(x+30,y-3,3,6)}
   else if(d.t=='ferris'){g.strokeStyle='#d8d8d8';g.lineWidth=2;g.beginPath();g.arc(x,y,26,0,7);g.stroke();for(let k=0;k<8;k++){const a=k*PI/4;g.beginPath();g.moveTo(x,y);g.lineTo(x+Math.cos(a)*26,y+Math.sin(a)*26);g.stroke();g.fillStyle=['#e8545a','#f4e04a','#4a7bd0','#6ab04c'][k%4];g.fillRect(Math.round(x+Math.cos(a)*26)-3,Math.round(y+Math.sin(a)*26)-3,6,6)}g.fillStyle='#888';g.fillRect(x-3,y-3,6,6)}
@@ -710,13 +795,13 @@ const UPS=[{k:'motor',n:'Motor',d:'+ velocidade e aceleração'},{k:'travoes',n:
 const UPP=[220,480,850];
 const PAINTS=['#c8372d','#2f5fa8','#e0b028','#2f2f33','#e8e8e8','#3f8f3b','#8e5cc2','#f08a3c','#d84a8a','#7fc4ac'];
 const HELMS=['#3f8f3b','#c8372d','#e8e8e8','#111111','#ffd02a','#2f5fa8'];
-const DEF=()=>({money:0,rep:50,bike:'keeway',owned:['keeway'],up:{motor:0,travoes:0,pneus:0,deposito:0,chassis:0},paint:{},helmet:'#3f8f3b',jacket:'#2f7a2a',town:'londres',npcDone:{},iap:[],lastDay:'',streak:0,tut:0,zoom:1,badges:[],prog:{clube:0,loja:0,estrada:0},done:0,miles:0,time:17*60+30,hp:100,fuel:100,sound:1});
+const DEF=()=>({money:0,rep:50,bike:'keeway',owned:['keeway'],up:{motor:0,travoes:0,pneus:0,deposito:0,chassis:0},paint:{},helmet:'#3f8f3b',jacket:'#2f7a2a',town:'londres',npcDone:{},iap:[],lastDay:'',streak:0,tut:0,zoom:1,badges:[],prog:{clube:0,loja:0,estrada:0},done:0,xp:0,members:12,ch:0,wins:0,mdone:{},rivals:{},idle:{},feed:[],spins:0,eats:{quiz:0,test:0,lic:0,n:0,earn:0},miles:0,time:17*60+30,hp:100,fuel:100,sound:1});
 let save=DEF();
 const STORE={getItem:k=>{try{const d=window.CrazyGames&&window.CrazyGames.SDK&&window.CrazyGames.SDK.data;return d?d.getItem(k):localStorage.getItem(k)}catch(e){return null}},setItem:(k,v)=>{try{const d=window.CrazyGames&&window.CrazyGames.SDK&&window.CrazyGames.SDK.data;d?d.setItem(k,v):localStorage.setItem(k,v)}catch(e){}},removeItem:k=>{try{const d=window.CrazyGames&&window.CrazyGames.SDK&&window.CrazyGames.SDK.data;d?d.removeItem(k):localStorage.removeItem(k)}catch(e){}}};
 let slot=1;const KEY=n=>'rc-save-'+(n||slot);
 function peek(n){try{return JSON.parse(STORE.getItem(KEY(n))||'null')}catch(e){return null}}
 function migrate(){try{const old=STORE.getItem('lr-gta2');if(old&&!STORE.getItem(KEY(1))){STORE.setItem(KEY(1),old)}if(old)STORE.removeItem('lr-gta2')}catch(e){}}
-function load(){try{const s=JSON.parse(STORE.getItem(KEY())||'null');if(s){save=Object.assign(DEF(),s);save.up=Object.assign(DEF().up,s.up||{});save.prog=Object.assign(DEF().prog,s.prog||{});return true}}catch(e){}return false}
+function load(){try{const s=JSON.parse(STORE.getItem(KEY())||'null');if(s){save=Object.assign(DEF(),s);save.up=Object.assign(DEF().up,s.up||{});save.prog=Object.assign(DEF().prog,s.prog||{});save.eats=Object.assign(DEF().eats,s.eats||{});return true}}catch(e){}return false}
 function store(){save.money=money;save.rep=rep;save.hp=P.hp;save.fuel=P.fuel;save.saved=Date.now();try{STORE.setItem(KEY(),JSON.stringify(save))}catch(e){}}
 const mg={on:false,ren:null};
 let act=null,actKey='',cafeCD=0;
@@ -747,7 +832,7 @@ function mkVeh(kind,type,col,extra={}){const spr=type=='bike'?bikeSpr(col,extra.
   Object.assign(v,laneSpawn(extra.minD||0)||{x:T*1.5,y:T*1.5,tx:2,ty:1,d:0,a:0,spd:0});return v}
 function spawnTraffic(){V=[];
   for(let i=0;i<52;i++){const r=Math.random(),t=r<.08?'bus':r<.2?'cab':r<.32?'van':r<.65?'hatch':'saloon';V.push(mkVeh('car',t,t=='bus'?'#c8241a':t=='cab'?'#1e1e22':pick(CARCOLS)))}
-  for(let i=0;i<4;i++)V.push(mkVeh('cop','police','#f2f2f2',{max:118}));
+  for(let i=0;i<4;i++)V.push(mkVeh('cop','police','#f2f2f2',{max:118}));for(let i=0;i<3;i++)addRival();
   for(let i=0;i<3;i++)V.push(mkVeh('rival','bike','#1a1a1a',{max:150,helm:'#c8241a',jacket:'#c8241a',st:'sport'}));
   for(let i=0;i<2;i++)V.push(mkVeh('car','amb','#f2f2f2',{max:120}));for(let i=0;i<2;i++)V.push(mkVeh('car','lorry',pick(['#e8e4da','#2f5fa8','#c8372d']),{max:70}));
   for(let i=0;i<4;i++)V.push(mkVeh('rival','bike',pick(['#e8e8e8','#2f5fa8','#e0b028','#3f8f3b']),{max:130,helm:pick(HELMS),jacket:'#222',st:pick(['naked','scooter','trail','cruiser','classic'])}));
@@ -772,7 +857,7 @@ function laneStep(c,dt){
 }
 const laneOK=(d,x,y)=>d==0?y%8==0:d==2?y%8==1:d==3?x%8==0:x%8==1;
 const carOK=(x,y)=>{const t=tile(x,y);return t==0||t==6||t==1||t==4||t==7};
-const refuge=()=>{const t=tile(Math.floor(P.x/T),Math.floor(P.y/T));return t==3||t==8||t==9||t==10};
+const refuge=()=>{const t=tile(Math.floor(P.x/T),Math.floor(P.y/T));return t==3||t==8||t==9||t==10||t==12};
 function copChase(c,dt){
   if(c.stun>0){c.stun-=dt;c.spd=0;if(Math.random()<.3)part(c.x,c.y,rnd(-8,8),rnd(-20,-8),.8,'rgba(200,200,200,.5)',2);return}
   const dx=P.x-c.x,dy=P.y-c.y,d=hyp(dx,dy),max=118+wanted*14;
@@ -924,7 +1009,7 @@ function startNpc(n){const def=n.m;M={def,bk:'npc',npc:n.n,who:n.n,first:false,s
 // ================= viagens =================
 function kmTo(id){const a=W_.ll,b=TOWNS[id].ll,dx=(a[0]-b[0])*Math.cos((a[1]+b[1])/2*PI/180)*111,dy=(a[1]-b[1])*111;return Math.round(hyp(dx,dy)*1.25)}
 function openTravel(){paused=true;const L=$('tlist');L.innerHTML=Object.values(TOWNS).map(t=>{const here=t.id==W_.id,km=kmTo(t.id),fuel=Math.ceil(km*.32),ok=!here&&P.fuel>=fuel,ns=NPCS.filter(n=>n.town==t.id);
-    return`<div class="it"><canvas width="30" height="18" data-town="${t.id}"></canvas><div><b>${t.name}${here?' · estás aqui':''}</b><span>${ns.map(n=>n.n+((save.npcDone||{})[n.n]?' ✓':'')).join(', ')||'Missões nas cabines telefónicas'}${here?'':`<br>${km} km · ${fuel} de gasolina`}</span></div><button class="buy" data-go="${t.id}" ${ok?'':'disabled'}>${here?'Aqui':ok?'Ir':'Sem gasolina'}</button></div>`}).join('');
+    return`<div class="it"><canvas width="30" height="18" data-town="${t.id}"></canvas><div><b>${t.name}${here?' · estás aqui':''}</b><span>${ns.map(n=>n.n+((save.npcDone||{})[n.n]?' ✓':'')).join(', ')||LL('Missões no telemóvel','Missions on your phone')}${here?'':`<br>${km} km · ${fuel} de gasolina`}</span></div><button class="buy" data-go="${t.id}" ${ok?'':'disabled'}>${here?'Aqui':ok?'Ir':'Sem gasolina'}</button></div>`}).join('');
   drawTMap();L.querySelectorAll('canvas[data-town]').forEach(c=>{const x=c.getContext('2d');x.imageSmoothingEnabled=false;x.fillStyle='#1a4fa0';x.fillRect(4,3,22,12);x.fillStyle='#fff';x.font='700 8px "Pixelify Sans",monospace';x.fillText('M1',8,12)});$('travel').classList.add('on')}
 function drawTMap(){const c=$('tmap'),x=c.getContext('2d');x.imageSmoothingEnabled=false;x.fillStyle='#2c5f8c';x.fillRect(0,0,200,200);
   const pt=ll=>[(ll[0]+1.1)/1.55*180+10,(53.45-ll[1])/2.1*180+10];
@@ -938,7 +1023,7 @@ function travelTo(id){const km=kmTo(id),fuel=Math.ceil(km*.32);$('travel').class
   genWorld(TOWNS[id]);save.town=id;resetWorld();const q=places.saida;P.x=q.x-T;P.y=q.y+T;P.a=PI;paused=false;cam.x=P.x;cam.y=P.y;
   const ns=npcs.length;bigToast(TOWNS[id].name.toUpperCase(),ns?`${ns} ${ns>1?'membros têm':'membro tem'} missões para ti`:'Bem-vindo de volta');store()}
 let pgLast='',pgT=0;function pagerTick(){const t=$('pgTxt').textContent+$('pgWho').textContent;if(t!=pgLast){pgLast=t;pgT=performance.now();$('pager').classList.remove('mini')}else if(performance.now()-pgT>8000)$('pager').classList.add('mini')}
-function idleTxt(){return W_.london?'Vai a uma cabine telefónica ou fala com os membros marcados a verde.':`Estás em ${W_.name}. Fala com os membros marcados a verde para missões, ou volta pela M1.`}
+function idleTxt(){return LL('Abre o telemóvel (📱) para escolher missões, ou desafia os motoqueiros rivais (roxo no mapa).','Open your phone (📱) to pick missions, or challenge the rival riders (purple on the map).')}
 function resetWorld(){spawnTraffic();initLife();peds=[];for(let i=0;i<95;i++)peds.push(spawnPed());makePickups();hist=[];crew=[];helpEv=null;wanted=0;parts=[];P.vx=P.vy=0;P.ltx=0;P.lty=0;actKey='~';offerKey='~';$('pgWho').textContent='Telefone';$('pgTxt').textContent=idleTxt()}
 function makePickups(){pickups=[];if(W_.london)badgeSpots.forEach((p,i)=>{if(!save.badges.includes(i))pickups.push({...p,t:'badge',id:i})});
   for(let k=0;k<6;k++)pickups.push({...RP(),t:'wrench'});for(let k=0;k<9;k++)pickups.push({...RP(),t:'cash',v:pick([20,30,50])})}
@@ -983,6 +1068,7 @@ function enterStep(){const s=M.steps[M.i];
   if(s.chase=='van'){const v=mkVeh('car','van','#f2f2f2',{max:122,target:1,minD:350});v.spr=carSpr('van','#f2f2f2');const sx=v.spr.getContext('2d');sx.fillStyle='#7b2fbf';sx.fillRect(5,4,12,5);sx.fillStyle='#ffd02a';sx.fillRect(7,5,1,3);sx.fillRect(9,5,1,3);sx.fillRect(11,5,1,3);sx.fillRect(13,5,1,3);V.push(v);M.ent=v}
   if(s.chase=='troll'){const st=laneSpawn(350,700)||{x:P.x+300,y:P.y};const b=mkBot(st.x,st.y,0,'#1a1a1a','#c8241a',{max:ST.max*.93,roam:1,target:1});roamPath(b);V.push(b);M.ent=b}
   if(s.collect)M.left=s.collect.slice();
+  if(s.spin)M.spins=0;
   if(s.race)setupRace(s);
 }
 function stepDone(){const s=M.steps[M.i];
@@ -993,13 +1079,13 @@ function stepDone(){const s=M.steps[M.i];
 function cleanupMission(){if(M){if(M.ent)V=V.filter(v=>v!==M.ent);if(M.race)V=V.filter(v=>!v.racer)}crew=[];if(P.pass){P.pass=null;refreshBike()}P.lock=false}
 function missionEnd(win,why){
   const m=M;cleanupMission();M=null;if(m.npc)npcCD[m.npc]=clockR+(win?90:15);shopLatch=true;boothCD=4;
-  if(win){const pay=Math.round(m.def.pay*mult()*(ST.scoot&&m.bk=='loja'?1.25:1));money+=pay;rep=Math.min(100,rep+m.def.rp);P.lastWin={k:'win',once:1,t:`Ver anúncio · +£${pay}`,until:clockR+14,fn:()=>{money+=pay;bigToast('RECOMPENSA DUPLICADA',`+£${pay}`)}};if(m.npc){save.npcDone=save.npcDone||{};save.npcDone[m.npc]=(save.npcDone[m.npc]||0)+1}if(m.first)save.prog[m.bk]++;const L0=lic();save.done++;if(lic()!=L0)setTimeout(()=>bigToast('CARTA '+lic()+'!',lic()=='A'?'Já podes conduzir qualquer cilindrada':'Já podes conduzir motas até 700cc'),3000);happy();bigToast('MISSÃO CUMPRIDA',`+£${pay} · +${m.def.rp} respeito`);sfx('win')}
+  if(win){const pay=Math.round(m.def.pay*mult()*(ST.scoot&&m.bk=='loja'?1.25:1));money+=pay;rep=Math.min(100,rep+m.def.rp);P.lastWin={k:'win',once:1,t:`Ver anúncio · +£${pay}`,until:clockR+14,fn:()=>{money+=pay;bigToast('RECOMPENSA DUPLICADA',`+£${pay}`)}};if(m.npc){save.npcDone=save.npcDone||{};save.npcDone[m.npc]=(save.npcDone[m.npc]||0)+1}if(m.first)save.prog[m.bk]++;const L0=lic();save.done++;if(lic()!=L0)setTimeout(()=>bigToast('CARTA '+lic()+'!',lic()=='A'?'Já podes conduzir qualquer cilindrada':'Já podes conduzir motas até 700cc'),3000);happy();v3Win(m,pay);bigToast('MISSÃO CUMPRIDA',`+£${pay} · +${m.def.rp} respeito`);sfx('win')}
   else{rep-=4;bigToast('MISSÃO FALHADA',why||'');sfx('fail')}
   $('pgWho').textContent='Telefone';$('pgTxt').textContent=idleTxt();$('pgTime').textContent='';$('pgExtra').textContent='';store();if(!win)setTimeout(midgame,3000);
 }
 function setupRace(s){const r=s.race;M.race={...r,k:0,cd:3.2,pos:1};const p0=r.path[0],p1=r.path[Math.min(1,r.path.length-1)];const a=Math.atan2(p1[1]-p0[1],p1[0]-p0[0]);
   const cx=r.start.x,cy=r.start.y,nx=-Math.sin(a),ny=Math.cos(a);P.x=cx-Math.cos(a)*20;P.y=cy-Math.sin(a)*20;P.a=a;P.vx=P.vy=0;P.lock=true;
-  const cols=[['#1a1a1a','#c8241a'],['#7a1010','#111'],['#222','#ffd02a']];
+  const cols=s.solo?[s.solo.c]:[['#1a1a1a','#c8241a'],['#7a1010','#111'],['#222','#ffd02a']];
   cols.forEach((c,k)=>{V.push(mkBot(cx-Math.cos(a)*(20+(k+1)*14)+nx*(k%2?8:-8),cy-Math.sin(a)*(20+(k+1)*14)+ny*(k%2?8:-8),a,c[0],c[1],{max:s.max*(1-k*.035),path:r.path.slice(),racer:1,wait:true}))})}
 function playerProg(){const r=M.race;const k=Math.min(r.k,r.cps.length-1);const c=r.cps[k];return r.cpIdx[k]-hyp(c.x-P.x,c.y-P.y)/T}
 function raceUpdate(dt){const r=M.race;
@@ -1007,13 +1093,14 @@ function raceUpdate(dt){const r=M.race;
   const c=r.cps[r.k];if(hyp(c.x-P.x,c.y-P.y)<38){r.k++;sfx('pick');if(r.k>=r.cps.length){const ahead=V.filter(v=>v.racer&&v.done).length;if(ahead==0)return stepDone();return missionEnd(false,`Ficaste em ${ahead+1}º lugar.`)}}
   const pp=playerProg();r.pos=1+V.filter(v=>v.racer&&(v.done||(v.i-hyp((v.path[Math.min(v.i,v.path.length-1)][0]+.5)*T-v.x,(v.path[Math.min(v.i,v.path.length-1)][1]+.5)*T-v.y)/T)>pp)).length;
 }
-function target(){if(!M)return null;const s=M.steps[M.i];if(s.go)return s.go;if(s.chase)return M.ent;if(s.race)return M.race.cps[Math.min(M.race.k,M.race.cps.length-1)];if(s.collect){let b=null,bd=1e9;for(const p of M.left){const d=hyp(p.x-P.x,p.y-P.y);if(d<bd){bd=d;b=p}}return b}return null}
+function target(){if(!M)return null;const s=M.steps[M.i];if(s.go)return s.go;if(s.chase)return M.ent;if(s.race)return M.race.cps[Math.min(M.race.k,M.race.cps.length-1)];if(s.spin)return places.pioes;if(s.collect){let b=null,bd=1e9;for(const p of M.left){const d=hyp(p.x-P.x,p.y-P.y);if(d<bd){bd=d;b=p}}return b}return null}
 function missionUpdate(dt,spd){
   if(!M)return;
   if(M.t){M.t-=dt;if(M.t<=0)return missionEnd(false,'Acabou o tempo.')}
   const s=M.steps[M.i];
-  if(s.go){if(hyp(s.go.x-P.x,s.go.y-P.y)<24&&(!s.stop||spd<70)){if(s.mg){if(!M.mgBusy){M.mgBusy=1;const m=M;mgOpen(s.mg,{},r=>{if(M!==m)return;M.mgBusy=0;const ok=s.mg=='drag'?r.win:s.mg=='bomba'?!r.quit||r.level>0:r.hits>=s.need;if(ok)stepDone();else missionEnd(false,s.mg=='drag'?'Perdeste a arrancada.':'Não ficou bem feito.')})}}else stepDone()}}
+  if(s.go){if(hyp(s.go.x-P.x,s.go.y-P.y)<24&&(!s.stop||spd<70)){if(s.mg){if(!M.mgBusy){M.mgBusy=1;const m=M;mgOpen(s.mg,s.mgo||{},r=>{if(M!==m)return;M.mgBusy=0;const ok=(s.mg=='drag'||s.mg=='cavalinho')?r.win:s.mg=='bomba'?!r.quit||r.level>0:r.hits>=s.need;if(ok)stepDone();else missionEnd(false,s.mg=='drag'?'Perdeste a arrancada.':'Não ficou bem feito.')})}}else stepDone()}}
   else if(s.chase){if(M.ent.hits>=s.need)stepDone()}
+  else if(s.spin){if((M.spins||0)>=s.spin)stepDone()}
   else if(s.collect){M.left=M.left.filter(p=>{if(hyp(p.x-P.x,p.y-P.y)<16){sfx('pick');toast(`Caixa apanhada! Faltam ${M.left.length-1}`);return false}return true});if(!M.left.length)stepDone()}
   else if(s.race)raceUpdate(dt);
   if(!M)return;
@@ -1070,7 +1157,7 @@ function update(dt){
   if(started){
     const gas=(keys.ArrowUp||keys.KeyW||inp.gas)&&!P.lock,brk=keys.ArrowDown||keys.KeyS||keys.Space||inp.brk,steer=Math.max(-1,Math.min(1,((keys.ArrowRight||keys.KeyD||inp.R)?1:0)-((keys.ArrowLeft||keys.KeyA||inp.L)?1:0)+(inp.jx||0)))*SENS;
     if((keys.KeyH||inp.horn)&&hornT<-.3){hornT=.4;sfx('horn')}
-    const tt=tile(Math.floor(P.x/T),Math.floor(P.y/T));let max=ST.max;if((tt==3||tt==10)&&!ST.trail)max*=.55;if(P.fuel<=0)max=Math.min(max,42);if(P.pass)max*=.93;
+    const tt=tile(Math.floor(P.x/T),Math.floor(P.y/T));let max=ST.max;if((tt==3||tt==10)&&!ST.trail)max*=.55;if(tt==12&&!ST.trail)max*=.8;if(P.fuel<=0)max=Math.min(max,42);if(P.pass)max*=.93;
     if(gas){if(fwd<0)fwd+=ST.brake*dt;else fwd+=ST.acc*dt*Math.max(0,1-fwd/max)}
     else if(brk){if(fwd>5)fwd-=ST.brake*dt;else fwd=Math.max(-55,fwd-90*dt)}
     else fwd-=Math.sign(fwd)*Math.min(Math.abs(fwd),60*dt);
@@ -1078,12 +1165,13 @@ function update(dt){
     lat*=Math.exp(-ST.grip*(rain?.62:1)*(tt==3||tt==10?.75:1)*dt);
     P.vx=ca*fwd-sa*lat;P.vy=sa*fwd+ca*lat;
     P.a+=steer*ST.hand*Math.min(1,Math.abs(fwd)/60)*(1-Math.min(.4,Math.abs(fwd)/700))*dt*(fwd<0?-1:1);
+    spinStep(dt,gas,steer,ca,sa);
     if(P.lock){P.vx=P.vy=0}
     P.x+=P.vx*dt;P.y+=P.vy*dt;hitWorld();hitVehicles();
     const sp=hyp(P.vx,P.vy);
     if((Math.abs(lat)>38||(brk&&fwd>110))&&tt!=3&&tt!=10){g.fillStyle='rgba(18,18,20,.35)';g.fillRect(Math.round(P.x-ca*8),Math.round(P.y-sa*8),2,2)}
     if(gas&&Math.random()<.5)part(P.x-ca*10,P.y-sa*10,-ca*20+rnd(-8,8),-sa*20+rnd(-8,8),.5,'rgba(200,200,200,.5)',2);
-    if((tt==3||tt==10)&&sp>60&&Math.random()<.4)part(P.x,P.y,rnd(-20,20),rnd(-20,20),.4,'#6a5a3a',2);
+    if((tt==3||tt==10||tt==12)&&sp>60&&Math.random()<.4)part(P.x,P.y,rnd(-20,20),rnd(-20,20),.4,'#6a5a3a',2);
     P.fuel=Math.max(0,P.fuel-sp*dt/T*.065*ST.fuelMul);if(P.fuel<=0&&fuelMsg<0){fuelMsg=8;toast('Sem gasolina! Vai a um posto.',1)}
     save.miles+=sp*dt/1500;P.fwd=fwd;
     const l=hist[hist.length-1];if(!l||hyp(l.x-P.x,l.y-P.y)>3){hist.push({x:P.x,y:P.y,a:P.a});if(hist.length>220)hist.shift()}
@@ -1111,6 +1199,7 @@ function update(dt){
     if(rep<=0){const lost=Math.floor(money/2);money-=lost;rep=40;if(M)missionEnd(false,'');bigToast('EXPULSO DO GRUPO!',`O Marco Machado deu-te outra chance. −£${lost}`);sfx('fail')}
     money=Math.max(0,Math.round(money*100)/100);
   }else{P.a+=dt*.15;P.vx=Math.cos(P.a)*40;P.vy=Math.sin(P.a)*40;P.x=clamp(P.x+P.vx*dt,200,N*T-200);P.y=clamp(P.y+P.vy*dt,200,N*T-200)}
+  if(started){rivalTick();idleStep(dt)}
   for(const c of V){if(c.kind=='parked'||c.mode=='wreck')continue;if(c.kind=='bot')botStep(c,dt);else if(c.kind=='cop'&&c.mode=='chase')copChase(c,dt);else laneStep(c,dt)}
   const sp=hyp(P.vx,P.vy);for(const p of peds)pedStep(p,dt,started?sp:0);lifeStep(dt,started?sp:0);
   for(const p of parts){p.x+=p.vx*dt;p.y+=p.vy*dt;p.l-=dt}parts=parts.filter(p=>p.l>0);
@@ -1221,7 +1310,8 @@ function render(){
   // objetivo por cima
   if(started){const tg=target();if(tg){ring(tg.x,tg.y,'#ffd02a',12+pulse*3);arrowTo(tg,'#ffd02a')}
     else if(!M){let b=null,bd=1e9;for(const q of booths.concat(npcs.filter(npcOK).map(n=>({x:n.x,y:n.y,col:'#7dffb0'})))){const d=hyp(q.x-P.x,q.y-P.y);if(d<bd){bd=d;b=q}}if(b)arrowTo(b,b.col)}
-    if(helpEv&&!M)ring(helpEv.x,helpEv.y,'#9fe39a',10)}
+    if(helpEv&&!M)ring(helpEv.x,helpEv.y,'#9fe39a',10);
+    if(!M)for(const v of V)if(v.rival&&vis(v.x,v.y)){ring(v.x,v.y,'#c04aff',11);ctx.font='700 8px "Pixelify Sans",monospace';ctx.textAlign='center';ctx.fillStyle='#000';ctx.fillText(v.rival.n,Math.round(v.x)+1,Math.round(v.y)-15);ctx.fillStyle='#e0a0ff';ctx.fillText(v.rival.n,Math.round(v.x),Math.round(v.y)-16);ctx.textAlign='left'}}
   // chuva
   ctx.setTransform(1,0,0,1,0,0);
   if(rain){ctx.fillStyle='rgba(30,50,80,.16)';ctx.fillRect(0,0,VW,VH);ctx.fillStyle='rgba(180,200,230,.55)';for(let k=0;k<110;k++){const x=(hash(k,1)*VW+clockR*60)%VW,y=(hash(k,2)*VH+clockR*(260+hash(k,3)*120))%VH;ctx.fillRect(Math.floor(x),Math.floor(y),1,5)}}
@@ -1256,14 +1346,14 @@ function drawRadar(){const mc=$('mini').getContext('2d'),k=2.6,rot=-P.a-PI/2;mc.
   mc.save();mc.beginPath();mc.arc(60,60,57,0,7);mc.clip();mc.fillStyle='#0b120d';mc.fillRect(0,0,120,120);mc.translate(60,60);mc.rotate(rot);mc.drawImage(MM,-P.x/T*k,-P.y/T*k,N*k,N*k);
   const dot=(x,y,c,s=5,blink)=>{if(blink&&Math.floor(clockR*4)%2)return;let dx=(x-P.x)/T*k,dy=(y-P.y)/T*k;const d=hyp(dx,dy);if(d>52){dx*=52/d;dy*=52/d}mc.save();mc.translate(dx,dy);mc.rotate(-rot);mc.fillStyle='#000';mc.fillRect(-s/2-1,-s/2-1,s+2,s+2);mc.fillStyle=c;mc.fillRect(-s/2,-s/2,s,s);mc.restore()};
   dot(places.garagem.x,places.garagem.y,'#7ab8ff');dot(places.posto.x,places.posto.y,'#ff8fe0');dot(places.posto2.x,places.posto2.y,'#ff8fe0');dot(places.cafe.x,places.cafe.y,'#c89048',4);
-  if(!M){booths.forEach(b=>dot(b.x,b.y,b.col,6));npcs.forEach(n=>{if(npcOK(n))dot(n.x,n.y,'#7dffb0',5)})}dot(places.saida.x,places.saida.y,'#4a8aff',5);if(helpEv)dot(helpEv.x,helpEv.y,'#9fe39a',5,1);
+  if(!M){booths.forEach(b=>dot(b.x,b.y,b.col,6));npcs.forEach(n=>{if(npcOK(n))dot(n.x,n.y,'#7dffb0',5)})}dot(places.saida.x,places.saida.y,'#4a8aff',5);if(places.pioes)dot(places.pioes.x,places.pioes.y,'#ff9a2a',5);if(!M)for(const v of V)if(v.rival)dot(v.x,v.y,'#c04aff',5);if(helpEv)dot(helpEv.x,helpEv.y,'#9fe39a',5,1);
   for(const v of V)if(v.kind=='cop'&&v.mode=='chase')dot(v.x,v.y,Math.floor(clockR*4)%2?'#ff3a2a':'#2a6aff',4);
   const tg=target();if(tg)dot(tg.x,tg.y,'#ffd02a',7);mc.restore();
   mc.fillStyle='#000';mc.beginPath();mc.moveTo(60,51);mc.lineTo(67,67);mc.lineTo(60,63);mc.lineTo(53,67);mc.closePath();mc.fill();mc.fillStyle='#fff';mc.beginPath();mc.moveTo(60,54);mc.lineTo(65,65);mc.lineTo(60,62);mc.lineTo(55,65);mc.closePath();mc.fill();
   mc.lineWidth=4;mc.strokeStyle='#000';mc.beginPath();mc.arc(60,60,57,0,7);mc.stroke();mc.lineWidth=2;mc.strokeStyle='#ffd02a';mc.stroke();
   const nx=60+Math.sin(rot)*50,ny=60-Math.cos(rot)*50;mc.fillStyle='#000';mc.fillRect(nx-4,ny-4,9,9);ptxt(mc,'N',Math.round(nx)-1,Math.round(ny)-2,'#fff');
 }
-function buildMM(){MM=mk(N*3,N*3,x=>{const C=['#5a5d63','#a39d90','#2a2c31','#3f7a35','#4a4d52','#2d5d8a','#6a6d73','#8a8a80','#c8b99c','#5a9a46','#8a7a3a'];for(let y=0;y<N;y++)for(let i=0;i<N;i++){x.fillStyle=C[grid[y*N+i]];x.fillRect(i*3,y*3,3,3)}})}
+function buildMM(){MM=mk(N*3,N*3,x=>{const C=['#5a5d63','#a39d90','#2a2c31','#3f7a35','#4a4d52','#2d5d8a','#6a6d73','#8a8a80','#c8b99c','#5a9a46','#8a7a3a','#1d4220','#a5824e'];for(let y=0;y<N;y++)for(let i=0;i<N;i++){x.fillStyle=C[grid[y*N+i]];x.fillRect(i*3,y*3,3,3)}})}
 let tT=0,bT=0;
 function toast(t,bad){const e=$('toast');e.textContent=t;e.className='ts on'+(bad?' bad':'');tT=2.6}
 function bigToast(a,b){$('bigT').textContent=a;$('bigS').textContent=b;$('big').classList.add('on');bT=2.8}
@@ -1275,6 +1365,7 @@ function findAct(sp){if(sp>40||!started||P.lock)return null;const nr=(p,r)=>p&&h
   if(nr(places.garagem,28))return{k:'garagem',t:'Entrar na garagem'};
   for(const q of['posto','posto2'])if(nr(places[q],44)&&P.fuel<ST.fuelMax-2)return{k:'bomba',t:'Abastecer'};
   if(nr(places.saida,26))return{k:'viajar',t:'Autoestrada M1 · viajar'};
+  if(!M)for(const v of V)if(v.rival&&nr(v,46))return{k:'rival',t:`${v.rival.n} · ${LL('desafio','challenge')}: ${rivalLabel(v.rival.k)}`,rv:v};
   if(!M)for(const n of npcs)if(npcOK(n)&&nr(n,24))return{k:'npc',t:'Falar com '+n.n,npc:n};
   if(!M&&nr(places.cafe,28)&&cafeCD<=0)return{k:'cafe',t:'Tirar bicas'};
   if(!M&&wanted==0&&nr(places.encontro,34))return{k:'drag',t:'Arrancada · aposta £'+Math.min(100,Math.floor(money))};
@@ -1284,7 +1375,8 @@ function doAct(){if(!act||paused||!started||mg.on)return;const k=act.k;actKey=''
   else if(k=='bomba')mgOpen('bomba',{},r=>{if(r.auto){const u=Math.min(ST.fuelMax-P.fuel,money/.35);P.fuel+=u;money-=u*.35;toast('Depósito cheio.');return}P.fuel=clamp(r.level/100*ST.fuelMax,0,ST.fuelMax);money=Math.max(0,money-r.cost);toast(`Pagaste £${r.cost.toFixed(2)} de gasolina.`)});
   else if(k=='cafe')mgOpen('cafe',{},r=>{if(r.quit&&!r.hits)return;cafeCD=90;const g=r.hits*15;money+=g;rep=Math.min(100,rep+r.hits);bigToast('CAFÉ SERVIDO',`+£${g} · +${r.hits} respeito`)});
   else if(k=='viajar'){if(M){toast('Acaba a missão primeiro.',1);return}openTravel()}
-  else if(k=='npc')startNpc(act.npc);
+  else if(k=='npc')talkNpc(act.npc);
+  else if(k=='rival')talkRival(act.rv);
   else if(k=='drag'){const bet=Math.min(100,Math.floor(money));mgOpen('drag',{},r=>{if(r.quit)return;if(r.win){money+=bet;rep=Math.min(100,rep+2);happy();bigToast('ARRANCADA GANHA',`+£${bet} · +2 respeito`)}else{money-=bet;bigToast('ARRANCADA PERDIDA',`−£${bet}`)}})}
 }
 $('act').onclick=doAct;
@@ -1426,6 +1518,216 @@ const MGK={
    if(B.done&&!A.done&&!s.end){s.bd=(s.bd||0)+dt;if(s.bd>5){s.end=1;mgMsg('O rival chegou muito antes.','#ff7a66');mgFinish({win:false})}}}}
 };
 
+// ================= v3: telemóvel, história, rivais, piões, cavalinho, RC Eats =================
+const LL=(p,e)=>LANG=='pt'?p:e;
+const XPN=n=>40*n*(n-1);
+function level(){let n=1;while(save.xp>=XPN(n+1))n++;return n}
+const LICO={A1:1,A2:2,A:3};
+const REQ={clube:[[1],[1],[2],[3],[4],[5]],loja:[[1],[2],[3],[4],[5],[6]],estrada:[[2],[3],[4],[2],[5,'A2'],[8,'A2']]};
+const npcReq=i=>2+(i%6);
+const STORY=[
+ {t:['O grupo do Facebook','The Facebook group'],x:['Tudo começou com 12 amigos num grupo do Facebook. O Marco Machado quer mais: faz missões e chega aos 60 membros.','It all started with 12 friends in a Facebook group. Marco Machado wants more: do missions and reach 60 members.'],g:[['members',60]]},
+ {t:['Primeiro encontro oficial','First official meet-up'],x:['Já somos muitos, mas na rua ninguém nos leva a sério. Ganha um desafio a um motoqueiro rival e chega aos 200 membros.','We are many now, but nobody on the street takes us seriously. Beat a rival rider in a challenge and reach 200 members.'],g:[['members',200],['wins',1]]},
+ {t:['A guerra das 125','The 125 war'],x:['Os Big Bikes Only dizem que as 125 não são motas. Prova o contrário: chega ao nível 6, vence 4 rivais e chega aos 600 membros.','The Big Bikes Only say 125s are not real bikes. Prove them wrong: reach level 6, beat 4 rivals and reach 600 members.'],g:[['level',6],['wins',4],['members',600]]},
+ {t:['Pelo Reino Unido fora','Across the UK'],x:['O clube tem de crescer fora de Londres. Ajuda membros em 4 cidades, tira a licença RC Eats para pagar as viagens e chega aos 1500 membros.','The club has to grow outside London. Help members in 4 towns, get the RC Eats licence to pay for the trips and reach 1,500 members.'],g:[['towns',4],['eats',1],['members',1500]]},
+ {t:['Os Lobos da Noite','The Night Wolves'],x:['O gangue mais temido do país quer acabar com o RC. Vence 10 desafios de rivais, chega ao nível 12 e aos 5000 membros.','The most feared gang in the country wants to finish off the RC. Win 10 rival challenges, reach level 12 and 5,000 members.'],g:[['wins',10],['level',12],['members',5000]]},
+ {t:['O maior clube do mundo','The biggest club in the world'],x:['Último passo: 20 000 membros e nível 18. O RC Riding Club vai ser o maior clube de motas do mundo!','Final step: 20,000 members and level 18. RC Riding Club is going to be the biggest motorcycle club in the world!'],g:[['members',20000],['level',18]]}];
+const GN={members:['membros','members'],wins:['desafios de rivais ganhos','rival challenges won'],level:['nível','level'],towns:['cidades com missões feitas','towns with missions done'],eats:['licença RC Eats','RC Eats licence']};
+function gval(k){return k=='members'?save.members:k=='wins'?save.wins:k=='level'?level():k=='towns'?new Set(NPC_DATA.filter(n=>(save.npcDone||{})[n.n]).map(n=>n.town)).size:k=='eats'?(save.eats.lic?1:0):0}
+function storyCheck(){const c=STORY[save.ch];if(!c)return;if(!c.g.every(([k,v])=>gval(k)>=v))return;const r=500*(save.ch+1);money+=r;save.ch++;happy();
+  setTimeout(()=>{bigToast(LL('CAPÍTULO CONCLUÍDO','CHAPTER COMPLETE'),`${LL(c.t[0],c.t[1])} · +£${r}`);sfx('win');const n=STORY[save.ch];
+    setTimeout(()=>{if(n){$('pgWho').textContent='Marco Machado';$('pgTxt').textContent=LL(n.x[0],n.x[1]);bigToast(LL('NOVO CAPÍTULO','NEW CHAPTER'),LL(n.t[0],n.t[1]));const tk=()=>{if(paused||mg.on||!started)return setTimeout(tk,1500);chapterTalk()};setTimeout(tk,2500)}else bigToast(LL('O MAIOR CLUBE DO MUNDO!','THE BIGGEST CLUB IN THE WORLD!'),LL('Respeito acima de tudo. Obrigado!','Respect above all. Thank you!'))},3500)},2600)}
+
+// ---------- rivais ----------
+const RIVS=[{n:'Rex "Big Bore"',g:'Big Bikes Only',c:['#1a1a1a','#c8241a'],k:'race'},{n:'Duda Cavalinho',g:'Scooter Mafia',c:['#e0b028','#111'],k:'cavalinho'},{n:'Nuno Pião',g:'Os Cromados',c:['#c0c0c0','#2f5fa8'],k:'pioes'},{n:'Viper',g:'Lobos da Noite',c:['#2a2a3a','#8e5cc2'],k:'race'},{n:'Tia Lena',g:'Scooter Mafia',c:['#e85d9a','#111'],k:'cavalinho'},{n:'Kiko Turbo',g:'Big Bikes Only',c:['#7a1010','#111'],k:'race'},{n:'Mestre Zé',g:'Os Cromados',c:['#d8d8d8','#c8372d'],k:'pioes'},{n:'Lobo Alfa',g:'Lobos da Noite',c:['#111','#8e5cc2'],k:'cavalinho'}];
+let rivalNext=0;
+function addRival(){const used=new Set(V.filter(v=>v.rival).map(v=>v.rival.n)),c=RIVS.filter(r=>!used.has(r.n));if(!c.length)return;const r=pick(c);
+  const st=laneSpawn(400,1200)||{x:P.x+500,y:P.y};const b=mkBot(st.x,st.y,0,r.c[0],r.c[1],{max:125,roam:1,rival:r});roamPath(b);V.push(b)}
+const rivalLabel=k=>k=='race'?LL('corrida','race'):k=='cavalinho'?LL('cavalinho','wheelie'):LL('piões','donuts');
+function startCustom(def,bk,who){M={def,bk,who,first:false,steps:def.steps(),i:0,t:def.time||0,cargo:null,crash:0,ent:null,race:null};
+  bigToast(def.t,'');sfx('beep');enterStep();$('pgWho').textContent=who+' · '+def.t;$('pgTxt').textContent=def.brief;setTimeout(()=>{if(M&&M.def==def)pagerStep()},3200)}
+function startRival(v){const r=v.rival,d=level()+(save.rivals[r.n]||0)*2+(r.angry?2:0),pay=100+d*35;V=V.filter(q=>q!==v);rivalNext=clockR+25;
+  const br=x=>LL(`${r.n} (${r.g}) desafia-te para ${x}. Se ganhares, o clube ganha fama.`,`${r.n} (${r.g}) challenges you to ${x}. Win and the club gains fame.`),t=LL('Desafio: ','Challenge: ')+r.n;let def;
+  if(r.k=='race')def={t,brief:br(LL('uma corrida','a race')),pay,rp:4,rival:r.n,steps:()=>{const rt=raceRoute(3+Math.min(3,d/5|0));return[{race:rt,max:Math.min(ST.max*1.06,150+d*6),solo:r,say:LL('Corrida 1 contra 1! Passa nos pontos e chega primeiro.','1-on-1 race! Hit the checkpoints and finish first.')}]}};
+  else if(r.k=='cavalinho'){const tg=Math.round(35+d*10);def={t,brief:br(LL('um despique de cavalinhos','a wheelie contest')),pay,rp:4,rival:r.n,steps:()=>[{go:{x:P.x,y:P.y},stop:1,mg:'cavalinho',mgo:{target:tg,name:r.n},say:LL(`Faz um cavalinho de mais de ${tg} m!`,`Pull a wheelie longer than ${tg} m!`)}]}}
+  else{const nn=Math.min(12,3+Math.floor(d/3));def={t,brief:br(LL('um despique de piões','a donut contest')),time:120,pay,rp:4,rival:r.n,steps:()=>[{go:places.pioes,stop:1,say:LL('Vai à pista de piões (laranja no mapa).','Go to the donut pad (orange on the map).')},{spin:nn,say:LL(`Faz ${nn} piões na pista: acelera e vira tudo.`,`Do ${nn} donuts on the pad: full throttle and full lock.`)}]}}
+  startCustom(def,'rival',r.n)}
+function rivalTick(){for(const v of V)if(v.rival)v.wait=!M&&hyp(v.x-P.x,v.y-P.y)<80;if(!M&&clockR>rivalNext&&V.filter(v=>v.rival).length<3){addRival();rivalNext=clockR+20}}
+
+// ---------- piões ----------
+let spinAcc=0,spinCombo=0,spinT=-9;
+function spinStep(dt,gas,steer,ca,sa){const pz=places.pioes;const inP=pz&&Math.abs(P.x-pz.x)<2*T&&Math.abs(P.y-pz.y)<2*T;
+  if(inP&&gas&&Math.abs(steer)>.35&&!P.lock){const w=Math.sign(steer)*Math.min(1.6,Math.abs(steer))*4.4*dt;P.a+=w;spinAcc+=Math.abs(w);const k=Math.exp(-3*dt);P.vx*=k;P.vy*=k;
+    if(Math.random()<.8)part(P.x-ca*9,P.y-sa*9,rnd(-25,25),rnd(-25,25),.9,'rgba(220,220,220,.55)',3);g.fillStyle='rgba(18,18,20,.25)';g.fillRect(Math.round(P.x-ca*8),Math.round(P.y-sa*8),2,2);
+    if(spinAcc>=6.283){spinAcc-=6.283;onSpin()}}else if(!inP)spinAcc=0}
+function onSpin(){spinCombo=clockR-spinT<3?spinCombo+1:1;spinT=clockR;save.spins=(save.spins||0)+1;sfx('pick');
+  const s=M&&M.steps[M.i];if(s&&s.spin){M.spins=(M.spins||0)+1;toast(LL(`Pião ${M.spins}/${s.spin}`,`Donut ${M.spins}/${s.spin}`))}
+  else{const gg=2+spinCombo;money+=gg;toast(LL(`Pião! x${spinCombo} · +£${gg}`,`Donut! x${spinCombo} · +£${gg}`))}}
+
+// ---------- RC Eats ----------
+const REST=['Frango da Guia','Sushi Sakura','Pizza Napoli','Kebab Express','Burger Joe','Tasca do Zé','Curry House','Fish & Chips Ben'];
+function eatsDef(test){const r=pick(REST),a=RP(120),b=RP(380),d=hyp(a.x-P.x,a.y-P.y)+hyp(b.x-a.x,b.y-a.y),pay=Math.round(8+d/T*.6);
+  return{t:test?LL('Entrega de teste','Test delivery'):'RC Eats · '+r,brief:LL(`Pedido no ${r}. Apanha a comida e entrega-a a tempo e sem a estragar.`,`Order at ${r}. Pick up the food and deliver it on time without ruining it.`),time:Math.round(45+d/T*1.15),pay:test?10:pay,rp:1,eats:1,test,
+    steps:()=>[{go:a,stop:1,cargo:1,say:LL(`Apanha o pedido no ${r}.`,`Pick up the order at ${r}.`)},{go:b,stop:1,say:LL('Entrega o pedido ao cliente. Cuidado com as pancadas!','Deliver the order to the customer. Mind the bumps!')}]}}
+const QUIZ=[
+ [['Numa mota, a manete do lado direito do guiador aciona…','On a motorcycle, the lever on the right of the handlebar operates…'],[['o travão da frente','the front brake'],['a embraiagem','the clutch'],['o travão de trás','the rear brake'],['a buzina','the horn']]],
+ [['Com a carta A1 podes conduzir motas até…','With an A1 licence you can ride bikes up to…'],[['125cc e 11 kW','125cc and 11 kW'],['300cc','300cc'],['500cc e 35 kW','500cc and 35 kW'],['qualquer cilindrada','any engine size']]],
+ [['O que faz o ABS?','What does ABS do?'],[['Impede as rodas de bloquear ao travar','Stops the wheels locking when braking'],['Aumenta a potência','Increases power'],['Acende as luzes sozinho','Turns the lights on by itself'],['Mede a gasolina','Measures the fuel']]],
+ [['Numa curva, para onde deves olhar?','In a corner, where should you look?'],[['Para a saída da curva','Towards the exit of the corner'],['Para a roda da frente','At the front wheel'],['Para o conta-quilómetros','At the speedometer'],['Para o retrovisor','In the mirror']]],
+ [['O que é obrigatório usar numa mota no Reino Unido?','What is compulsory to wear on a motorcycle in the UK?'],[['Capacete homologado','An approved helmet'],['Luvas de couro','Leather gloves'],['Botas altas','Tall boots'],['Colete refletor','A hi-vis vest']]],
+ [['Qual é considerada a primeira mota com motor a gasolina (1885)?','Which is considered the first petrol-engined motorcycle (1885)?'],[['Daimler Reitwagen','Daimler Reitwagen'],['Harley-Davidson Model 1','Harley-Davidson Model 1'],['Vespa 98','Vespa 98'],['Honda Super Cub','Honda Super Cub']]],
+ [['Que número usava Valentino Rossi?','What number did Valentino Rossi race with?'],[['46','46'],['93','93'],['27','27'],['1','1']]],
+ [['A Ilha de Man é famosa pela corrida…','The Isle of Man is famous for the…'],[['TT','TT races'],['Dakar','Dakar rally'],['Le Mans','Le Mans race'],['Paris-Roubaix','Paris-Roubaix']]],
+ [['Que bandeira assinala o fim de uma corrida de motas?','Which flag signals the end of a motorcycle race?'],[['Axadrezada','Chequered'],['Vermelha','Red'],['Amarela','Yellow'],['Azul','Blue']]],
+ [['Andar só com a roda de trás no chão chama-se…','Riding with only the rear wheel on the ground is called a…'],[['cavalinho','wheelie'],['pião','donut'],['travagem a fundo','emergency stop'],['derrapagem','skid']]]];
+let qz=null;
+function quizStart(){qz={i:0,ok:0,ans:null,ord:QUIZ.map(q=>[0,1,2,3].sort(()=>Math.random()-.5))};renderPhone()}
+
+// ---------- vitória ----------
+function v3Win(m,pay){const lv0=level(),xp=Math.round(m.def.rp*10+m.def.pay/8),mem=Math.round(m.def.rp*(2+lv0)*(1+save.ch*.6));save.xp+=xp;save.members+=mem;save.mdone[m.def.t]=(save.mdone[m.def.t]||0)+1;
+  if(m.def.rival){save.wins++;save.rivals[m.def.rival]=(save.rivals[m.def.rival]||0)+1}
+  if(m.def.eats){const tip=m.def.test?0:Math.round(Math.max(0,m.t)/(m.def.time||1)*m.def.pay*.6);money+=tip;save.eats.n++;save.eats.earn=(save.eats.earn||0)+pay+tip;if(tip)setTimeout(()=>toast(LL(`Gorjeta: +£${tip}`,`Tip: +£${tip}`)),1200);
+    if(m.def.test){save.eats.test++;if(save.eats.test>=3&&save.eats.quiz&&!save.eats.lic){save.eats.lic=1;setTimeout(()=>{bigToast(LL('LICENÇA RC EATS','RC EATS LICENCE'),LL('Já podes fazer entregas pagas no telemóvel','You can now do paid deliveries on your phone'));sfx('win')},3300)}}}
+  setTimeout(()=>toast(LL(`+${xp} XP · +${mem} membros`,`+${xp} XP · +${mem} members`)),2200);
+  if(level()>lv0)setTimeout(()=>{bigToast(LL('SUBISTE DE NÍVEL','LEVEL UP'),LL(`Nível ${level()} · novas missões no telemóvel`,`Level ${level()} · new missions on your phone`));sfx('win')},4200);
+  feedWin(m);storyCheck()}
+
+// ================= v4: diálogos, grupo do Facebook, clube idle =================
+// ---------- diálogos com 3 respostas ----------
+const DLG=[ // por capítulo: [pergunta, [resposta, efeito, réplica]...]
+ [[['Ei! Vi-te no grupo do Facebook. A tua foto de perfil és tu de capacete… dentro de casa?','Hey! Saw you in the Facebook group. Your profile picture is you wearing a helmet… indoors?'],[[['Segurança acima de tudo, até no sofá.','Safety first, even on the sofa.'],'good',['Respeito! Vou fazer o mesmo.','Respect! I\'m doing the same.']],[['E a tua é um pôr do sol com uma frase motivacional.','And yours is a sunset with a motivational quote.'],'bad',['…Isso doeu. Mas é verdade.','…That hurt. But it\'s true.']],[['Era a única foto em que não estava a piscar os olhos.','It was the only photo where I wasn\'t blinking.'],'neu',['Justo. Eu tenho 400 fotos a piscar.','Fair. I have 400 photos of me blinking.']]]],
+  [['O Marco diz que se chegarmos aos 60 membros paga bifanas a todos. Achas que ele cumpre?','Marco says if we reach 60 members he\'ll buy everyone pork sandwiches. Think he\'ll pay up?'],[[['Claro, o Marco é um homem de palavra.','Of course, Marco is a man of his word.'],'good',['És um otimista. Gosto disso.','You\'re an optimist. I like that.']],[['Ele ainda me deve um café de 2019.','He still owes me a coffee from 2019.'],'bad',['Toda a gente tem um café pendente com o Marco.','Everyone has an unpaid coffee with Marco.']],[['Eu vou pelas bifanas, não pelo Marco.','I\'m in it for the sandwiches, not for Marco.'],'neu',['Prioridades bem definidas.','Clear priorities.']]]]],
+ [[['Primeiro encontro oficial! Trouxe cadeiras de praia, um termo de café e o meu tio. O meu tio não sabe andar de mota.','First official meet-up! I brought beach chairs, a flask of coffee and my uncle. My uncle can\'t ride a bike.'],[[['Quanto mais, melhor! O tio fica a guardar as motas.','The more the merrier! Your uncle can guard the bikes.'],'good',['Ele vai adorar, adora mandar.','He\'ll love it, he loves being in charge.']],[['Deixa o tio em casa, por favor.','Leave your uncle at home, please.'],'bad',['Já é tarde, ele já começou a contar a história da tropa.','Too late, he\'s already telling his army stories.']],[['Tens café para mim?','Got coffee for me?'],'neu',['Tenho, mas é do tio. Boa sorte.','I do, but it\'s my uncle\'s. Good luck.']]]],
+  [['Anda um rival a dizer que a tua 125 parece uma máquina de costura.','A rival is saying your 125 sounds like a sewing machine.'],[[['Uma máquina de costura que lhe vai coser a derrota.','A sewing machine that will stitch up his defeat.'],'good',['UUUH! Isso vai para o grupo!','OOOH! That\'s going in the group!']],[['Diz-lhe que a mota dele é que parece um secador avariado.','Tell him his bike sounds like a broken hair dryer.'],'bad',['Calma! Respeito acima de tudo… mas ri-me.','Easy! Respect above all… but I laughed.']],[['As máquinas de costura são muito fiáveis.','Sewing machines are very reliable.'],'neu',['Visto assim, até é um elogio.','Put like that, it\'s a compliment.']]]]],
+ [[['Os Big Bikes Only fizeram um meme connosco. Somos um caracol de capacete.','The Big Bikes Only made a meme about us. We\'re a snail wearing a helmet.'],[[['Os caracóis chegam sempre. Respondemos com uma vitória.','Snails always get there. We\'ll answer with a win.'],'good',['Isso! Caracol com turbo!','Yes! Turbo snail!']],[['Vou fazer um meme deles a empurrar a mota até à bomba.','I\'ll make a meme of them pushing their bike to the petrol station.'],'bad',['Maldoso. Mas gosto.','Nasty. But I like it.']],[['Ao menos o capacete está bem desenhado.','At least the helmet is well drawn.'],'neu',['Pois, até parece homologado.','True, it even looks approved.']]]],
+  [['Pus um autocolante do clube na mota e agora ela anda mais depressa. Ciência?','I put a club sticker on my bike and now it goes faster. Science?'],[[['Ciência, claro. Mais 10 cavalos de orgulho.','Science, obviously. Plus 10 horsepower of pride.'],'good',['Eu sabia! Vou pôr mais três.','I knew it! I\'m adding three more.']],[['Não. Só deixaste de andar com o descanso em baixo.','No. You just stopped riding with the kickstand down.'],'bad',['…Como é que sabes disso?','…How do you know about that?']],[['Depende do autocolante.','Depends on the sticker.'],'neu',['É um gato a fazer um cavalinho.','It\'s a cat doing a wheelie.']]]]],
+ [[['Fiz 200 km para este encontro. Bem, e pelas natas. Principalmente pelas natas.','I rode 200 km for this meet-up. Well, and for the custard tarts. Mostly the tarts.'],[[['As natas e eu agradecemos a visita.','The tarts and I thank you for coming.'],'good',['És um poeta. Um poeta com natas.','You\'re a poet. A poet with tarts.']],[['Então vai lá falar com as natas.','Then go and talk to the tarts.'],'bad',['Já falei. Vieram comigo.','I did. They\'re coming home with me.']],[['Quantas natas?','How many tarts?'],'neu',['Não te vou dizer. Não me julgues.','Not telling. Don\'t judge me.']]]],
+  [['O clube já tem membros por todo o Reino Unido! Até um no País de Gales que só fala com ovelhas.','The club has members all over the UK! Even one in Wales who only talks to sheep.'],[[['Toda a gente é bem-vinda, até as ovelhas.','Everyone is welcome, even the sheep.'],'good',['Ele vai ficar contente. As ovelhas também.','He\'ll be happy. So will the sheep.']],[['Se a ovelha pagar quota, aceito.','If the sheep pays the fee, she\'s in.'],'bad',['Ela paga em lã. Serve?','She pays in wool. Will that do?']],[['As ovelhas andam de mota?','Do sheep ride bikes?'],'neu',['Até agora, só à pendura.','So far, only as passengers.']]]]],
+ [[['Os Lobos da Noite uivaram à porta do café. O dono deu-lhes um pastel de nata e eles foram-se embora.','The Night Wolves howled outside the café. The owner gave them a custard tart and they left.'],[[['O pastel de nata resolve tudo. Diplomacia portuguesa.','Custard tarts fix everything. Portuguese diplomacy.'],'good',['Devíamos mandar natas para a ONU.','We should send tarts to the UN.']],[['Devias ter uivado de volta.','You should have howled back.'],'bad',['Eu uivei. Desafinei. Foi triste.','I did. Off-key. It was sad.']],[['Era de canela?','Did it have cinnamon?'],'neu',['Era. Nem os lobos resistem.','It did. Not even wolves can resist.']]]],
+  [['Dizem que o líder dos Lobos nunca perdeu uma corrida. Também dizem que dorme de capacete.','They say the Wolves\' leader has never lost a race. They also say he sleeps in his helmet.'],[[['Toda a gente perde um dia. Hoje é o dia dele.','Everyone loses one day. Today is his day.'],'good',['Arrepiei-me. Bora!','Goosebumps. Let\'s go!']],[['Se dorme de capacete, é porque cai da cama.','If he sleeps in a helmet, it\'s because he falls out of bed.'],'bad',['AHAH! Não lhe digas isso na cara.','HAHA! Don\'t say that to his face.']],[['Dormir de capacete faz mal ao pescoço.','Sleeping in a helmet is bad for your neck.'],'neu',['És o membro mais responsável do clube.','You\'re the most responsible member of the club.']]]]],
+ [[['Um japonês, um brasileiro e um australiano pediram para entrar no grupo. Parece o início de uma anedota.','A Japanese, a Brazilian and an Australian asked to join the group. Sounds like the start of a joke.'],[[['Aceita! O RC é de todo o mundo.','Accept them! The RC belongs to the whole world.'],'good',['Feito! Bem-vindos, malta!','Done! Welcome, guys!']],[['Só se trouxerem bifanas.','Only if they bring pork sandwiches.'],'bad',['O australiano trouxe um canguru. Serve?','The Australian brought a kangaroo. Will that do?']],[['Qual é o fim da anedota?','How does the joke end?'],'neu',['Ainda não sei. Estamos a escrevê-la juntos.','Don\'t know yet. We\'re writing it together.']]]],
+  [['Se formos o maior clube do mundo, achas que o Marco finalmente paga as bifanas?','If we become the biggest club in the world, think Marco will finally buy the sandwiches?'],[[['Paga, e eu ajudo a grelhar.','He will, and I\'ll help on the grill.'],'good',['És boa pessoa. Ficas com a maior.','You\'re a good person. You get the biggest one.']],[['Nem que fôssemos o maior clube do universo.','Not even if we were the biggest club in the universe.'],'bad',['Triste, mas realista.','Sad, but realistic.']],[['Eu já desisti das bifanas.','I gave up on the sandwiches.'],'neu',['Nunca desistas das bifanas.','Never give up on the sandwiches.']]]]]];
+const RDLG=[
+ [['Olha quem é. O menino da scooter dos correios.','Look who it is. The kid on the postman\'s scooter.'],[[['Bora resolver isto na estrada, com respeito.','Let\'s settle this on the road, with respect.'],'good',['Hmpf. Ao menos tens educação.','Hmpf. At least you\'ve got manners.']],[['Melhor que a tua, que parece um frigorífico com rodas.','Better than yours, which looks like a fridge on wheels.'],'bad',['Grrr! Agora é pessoal!','Grrr! Now it\'s personal!']],[['Eu nem trabalho nos correios.','I don\'t even work for the post office.'],'neu',['…Ok, isso confundiu-me.','…Okay, that confused me.']]]],
+ [['Se perderes, pintas a mota de cor-de-rosa.','If you lose, you paint your bike pink.'],[[['Combinado. E se perderes, dizes bom dia a toda a gente durante uma semana.','Deal. And if you lose, you say good morning to everyone for a week.'],'good',['Isso é… estranhamente simpático. Aceito.','That\'s… weirdly nice. Deal.']],[['Se perderes, trocas a mota por uma trotinete.','If you lose, you swap your bike for a kick scooter.'],'bad',['Isso é cruel. Gosto de ti.','That\'s cruel. I like you.']],[['Cor-de-rosa até me fica bem.','Pink actually suits me.'],'neu',['Pois fica. Raios.','It does. Dammit.']]]],
+ [['Já ganhei a 47 pessoas. Tu vais ser a 48.ª.','I\'ve beaten 47 people. You\'ll be number 48.'],[[['Ótimo, então sabes perder com classe quando chegar a hora.','Great, so you know how to lose with class when the time comes.'],'good',['Ahah! Gosto da confiança.','Haha! I like the confidence.']],[['Contaste pelos dedos dos pés também?','Did you count on your toes too?'],'bad',['…Sim. Algum problema?','…Yes. Got a problem?']],[['48 é um número bonito.','48 is a nice number.'],'neu',['Não é? Fica bem numa t-shirt.','Right? Looks good on a t-shirt.']]]],
+ [['O meu escape faz mais barulho do que a tua mota toda.','My exhaust is louder than your whole bike.'],[[['E a minha não acorda o bairro às 3 da manhã. Os vizinhos agradecem.','And mine doesn\'t wake the street at 3am. The neighbours say thanks.'],'good',['Os meus vizinhos odeiam-me, é verdade.','My neighbours do hate me, it\'s true.']],[['O teu escape é o único que fala por ti.','Your exhaust is the only thing that talks for you.'],'bad',['Isso… foi certeiro.','That… hit the spot.']],[['Tens tampões para os ouvidos?','Got earplugs?'],'neu',['Tenho. Não para ti.','I do. Not for you.']]]]];
+const MDLG=[[['Conta comigo, presidente!','Count on me, president!'],'good',['É assim mesmo! Respeito acima de tudo.','That\'s the spirit! Respect above all.']],[['Isso dá muito trabalho… há bifanas no fim?','That sounds like hard work… are there sandwiches at the end?'],'bad',['Há bifanas no fim. Talvez. Provavelmente não.','There are sandwiches at the end. Maybe. Probably not.']],[['Ok.','Okay.'],'neu',['Um homem de poucas palavras. Respeito.','A person of few words. Respect.']]];
+let dlgCB=null;
+function dialog(who,q,ans,cb){paused=true;P.vx=P.vy=0;$('dlgWho').textContent=who;$('dlgTxt').textContent=LL(q[0],q[1]);const o=$('dlgOpts');
+  o.innerHTML=ans.map((a,i)=>[a,i]).sort(()=>Math.random()-.5).map(([a,i])=>`<button class="go alt qo" type="button" data-i="${i}">${LL(a[0][0],a[0][1])}</button>`).join('');
+  dlgCB={ans,cb};$('dlg').classList.add('on')}
+$('dlgOpts').addEventListener('click',e=>{const b=e.target.closest('button');if(!b||!dlgCB)return;
+  if(b.dataset.a=='ok'){const c=dlgCB;dlgCB=null;$('dlg').classList.remove('on');paused=false;if(c.cb)c.cb(c.k);return}
+  const a=dlgCB.ans[+b.dataset.i],k=a[1];dlgCB.k=k;$('dlgTxt').textContent=LL(a[2][0],a[2][1]);
+  let fx='';if(k=='good'){rep=Math.min(100,rep+3);save.members+=5;fx=LL('+3 respeito · +5 membros','+3 respect · +5 members')}else if(k=='bad'){rep=Math.max(0,rep-2);fx=LL('−2 respeito (mas foi engraçado)','−2 respect (but it was funny)')}else fx=LL('Nada muda.','Nothing changes.');
+  $('dlgOpts').innerHTML=`<p class="stat">${fx}</p><button class="go" type="button" data-a="ok">${LL('Continuar','Continue')}</button>`;sfx(k=='good'?'pick':k=='bad'?'hit':'beep')});
+function talkNpc(n){const pool=DLG[Math.min(save.ch,DLG.length-1)],d=pool[(hash(n.n.length,save.ch+n.n.charCodeAt(0))*pool.length)|0]||pool[0];
+  dialog(n.n,d[0],d[1],()=>startNpc(n))}
+function talkRival(v){const r=v.rival,d=RDLG[(hash(r.n.length,save.wins)*RDLG.length)|0]||RDLG[0];dialog(r.n+' · '+r.g,d[0],d[1],k=>{if(k=='bad')r.angry=1;startRival(v)})}
+function chapterTalk(){const c=STORY[save.ch];if(!c)return;dialog('Marco Machado · '+LL('Presidente','President'),c.x,MDLG,null)}
+
+// ---------- grupo do Facebook ----------
+const FN=['Zé','Tó','Joana','Rita','Bruno','Carla','Nelson','Sara','Hugo','Inês','Paulo','Marta','Diogo','Vera','Luís','Patrícia','Kevin','Sónia','Fábio','Tânia'];
+const FL=['Silva','Santos','Ferreira','Pereira','Costa','Martins','Sousa','Fernandes','Gomes','Lopes','Marques','Almeida','Ribeiro','Pinto','Carvalho','Teixeira'];
+const fname=()=>pick(FN)+' '+pick(FL);
+const FPOST=[['Alguém viu as minhas luvas? Deixei-as no café em 2023.','Has anyone seen my gloves? I left them at the café in 2023.'],['Vendo capacete. Só caiu uma vez. Do armário.','Selling helmet. Only dropped once. Off the wardrobe.'],['Chuva em Londres. Grande novidade.','Rain in London. Big news.'],['Quem alinha num passeio no domingo? Eu levo os bolos.','Who\'s up for a ride on Sunday? I\'ll bring the cakes.'],['A minha mulher perguntou se a mota é mais importante do que ela. Não respondi a tempo.','My wife asked if the bike is more important than her. I didn\'t answer in time.'],['Lembrete: o capacete vai NA CABEÇA, Rui.','Reminder: the helmet goes ON YOUR HEAD, Rui.'],['Alguém sabe arranjar um pisca? O meu pisca para o lado errado.','Anyone know how to fix an indicator? Mine blinks the wrong way.'],['Hoje fiz 300 km e só parei 7 vezes para café.','Did 300 km today and only stopped 7 times for coffee.'],['Encontrei uma 125 igual à minha num museu. Devo preocupar-me?','Found a 125 just like mine in a museum. Should I be worried?'],['Foto de grupo no sábado! Tragam o melhor sorriso e o pior casaco.','Group photo on Saturday! Bring your best smile and your worst jacket.'],['O GPS mandou-me para dentro de um rio. Confiei. Erro.','The GPS sent me into a river. I trusted it. Mistake.'],['Os pastéis de nata da mercearia acabaram. Desculpem, fui eu.','The deli is out of custard tarts. Sorry, that was me.'],['Lavei a mota e começou logo a chover. De nada, Inglaterra.','I washed my bike and it started raining straight away. You\'re welcome, England.'],['Primeira vez a passar nos 100 km/h na autoestrada. Chorei um bocadinho.','First time over 100 km/h on the motorway. I cried a little.']];
+function addPost(w,p,e,l){save.feed=save.feed||[];save.feed.unshift({w,p,e,l:l||Math.floor(Math.random()*20),t:Date.now()});if(save.feed.length>40)save.feed.length=40}
+let feedNext=40,joinMark=0;
+function feedTick(dt){feedNext-=dt;if(feedNext<=0){feedNext=rnd(70,140);const f=pick(FPOST);addPost(Math.random()<.3?pick(NPC_DATA).n:fname(),f[0],f[1])}
+  const step=save.members<200?10:save.members<2000?100:save.members<20000?1000:5000,m=Math.floor(save.members/step);if(!joinMark)joinMark=m;
+  if(m>joinMark){const n=(m-joinMark)*step;joinMark=m;const a=fname(),b=fname();addPost('RC Riding Club',`${a}, ${b} e mais ${n} pessoas juntaram-se ao grupo. Bem-vindos! Total: ${save.members.toLocaleString('pt-PT')} membros.`,`${a}, ${b} and ${n} more people joined the group. Welcome! Total: ${save.members.toLocaleString('en-GB')} members.`,n)}}
+function feedWin(m){if(m.def.rival)addPost('Marco Machado',`${m.def.rival} perdeu um desafio contra o RC. Já está a pedir desforra 😂`,`${m.def.rival} lost a challenge against the RC. Already asking for a rematch 😂`,30);
+  else if(!m.def.eats&&Math.random()<.6)addPost(m.npc||m.who||'Marco Machado',`Missão cumprida: ${m.def.t}. Obrigado, és uma lenda! 🏍️`,`Mission complete: ${m.def.t}. Thank you, you're a legend! 🏍️`)}
+
+// ---------- clube idle ----------
+const IUP=[{k:'fb',n:['Anúncios no Facebook','Facebook ads'],d:['+membros por minuto','+members per minute'],c:150,g:1.6},{k:'ev',n:['Encontros mensais','Monthly meet-ups'],d:['+muitos membros por minuto','+lots of members per minute'],c:500,g:1.65},{k:'merch',n:['Loja online de merch','Online merch shop'],d:['+£ por cada 1000 membros','+£ per 1,000 members'],c:350,g:1.6},{k:'pat',n:['Patrocínios','Sponsorships'],d:['+£ fixo e +membros','+flat £ and +members'],c:1200,g:1.7},{k:'sede',n:['Sede do clube','Clubhouse'],d:['multiplica tudo ×1,25 por nível','multiplies everything ×1.25 per level'],c:2500,g:1.9}];
+const IU=k=>(save.idle&&save.idle[k])||0;
+const idleMem=()=>(IU('fb')*.03+IU('ev')*.12+IU('pat')*.05)*(1+IU('sede')*.25)*(1+save.ch*.2);
+const idleInc=()=>(save.members/1000*(.3+IU('merch')*.5)+IU('pat')*.08)*(1+IU('sede')*.25);
+const iCost=u=>Math.round(u.c*Math.pow(u.g,IU(u.k)));
+let memF=0;
+function idleStep(dt){memF+=idleMem()*dt;if(memF>=1){const n=Math.floor(memF);memF-=n;save.members+=n}money+=idleInc()*dt;feedTick(dt);if(Math.random()<dt/5)storyCheck()}
+function idleOffline(){const last=save.saved||0;if(!last)return;const dt=Math.min(4*3600,(Date.now()-last)/1000);if(dt<60)return;const m0=save.members,g0=money;
+  save.members+=Math.floor(idleMem()*dt);money+=idleInc()*dt;const dm=save.members-m0,dg=Math.round(money-g0);if(dm>0||dg>0)setTimeout(()=>bigToast(LL('ENQUANTO ESTIVESTE FORA','WHILE YOU WERE AWAY'),LL(`+${dm} membros · +£${dg}`,`+${dm} members · +£${dg}`)),2500)}
+
+// ---------- telemóvel ----------
+let phTab='mis';
+function openPhone(){if(!started||mg.on)return;paused=true;P.vx=P.vy=0;$('phone').classList.add('on');renderPhone()}
+function closePhone(){$('phone').classList.remove('on');paused=false}
+const prow=(t,sub,btn,dis,data)=>`<div class="it p"><div><b>${t}</b><span>${sub}</span></div>${btn?`<button class="buy" type="button" ${data||''} ${dis?'disabled':''}>${btn}</button>`:''}</div>`;
+function renderPhone(){const lv=level(),a=XPN(lv),b=XPN(lv+1);
+  $('phStat').innerHTML=`${LL('Nível','Level')} ${lv} · ${save.members.toLocaleString(LANG=='pt'?'pt-PT':'en-GB')} ${LL('membros','members')}<span class="xpb"><i style="width:${Math.round((save.xp-a)/(b-a)*100)}%"></i></span>`;
+  document.querySelectorAll('#phTabs .tab').forEach(x=>x.classList.toggle('on',x.dataset.p==phTab));
+  let h='';const lk=x=>'🔒 '+x,Lv=LL('Nível','Level'),busy=LL('Ocupado','Busy'),acc=LL('Aceitar','Accept');
+  if(M)h+=prow(LL('Missão em curso','Mission in progress')+': '+M.def.t,M.steps[M.i].say,LL('Desistir','Give up'),0,'data-a="quit"');
+  if(phTab=='mis'){const lic0=LICO[lic()];
+    for(const[k,nm]of[['clube','Marco Machado · '+LL('Clube','Club')],['loja','Loja RC'],['estrada','Paula · '+LL('Estrada','Road')]]){h+=`<h3>${nm}</h3>`;
+      MIS[k].forEach((d,i)=>{const[rl,rc]=REQ[k][i],n=save.mdone[d.t]||(i<save.prog[k]?1:0),lL=lv<rl,lC=rc&&lic0<LICO[rc];
+        h+=prow(d.t+(n?' ✓':''),`${d.brief}<br>£${d.pay} · ${Lv} ${rl}${rc?' · '+LL('Carta','Licence')+' '+rc:''}`,lL?lk(Lv+' '+rl):lC?lk(LL('Carta','Licence')+' '+rc):M?busy:acc,lL||lC||M,`data-a="m" data-k="${k}" data-i="${i}"`)})}
+    h+=`<h3>${LL('Membros noutras cidades','Members in other towns')}</h3>`;
+    NPC_DATA.forEach((n,i)=>{const rl=npcReq(i),here=n.town==W_.id,lock=lv<rl,dn=(save.npcDone||{})[n.n],np=npcs.find(q=>q.n==n.n);
+      h+=prow(n.m.t+(dn?' ✓':''),`${n.n} · ${TOWNS[n.town].name}<br>${n.m.brief}<br>£${n.m.pay} · ${Lv} ${rl}`,lock?lk(Lv+' '+rl):M?busy:here?acc:LL('Viajar','Travel'),lock||M||(here&&!(np&&npcOK(np))),`data-a="${here?'npc':'trav'}" data-n="${i}"`)})}
+  else if(phTab=='grupo'){h+=`<div class="fbh"><b>RC Riding Club</b><span>${LL('Grupo público','Public group')} · ${save.members.toLocaleString(LANG=='pt'?'pt-PT':'en-GB')} ${LL('membros','members')}</span></div>`;
+    (save.feed||[]).forEach((f,i)=>{const ago=Math.max(1,Math.round((Date.now()-f.t)/60000));h+=`<div class="fbp"><div class="fbn"><i>${f.w[0]}</i><b>${f.w}</b><small>${ago<60?ago+' min':Math.round(ago/60)+' h'}</small></div><p>${LL(f.p,f.e)}</p><button type="button" class="fbl${f.me?' on':''}" data-a="like" data-i="${i}">👍 ${f.l}</button></div>`})}
+  else if(phTab=='clube'){h+=prow(LL('O teu clube','Your club'),LL(`${save.members.toLocaleString('pt-PT')} membros · +${(idleMem()*60).toFixed(1)} membros/min · +£${(idleInc()*60).toFixed(1)}/min<br>O clube cresce e dá dinheiro sozinho, mesmo quando não estás a jogar (até 4 horas).`,`${save.members.toLocaleString('en-GB')} members · +${(idleMem()*60).toFixed(1)} members/min · +£${(idleInc()*60).toFixed(1)}/min<br>The club grows and earns money on its own, even when you're not playing (up to 4 hours).`));
+    IUP.forEach(u=>{const c=iCost(u);h+=prow(`${LL(u.n[0],u.n[1])} · ${LL('nível','level')} ${IU(u.k)}`,LL(u.d[0],u.d[1]),'£'+c.toLocaleString(),money<c,`data-a="iup" data-k="${u.k}"`)})}
+  else if(phTab=='hist'){STORY.forEach((c,i)=>{const done=i<save.ch,cur=i==save.ch;if(i>save.ch){h+=prow(`${i+1}. ???`,LL('Bloqueado','Locked'));return}
+      h+=prow(`${i+1}. ${LL(c.t[0],c.t[1])}${done?' ✓':''}`,LL(c.x[0],c.x[1])+(cur?'<br>'+c.g.map(([k,v])=>`${gval(k)>=v?'✓':'•'} ${LL(GN[k][0],GN[k][1])}: ${Math.min(gval(k),v).toLocaleString()}/${v.toLocaleString()}`).join('<br>'):''))});
+    if(save.ch>=STORY.length)h+=prow(LL('O RC Riding Club é o maior clube de motas do mundo!','RC Riding Club is the biggest motorcycle club in the world!'),LL('Continua a jogar: há sempre rivais para vencer.','Keep playing: there are always rivals to beat.'))}
+  else if(phTab=='riv'){h+=`<h3>${LL('Motoqueiros rivais nesta cidade','Rival riders in this town')}</h3>`;const rv=V.filter(v=>v.rival);
+    rv.forEach(v=>{const r=v.rival;h+=prow(r.n,`${r.g} · ${LL('desafio','challenge')}: ${rivalLabel(r.k)} · ${LL('vitórias contra ele','wins against them')}: ${save.rivals[r.n]||0}<br>${LL('Procura o ponto roxo no mapa e para ao lado dele.','Find the purple dot on the map and stop next to them.')}`,LL('Mapa','Map'),0,'data-a="map"')});
+    if(!rv.length)h+=prow(LL('Ninguém por perto','Nobody around'),LL('Os rivais aparecem pela cidade de vez em quando.','Rivals show up around town now and then.'));
+    h+=prow(LL('Pista de piões','Donut pad'),LL(`Treina na pista (laranja no mapa): acelera e vira tudo. Piões feitos: ${save.spins||0}`,`Practise on the pad (orange on the map): full throttle and full lock. Donuts done: ${save.spins||0}`))}
+  else if(phTab=='eats'){const e=save.eats;
+    if(qz){const q=QUIZ[qz.i],o=qz.ord[qz.i];h+=`<h3>${LL('Teste RC Eats','RC Eats test')} · ${qz.i+1}/10 · ${qz.i<5?LL('Motas','Bikes'):LL('Curiosidades','Trivia')}</h3><p class="qq">${LL(q[0][0],q[0][1])}</p>`;
+      o.forEach((oi,j)=>{const t=LL(q[1][oi][0],q[1][oi][1]);let cl='go alt qo';if(qz.ans!=null){if(oi==0)cl+=' qok';else if(j==qz.ans)cl+=' qbad'}h+=`<button class="${cl}" type="button" data-a="qa" data-o="${j}" ${qz.ans!=null?'disabled':''}>${t}</button>`});
+      if(qz.ans!=null)h+=`<button class="go" type="button" data-a="qn">${qz.i<9?LL('Seguinte','Next'):LL('Ver resultado','See result')}</button>`}
+    else if(!e.lic){h+=prow('RC Eats',LL('Ganha dinheiro a entregar comida pela cidade. Para teres a licença de estafeta: passa o teste (5 perguntas sobre motas e 5 curiosidades, mínimo 8 certas) e faz 3 entregas de teste.','Earn money delivering food around town. To get your courier licence: pass the test (5 bike questions and 5 trivia questions, at least 8 right) and do 3 test deliveries.'));
+      h+=prow((e.quiz?'✓ ':'1. ')+LL('Teste teórico','Theory test'),e.quiz?LL('Aprovado','Passed'):LL('10 perguntas · mínimo 8 certas','10 questions · at least 8 right'),e.quiz?'':LL('Começar','Start'),0,'data-a="quiz"');
+      h+=prow((e.test>=3?'✓ ':'2. ')+LL('Entregas de teste','Test deliveries'),`${Math.min(3,e.test)}/3`,M?busy:LL('Entregar','Deliver'),!e.quiz||M,'data-a="etest"')}
+    else{h+=prow('RC Eats · '+LL('licença ativa','licence active'),LL(`Entregas feitas: ${e.n} · ganhos: £${Math.round(e.earn||0)}. Quanto mais depressa entregares, maior a gorjeta.`,`Deliveries done: ${e.n} · earnings: £${Math.round(e.earn||0)}. The faster you deliver, the bigger the tip.`));
+      h+=prow(LL('Novo pedido','New order'),LL('Restaurante e cliente aleatórios pela cidade.','Random restaurant and customer around town.'),M?busy:LL('Aceitar','Accept'),M,'data-a="eats"')}}
+  $('phBody').innerHTML=h}
+$('phTabs').addEventListener('click',e=>{const b=e.target.closest('.tab');if(!b)return;phTab=b.dataset.p;if(phTab!='eats')qz=null;renderPhone();$('phBody').scrollTop=0});
+$('phBody').addEventListener('click',e=>{const b=e.target.closest('button');if(!b||b.disabled)return;const a=b.dataset.a;
+  if(a=='quit'){closePhone();if(M)missionEnd(false,LL('Desististe.','You gave up.'));return}
+  if(a=='m'){closePhone();startCustom(MIS[b.dataset.k][+b.dataset.i],b.dataset.k,{clube:'Marco Machado',loja:'Loja RC',estrada:'Paula'}[b.dataset.k]);M.first=+b.dataset.i>=save.prog[b.dataset.k]&&+b.dataset.i==save.prog[b.dataset.k];return}
+  if(a=='npc'){const n=npcs.find(q=>q.n==NPC_DATA[+b.dataset.n].n);if(n){closePhone();talkNpc(n)}return}
+  if(a=='trav'){closePhone();openTravel();return}
+  if(a=='map'){closePhone();openMap();return}
+  if(a=='quiz'){quizStart();return}
+  if(a=='like'){const f=save.feed[+b.dataset.i];if(f){f.me=!f.me;f.l+=f.me?1:-1;renderPhone()}return}
+  if(a=='iup'){const u=IUP.find(q=>q.k==b.dataset.k),c=iCost(u);if(money>=c){money-=c;save.idle[u.k]=IU(u.k)+1;sfx('pick');store();renderPhone()}return}
+  if(a=='qa'){qz.ans=+b.dataset.o;const ok=qz.ord[qz.i][qz.ans]==0;if(ok){qz.ok++;sfx('pick')}else sfx('hit');renderPhone();return}
+  if(a=='qn'){qz.i++;qz.ans=null;if(qz.i>=10){const ok=qz.ok;qz=null;if(ok>=8){save.eats.quiz=1;bigToast(LL('TESTE APROVADO','TEST PASSED'),`${ok}/10`);sfx('win');store()}else{bigToast(LL('TESTE CHUMBADO','TEST FAILED'),LL(`${ok}/10 · precisas de 8. Tenta outra vez!`,`${ok}/10 · you need 8. Try again!`));sfx('fail')}}renderPhone();return}
+  if(a=='etest'||a=='eats'){closePhone();startCustom(eatsDef(a=='etest'),'eats','RC Eats');return}});
+$('phoneB').onclick=openPhone;$('phClose').onclick=closePhone;$('phMap').onclick=()=>{closePhone();openMap()};$('phTravel').onclick=()=>{closePhone();if(M){toast(LL('Acaba a missão primeiro.','Finish the mission first.'),1);return}openTravel()};
+addEventListener('keydown',e=>{if(e.code=='KeyT'&&started&&!mg.on){if($('phone').classList.contains('on'))closePhone();else if(!paused)openPhone()}});
+
+// ---------- mini-jogo: cavalinho ----------
+MGK.cavalinho={auto:o=>({win:true,dist:o.target||50}),quit:s=>({win:false,quit:1,dist:s.dist||0}),
+ build(s,sc,o){const day=darkness()<.3,bg=day?'#9cc8f0':'#0c1430';sc.background=new TH.Color(bg);sc.fog=new TH.Fog(bg,22,90);lights3(sc,day);
+  bx(sc,9,.1,2400,MTX(ctex(32,32,x=>{px(x,'#3a3d43',0,0,32,32);for(let k=0;k<70;k++)px(x,Math.random()<.5?'#34373c':'#45484e',Math.random()*32|0,Math.random()*32|0,1,1)},4,600)),0,-.05,-1190);
+  const wm=MBS('#e8e4d8');for(let z=0;z>-2380;z-=6)bx(sc,.12,.02,3,wm,-2.2,.01,z);
+  const swt=MTX(ctex(16,16,x=>{px(x,'#bdb6a6',0,0,16,16);px(x,'#a9a293',0,0,16,1);px(x,'#a9a293',0,0,1,16)},2,600));bx(sc,3,.25,2400,swt,-6,.12,-1190);bx(sc,3,.25,2400,swt,6,.12,-1190);
+  const wt=[0,1,2,3].map(k=>ctex(16,32,x=>{px(x,['#8a5a44','#6f7480','#a7a196','#3d566e'][k],0,0,16,32);for(let j=2;j<30;j+=5)for(let i=2;i<14;i+=5)px(x,!day&&Math.random()<.45?'#ffd77a':k==3?'#7aa0c4':'#1e2a38',i,j,3,3)}));
+  for(let z=-4;z>-2380;z-=7){const h=4+Math.random()*12;bx(sc,6,h,6.5,MTX(wt[Math.floor(Math.random()*4)]),-11,h/2,z)}
+  const mk_=MBS('#ffd02a');for(let m=10;m<2300;m+=10){bx(sc,.15,1.2,.15,'#333',3.6,.6,-m);bx(sc,.5,.3,.05,m%50?'#eee':mk_,3.6,1.3,-m)}
+  s.tg=o.target||60;const ck=ctex(16,4,x=>{for(let i=0;i<16;i++)for(let j=0;j<4;j++)px(x,(i+j)%2?'#111':'#fff',i,j)});const fin=new TH.Mesh(new TH.PlaneGeometry(9,2),new TH.MeshBasicMaterial({map:ck}));fin.rotation.x=-PI/2;fin.position.set(0,.02,-(s.tg+20));sc.add(fin);
+  bx(sc,.3,4,.3,'#c8241a',-4.5,2,-(s.tg+20));bx(sc,.3,4,.3,'#c8241a',4.5,2,-(s.tg+20));
+  const pv=new TH.Group();const bk=bike3D(ST.col,save.helmet,true,ST.style);bk.position.set(0,-.33,-.66);pv.add(bk);pv.position.set(0,.33,0);sc.add(pv);s.pv=pv;
+  s.a=0;s.w=0;s.z=0;s.v=0;s.dist=0;s.up=false;s.t0=0;s.start=0;
+  mgUI(LL('Cavalinho','Wheelie')+(o.name?' · vs '+o.name:''),'','ACELERA','Desistir');mgMsg(LL('Mantém ACELERA para levantar a frente e larga para baixar. Fica na zona verde!','Hold GAS to lift the front and release to lower it. Stay in the green zone!'))},
+ update(s,dt){if(s.end)return;s.v=Math.min(15,s.v+5*dt);s.z-=s.v*dt;
+  if(s.v>7){s.w+=((mg.hold?3.6:0)-(s.a>0||mg.hold?2.3*Math.cos(s.a):0))*dt;s.w*=Math.exp(-.7*dt);s.a+=s.w*dt;if(s.a<=0){s.a=0;if(s.w<0)s.w=0;if(s.up&&s.dist>1){s.end=1;const win=s.dist>=s.tg;mgMsg(win?LL(`Ganhaste! ${s.dist.toFixed(1)} m`,`You won! ${s.dist.toFixed(1)} m`):LL(`A frente caiu aos ${s.dist.toFixed(1)} m`,`The front dropped at ${s.dist.toFixed(1)} m`),win?'#9fe39a':'#ff7a66');sfx(win?'win':'fail');mgFinish({win,dist:s.dist},2)}}}
+  else s.start+=dt;
+  if(s.a>.25){s.up=true;s.dist+=s.v*dt;if(s.dist>=s.tg&&!s.end){s.end=1;mgMsg(LL(`Ganhaste! ${s.dist.toFixed(1)} m`,`You won! ${s.dist.toFixed(1)} m`),'#9fe39a');sfx('win');mgFinish({win:true,dist:s.dist},2)}}
+  if(s.a>1.3&&!s.end){s.end=1;s.a=1.6;mgMsg(LL('Caíste para trás!','You looped it!'),'#ff7a66');sfx('crash');mgFinish({win:false,dist:s.dist},2)}
+  if(!s.up&&s.v>7){s.t0+=dt;if(s.t0>9&&!s.end){s.end=1;mgMsg(LL('Não levantaste a frente.','You never lifted the front.'),'#ff7a66');mgFinish({win:false,dist:0})}}
+  s.pv.rotation.x=s.a;s.pv.position.z=s.z;mg.cam.position.set(5.4,1.5,s.z-.4);mg.cam.lookAt(0,.95,s.z-.55);
+  mgBar(s.a/1.3,.45/1.3,.85/1.3,s.a/1.3);mgUI(null,`${Math.round(s.v*3.6)} km/h · ${s.dist.toFixed(1)} / ${s.tg} m`)}};
+
 // ================= garagem =================
 let shopTab='motas';
 function openShop(){paused=true;P.vx=P.vy=0;$('shop').classList.add('on');renderShop()}
@@ -1481,15 +1783,16 @@ function begin(fresh){if(fresh){save=DEF();try{STORE.removeItem(KEY())}catch(e){
   if((save.town||'londres')!=W_.id){genWorld(TOWNS[save.town]||TOWNS.londres);spawnTraffic();initLife();peds=[];for(let i=0;i<95;i++)peds.push(spawnPed())}
   money=save.money;rep=save.rep;P.hp=save.hp;P.fuel=save.fuel;P.pass=null;refreshBike();
   const gp=places.garagem;P.x=gp.x;P.y=gp.y-T*1.3;P.a=-PI/2;P.vx=P.vy=0;P.ltx=Math.floor(P.x/T);P.lty=Math.floor(P.y/T);cam.x=P.x;cam.y=P.y;shopLatch=true;
-  makePickups();
+  makePickups();idleOffline();if(fresh||!save.feed||!save.feed.length)addPost('Marco Machado','Bem-vindos ao grupo do RC Riding Club! Regras: respeito acima de tudo, capacete sempre e nada de spam de cripto.','Welcome to the RC Riding Club group! Rules: respect above all, helmets always and no crypto spam.',12);
   started=true;paused=false;audioInit();if(AC&&AC.state=='suspended')AC.resume();
   ['hudL','hudR','pager','gauge','padL','padR'].forEach(i=>$(i).classList.remove('hide'));document.body.classList.add('pager-on');$('start').classList.remove('on');
-  $('pgWho').textContent='Telefone';$('pgTxt').textContent='Segue a seta até uma cabine telefónica: verde é o clube, laranja a loja, vermelha os passeios e corridas.';
+  $('pgWho').textContent='Telefone';$('pgTxt').textContent=idleTxt();
   bigToast('RC RIDING CLUB','Respeito acima de tudo');sdkInit();
   const today=new Date().toISOString().slice(0,10),yest=new Date(Date.now()-864e5).toISOString().slice(0,10);
   if(save.lastDay!=today){save.streak=save.lastDay==yest?Math.min(7,(save.streak||0)+1):1;save.lastDay=today;const g=50*save.streak+50;money+=g;
     setTimeout(()=>{bigToast('PRÉMIO DIÁRIO',`Dia ${save.streak} seguido · +£${g}`);sfx('win')},3200);dailyOffer={k:'day',once:1,t:`Ver anúncio · +£${g} extra`,until:clockR+25,fn:()=>{money+=g;bigToast('PRÉMIO DUPLICADO',`+£${g}`)}};store()}
-  if(!save.tut){save.tut=1;const tips=['Segue a seta: as cabines telefónicas dão missões.','Para nos sítios com marcador para abastecer, tirar cafés ou entrar na garagem.','Foge à polícia pelos parques: os carros não entram.'];tips.forEach((t,i)=>setTimeout(()=>toast(t),6500+i*4200))}
+  if(!save.intro){save.intro=1;setTimeout(()=>{if(!paused)chapterTalk()},4200)}
+  if(!save.tut){save.tut=1;const tips=[LL('Toca no 📱 para abrir o telemóvel e escolher missões.','Tap 📱 to open your phone and pick missions.'),'Para nos sítios com marcador para abastecer, tirar cafés ou entrar na garagem.','Foge à polícia pelos parques: os carros não entram.'];tips.forEach((t,i)=>setTimeout(()=>toast(t),6500+i*4200))}
 }
 $('play').onclick=()=>begin(false);$('newG').onclick=()=>begin(true);
 addEventListener('keydown',e=>{if(mg.on){if(e.code=='Space'||e.code=='Enter'){if(!e.repeat)mg.press=true;mg.hold=true;e.preventDefault()}if(e.code=='Escape')$('mgB').click();return}keys[e.code]=true;if(e.code.startsWith('Arrow')||e.code=='Space')e.preventDefault();if(started&&!paused&&e.code=='KeyE')doAct();if(started&&e.code=='KeyZ')$('zoomB').click();
