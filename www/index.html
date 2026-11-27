@@ -557,11 +557,12 @@ const PAINTS=['#c8372d','#2f5fa8','#e0b028','#2f2f33','#e8e8e8','#3f8f3b','#8e5c
 const HELMS=['#3f8f3b','#c8372d','#e8e8e8','#111111','#ffd02a','#2f5fa8'];
 const DEF=()=>({money:0,rep:50,bike:'keeway',owned:['keeway'],up:{motor:0,travoes:0,pneus:0,deposito:0,chassis:0},paint:{},helmet:'#3f8f3b',jacket:'#2f7a2a',town:'londres',npcDone:{},iap:[],lastDay:'',streak:0,tut:0,zoom:1,badges:[],prog:{clube:0,loja:0,estrada:0},done:0,miles:0,time:17*60+30,hp:100,fuel:100,sound:1});
 let save=DEF();
+const STORE={getItem:k=>{try{const d=window.CrazyGames&&window.CrazyGames.SDK&&window.CrazyGames.SDK.data;return d?d.getItem(k):localStorage.getItem(k)}catch(e){return null}},setItem:(k,v)=>{try{const d=window.CrazyGames&&window.CrazyGames.SDK&&window.CrazyGames.SDK.data;d?d.setItem(k,v):localStorage.setItem(k,v)}catch(e){}},removeItem:k=>{try{const d=window.CrazyGames&&window.CrazyGames.SDK&&window.CrazyGames.SDK.data;d?d.removeItem(k):localStorage.removeItem(k)}catch(e){}}};
 let slot=1;const KEY=n=>'rc-save-'+(n||slot);
-function peek(n){try{return JSON.parse(localStorage.getItem(KEY(n))||'null')}catch(e){return null}}
-function migrate(){try{const old=localStorage.getItem('lr-gta2');if(old&&!localStorage.getItem(KEY(1))){localStorage.setItem(KEY(1),old)}if(old)localStorage.removeItem('lr-gta2')}catch(e){}}
-function load(){try{const s=JSON.parse(localStorage.getItem(KEY())||'null');if(s){save=Object.assign(DEF(),s);save.up=Object.assign(DEF().up,s.up||{});save.prog=Object.assign(DEF().prog,s.prog||{});return true}}catch(e){}return false}
-function store(){save.money=money;save.rep=rep;save.hp=P.hp;save.fuel=P.fuel;save.saved=Date.now();try{localStorage.setItem(KEY(),JSON.stringify(save))}catch(e){}}
+function peek(n){try{return JSON.parse(STORE.getItem(KEY(n))||'null')}catch(e){return null}}
+function migrate(){try{const old=STORE.getItem('lr-gta2');if(old&&!STORE.getItem(KEY(1))){STORE.setItem(KEY(1),old)}if(old)STORE.removeItem('lr-gta2')}catch(e){}}
+function load(){try{const s=JSON.parse(STORE.getItem(KEY())||'null');if(s){save=Object.assign(DEF(),s);save.up=Object.assign(DEF().up,s.up||{});save.prog=Object.assign(DEF().prog,s.prog||{});return true}}catch(e){}return false}
+function store(){save.money=money;save.rep=rep;save.hp=P.hp;save.fuel=P.fuel;save.saved=Date.now();try{STORE.setItem(KEY(),JSON.stringify(save))}catch(e){}}
 const mg={on:false,ren:null};
 let act=null,actKey='',cafeCD=0;
 let money=0,rep=50,wanted=0,wantedCool=0,bustT=0,hitCD=0,redCD=0,hornT=0,clockR=0,rain=false,weatherNext=0,started=false,paused=false,ST=null;
@@ -689,7 +690,7 @@ function part(x,y,vx,vy,l,c,s){if(parts.length<260)parts.push({x,y,vx,vy,l,ml:l,
 
 // ================= áudio =================
 let AC=null,eng=null,engG=null,sir=null,sirG=null,master=null;
-function audioInit(){if(AC)return;try{AC=new(window.AudioContext||window.webkitAudioContext)();master=AC.createGain();master.gain.value=save.sound?.45:0;master.connect(AC.destination);
+function audioInit(){if(AC)return;try{AC=new(window.AudioContext||window.webkitAudioContext)();master=AC.createGain();master.gain.value=vol();master.connect(AC.destination);
   eng=AC.createOscillator();eng.type='sawtooth';const f=AC.createBiquadFilter();f.type='lowpass';f.frequency.value=650;engG=AC.createGain();engG.gain.value=0;eng.connect(f);f.connect(engG);engG.connect(master);eng.start();
   sir=AC.createOscillator();sir.type='square';sirG=AC.createGain();sirG.gain.value=0;const f2=AC.createBiquadFilter();f2.type='lowpass';f2.frequency.value=1600;sir.connect(f2);f2.connect(sirG);sirG.connect(master);sir.start()}catch(e){AC=null}}
 function sfx(k){if(!AC||!save.sound)return;try{const t=AC.currentTime,o=AC.createOscillator(),gn=AC.createGain();o.connect(gn);gn.connect(master);
@@ -701,13 +702,15 @@ function sfx(k){if(!AC||!save.sound)return;try{const t=AC.currentTime,o=AC.creat
 const CFG={merchUrl:'',admobRewarded:'ca-app-pub-3940256099942544/5224354917',admobInter:'ca-app-pub-3940256099942544/1033173712'};
 const CG=()=>window.CrazyGames&&window.CrazyGames.SDK||null,CAP=()=>window.Capacitor&&window.Capacitor.Plugins||null;
 let adBusy=false,lastMid=Date.now(),offer=null,offerKey='',gpState=null,dailyOffer=null;
-async function sdkInit(){try{if(CG())await CG().init()}catch(e){}try{if(CAP()&&CAP().AdMob)await CAP().AdMob.initialize({})}catch(e){}}
+let sdkReady=false,cgMute=false;
+const vol=()=>save.sound&&!cgMute?.45:0;
+async function sdkInit(){if(sdkReady)return;sdkReady=true;try{if(CG()){await CG().init();const g=CG().game;cgMute=!!(g.settings&&g.settings.muteAudio);g.addSettingsChangeListener&&g.addSettingsChangeListener(st=>{cgMute=!!st.muteAudio;if(master)master.gain.value=vol()})}}catch(e){}try{if(CAP()&&CAP().AdMob)await CAP().AdMob.initialize({})}catch(e){}}
 function demoAd(kind){return new Promise(res=>{const o=$('adOv');let t=kind=='rewarded'?5:3;$('adT').textContent=kind=='rewarded'?'Anúncio com recompensa':'Intervalo publicitário';$('adS').textContent=t;o.classList.add('on');const iv=setInterval(()=>{t--;$('adS').textContent=t;if(t<=0){clearInterval(iv);o.classList.remove('on');res(true)}},1000)})}
 async function showAd(kind){if(adBusy)return false;adBusy=true;const was=paused;paused=true;if(master)master.gain.value=0;let ok=false;
   try{if(CG())ok=await new Promise(res=>CG().ad.requestAd(kind,{adStarted:()=>{},adFinished:()=>res(true),adError:()=>res(false)}));
     else if(CAP()&&CAP().AdMob){const A=CAP().AdMob;if(kind=='rewarded'){await A.prepareRewardVideoAd({adId:CFG.admobRewarded});ok=!!(await A.showRewardVideoAd())}else{await A.prepareInterstitial({adId:CFG.admobInter});await A.showInterstitial();ok=true}}
     else ok=await demoAd(kind)}catch(e){ok=false}
-  if(master)master.gain.value=save.sound?.45:0;paused=was;adBusy=false;return ok}
+  if(master)master.gain.value=vol();paused=was;adBusy=false;return ok}
 async function rewarded(fn){const ok=await showAd('rewarded');if(ok){fn();sfx('win');store()}else toast('O anúncio não carregou. Tenta mais tarde.',1)}
 function midgame(){if(!started||Date.now()-lastMid<180000||adBusy||mg.on)return;lastMid=Date.now();showAd('midgame')}
 function findOffer(sp){if(!started||paused||mg.on)return null;
@@ -1309,15 +1312,15 @@ $('mini').onclick=()=>{if(started)openMap()};$('mMap').onclick=()=>{$('menu').cl
 $('mapClose').onclick=()=>{$('mapOv').classList.remove('on');paused=false};
 $('menuB').onclick=()=>{if(!started)return;paused=true;$('mStats').textContent=`${rankName()} · ${save.done} missões · ${(save.miles*1.609).toFixed(1)} km · carta ${lic()} · crachás ${save.badges.length}/20`;$('mSnd').textContent='Som: '+(save.sound?'ligado':'desligado');$('menu').classList.add('on')};
 $('mCont').onclick=()=>{$('menu').classList.remove('on');paused=false};
-$('mSnd').onclick=()=>{save.sound=save.sound?0:1;if(master)master.gain.value=save.sound?.45:0;$('mSnd').textContent='Som: '+(save.sound?'ligado':'desligado');store()};
+$('mSnd').onclick=()=>{save.sound=save.sound?0:1;if(master)master.gain.value=vol();$('mSnd').textContent='Som: '+(save.sound?'ligado':'desligado');store()};
 $('mSave').onclick=()=>{store();toast(`Gravado no save ${slot}.`);$('mSave').textContent='Gravado!';setTimeout(()=>$('mSave').textContent='Gravar agora',1500)};
 $('mSlots').onclick=()=>{store();location.reload()};
 let delArm=0;
 function renderSlots(){migrate();$('slots').innerHTML=[1,2,3].map(n=>{const v=peek(n);const tn=v&&TOWNS[v.town||'londres']?TOWNS[v.town||'londres'].name:'Londres';
   return`<div class="it" style="grid-template-columns:minmax(0,1fr) auto auto"><div><b>Save ${n}</b><span>${v?`£${Math.floor(v.money||0).toLocaleString('pt-PT')} · ${v.done||0} missões · ${tn}<br>${v.saved?new Date(v.saved).toLocaleString('pt-PT',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}):''}`:'Vazio'}</span></div>${v?`<button class="buy" style="background:#3a443d;color:#fff" data-del="${n}">${delArm==n?'Confirmar':'Apagar'}</button>`:'<span></span>'}<button class="buy" data-slot="${n}">${v?'Continuar':'Novo jogo'}</button></div>`}).join('')}
-$('slots').addEventListener('click',e=>{const d=e.target.closest('button[data-del]');if(d){const n=+d.dataset.del;if(delArm!=n){delArm=n;renderSlots();return}try{localStorage.removeItem(KEY(n))}catch(_){}delArm=0;renderSlots();return}
+$('slots').addEventListener('click',e=>{const d=e.target.closest('button[data-del]');if(d){const n=+d.dataset.del;if(delArm!=n){delArm=n;renderSlots();return}try{STORE.removeItem(KEY(n))}catch(_){}delArm=0;renderSlots();return}
   const b=e.target.closest('button[data-slot]');if(!b)return;slot=+b.dataset.slot;const had=load();begin(!had)});
-function begin(fresh){if(fresh){save=DEF();try{localStorage.removeItem(KEY())}catch(e){}}
+function begin(fresh){if(fresh){save=DEF();try{STORE.removeItem(KEY())}catch(e){}}
   if((save.town||'londres')!=W_.id){genWorld(TOWNS[save.town]||TOWNS.londres);spawnTraffic();initLife();peds=[];for(let i=0;i<95;i++)peds.push(spawnPed())}
   money=save.money;rep=save.rep;P.hp=save.hp;P.fuel=save.fuel;P.pass=null;refreshBike();
   const gp=places.garagem;P.x=gp.x;P.y=gp.y-T*1.3;P.a=-PI/2;P.vx=P.vy=0;P.ltx=Math.floor(P.x/T);P.lty=Math.floor(P.y/T);cam.x=P.x;cam.y=P.y;shopLatch=true;
@@ -1349,6 +1352,7 @@ function loop(ts){const dt=Math.min(.05,(ts-last)/1000||0);last=ts;
   if(!paused){acc+=dt;let n=0;while(acc>=1/60&&n<4){update(1/60);acc-=1/60;n++}if(n==4)acc=0}
   gameplayTick();if(!mg.on){render();if(started){hud(dt);drawGauge();drawRadar()}}timers(dt);requestAnimationFrame(loop)}
 async function init(){
+  await Promise.race([sdkInit(),new Promise(r=>setTimeout(r,4000))]);
   try{await Promise.race([document.fonts.load('700 9px "Pixelify Sans"'),new Promise(r=>setTimeout(r,1500))])}catch(e){}
   fontsOK=true;for(const b of blds)b.img=roofImg(b);
   resize();renderSlots();
