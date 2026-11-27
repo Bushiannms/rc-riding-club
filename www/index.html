@@ -1610,14 +1610,14 @@ const MGK={
   build(s,sc){sc.background=new TH.Color('#3a2a20');lights3(sc,true);const pl=new TH.PointLight('#ffe0b0',.5,8);pl.position.set(0,3,2);sc.add(pl);
    bx(sc,12,4,.2,MTX(ctex(16,16,x=>{px(x,'#f2f2f2',0,0,16,16);px(x,'#1a4fa0',7,0,2,16);px(x,'#1a4fa0',0,7,16,2);px(x,'#3a6fd0',3,3,3,3);px(x,'#3a6fd0',10,3,3,3);px(x,'#3a6fd0',3,10,3,3);px(x,'#3a6fd0',10,10,3,3);px(x,'#1a4fa0',0,0,1,16);px(x,'#1a4fa0',0,0,16,1);px(x,'#e0b028',7,7,2,2)},14,5)),0,2,-1.6);
    bx(sc,8,1,1.4,MTX(ctex(16,16,x=>{px(x,'#7a4a2a',0,0,16,16);for(let j=0;j<16;j+=4)px(x,'#6a3a1a',0,j,16,1);px(x,'#8a5a3a',3,1,6,1)},6,1)),0,.5,0);bx(sc,8.1,.08,1.5,'#d8d0c0',0,1.04,0);
-   const mc=new TH.Group();mc.position.set(0,1.08,-.6);sc.add(mc);bx(mc,1.8,1,.7,'#9aa0a6',0,.5,0);bx(mc,1.82,.12,.72,'#2a2a2a',0,1,0);bx(mc,1.6,.06,.4,'#555',0,.03,.2);bx(mc,.5,.18,.02,MBS('#1a1a1a'),-.5,.8,.36);
-   for(const gx of[-.45,.45]){cyl(mc,.09,.09,.12,8,'#888',gx,.55,.3);bx(mc,.06,.06,.25,'#222',gx,.55,.47)}
+   const mc=new TH.Group();mc.position.set(0,1.08,-.75);sc.add(mc);bx(mc,1.8,1,.7,'#9aa0a6',0,.5,0);bx(mc,1.82,.12,.72,'#2a2a2a',0,1,0);bx(mc,1.6,.06,.62,'#555',0,.03,.42);for(let k=0;k<7;k++)bx(mc,1.5,.012,.03,'#333',0,.065,.18+k*.08);bx(mc,.5,.18,.02,MBS('#1a1a1a'),-.5,.8,.36);
+   for(const gx of[-.45,.45]){cyl(mc,.09,.09,.12,8,'#888',gx,.55,.3);bx(mc,.06,.06,.34,'#222',gx,.55,.47);cyl(mc,.03,.02,.06,6,'#333',gx,.5,.62)}
    cyl(sc,.35,.35,.04,10,'#f2f2f2',-2.2,1.1,.2);for(let k=0;k<5;k++){const a=k*1.25;cyl(sc,.09,.07,.06,7,'#e0a040',-2.2+Math.cos(a)*.18,1.15,.2+Math.sin(a)*.18);cyl(sc,.06,.06,.012,7,'#6a3a10',-2.2+Math.cos(a)*.18,1.185,.2+Math.sin(a)*.18)}
    for(let k=0;k<4;k++)cyl(sc,.06,.06,.1,6,['#ffffff','#e0b028','#c8372d','#2f7a2a'][k],2+k*.25,1.13,.3);
    s.D=[{n:'Bica',lo:.34,hi:.46,r:.42,h:.16,rad:.1},{n:'Pingo',lo:.55,hi:.67,r:.45,h:.18,rad:.1},{n:'Galão',lo:.8,hi:.9,r:.55,h:.36,rad:.09}];s.i=0;s.hits=0;s.cx=.45;
    s.mk=()=>{if(s.cup)mg.scene.remove(s.cup);const d=s.D[s.i],g=new TH.Group(),gl=d.n=='Galão';cyl(g,d.rad,d.rad*.85,d.h,10,gl?new TH.MeshLambertMaterial({color:'#dfefff',transparent:true,opacity:.45}):'#f4f4f4',0,d.h/2,0);if(!gl){cyl(g,d.rad*1.8,d.rad*1.8,.02,10,'#f4f4f4',0,.01,0);bx(g,.04,.06,.02,'#f4f4f4',d.rad+.02,d.h*.6,0)}
-     s.liq=cyl(g,d.rad*.92,d.rad*.8,1,10,gl?'#c8a070':'#4a2810',0,.01,0);s.liq.scale.y=.001;g.position.set(s.cx+1.6,1.12,-.25);mg.scene.add(g);s.cup=g;s.cin=1;s.fill=0;s.pour=0;s.d=d};
-   s.strm=cyl(sc,.014,.014,.42,5,'#3a1a08',s.cx,1.48,-.25);s.strm.visible=false;s.mk();
+     s.liq=cyl(g,d.rad*.92,d.rad*.8,1,10,gl?'#c8a070':'#4a2810',0,.01,0);s.liq.scale.y=.001;g.position.set(s.cx+1.6,1.12,-.12);mg.scene.add(g);s.cup=g;s.cin=1;s.fill=0;s.pour=0;s.d=d};
+   s.strm=cyl(sc,.014,.014,.42,5,'#3a1a08',s.cx,1.48,-.12);s.strm.visible=false;s.mk();
    mg.cam.position.set(1.15,1.8,1.75);mg.cam.lookAt(.35,1.25,-.35);mgUI('Café Lusitano','','TIRAR','Sair');mgMsg('Mantém TIRAR premido e larga com o café na marca verde.')},
   update(s,dt){const d=s.d;
    if(s.cin){s.cup.position.x+=(s.cx-s.cup.position.x)*Math.min(1,dt*7);if(Math.abs(s.cup.position.x-s.cx)<.01)s.cin=0}
