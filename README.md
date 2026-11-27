@@ -5,7 +5,7 @@ Jogo de motas em pixel art ao estilo GTA 2: uma cidade de Londres com o Tamisa, 
 ## Onde está cada coisa
 - **Jogo:** `www/index.html` + `www/three.min.js`.
 - **Jogar no browser:** com o GitHub Pages ativo (Settings → Pages → Source: GitHub Actions), cada alteração no `main` publica o jogo.
-- **APK Android de teste:** **Actions → Compilar APK → rc-riding-club-apk**.
+- **APK Android de teste:** cada alteração no `main` publica o APK em **Releases**. Link direto: https://github.com/Bushiannms/rc-riding-club/releases/latest/download/rc-riding-club.apk
 - **CrazyGames:** **Actions → Pacote CrazyGames** gera o ZIP com o SDK v3 de anúncios.
 - **Versão final Android** (AdMob e compras no Google Play): [`ANDROID.md`](ANDROID.md).
 
