@@ -1,0 +1,14 @@
+{
+  "name": "rc-riding-club",
+  "version": "1.0.0",
+  "private": true,
+  "description": "RC Riding Club - jogo de motas em pixel art ao estilo GTA 2",
+  "dependencies": {
+    "@capacitor/android": "^8.6.3",
+    "@capacitor/cli": "^8.6.3",
+    "@capacitor/core": "^8.6.3"
+  },
+  "devDependencies": {
+    "@capacitor/assets": "^4.0.0"
+  }
+}

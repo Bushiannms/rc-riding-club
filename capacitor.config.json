@@ -1,0 +1,8 @@
+{
+  "appId": "uk.rcridingclub.game",
+  "appName": "RC Riding Club",
+  "webDir": "www",
+  "android": {
+    "adjustMarginsForEdgeToEdge": "auto"
+  }
+}

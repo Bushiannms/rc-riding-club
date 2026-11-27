@@ -1,0 +1,22 @@
+name: Pacote CrazyGames
+
+on:
+  push:
+    paths: ['www/**']
+  workflow_dispatch:
+
+jobs:
+  zip:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Juntar o SDK da CrazyGames e criar o ZIP
+        run: |
+          mkdir -p out
+          cp www/three.min.js out/
+          sed 's#<link rel="preconnect" href="https://fonts.googleapis.com">#<script src="https://sdk.crazygames.com/crazygames-sdk-v3.js"></script>\n<link rel="preconnect" href="https://fonts.googleapis.com">#' www/index.html > out/index.html
+          grep -q crazygames-sdk-v3 out/index.html
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rc-riding-club-crazygames
+          path: out/
