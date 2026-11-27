@@ -102,6 +102,7 @@ body .ov.on{place-items:safe center}
 body .buy[disabled]{background:#3a443d}
 #nameIn{width:100%;font:700 22px 'Pixelify Sans',monospace;padding:10px;border:3px solid #000;background:#f2f2f2;color:#111;margin:6px 0;text-align:center}
 #pager.mini #pgTxt{display:none}
+#pager.gone{display:none!important}
 body.ui-open .pad,body.ui-open #act,body.ui-open #offer,body.ui-open #gauge{display:none!important}
 @media(max-height:460px){#pager{top:auto;bottom:8px;width:min(46vw,420px)}}
 @media(max-height:460px) and (hover:hover) and (pointer:fine){#gauge{left:auto;right:8px;transform:none;bottom:8px;width:120px;height:110px}}
@@ -1049,9 +1050,9 @@ $('tClose').onclick=()=>{$('travel').classList.remove('on');paused=false};
 function travelTo(id){const km=kmTo(id),fuel=Math.ceil(km*.32);$('travel').classList.remove('on');P.fuel=Math.max(0,P.fuel-fuel);save.time=(save.time+km/80*60)%1440;save.miles+=km/1.609;
   genWorld(TOWNS[id]);save.town=id;resetWorld();const q=places.saida;P.x=q.x-T;P.y=q.y+T;P.a=PI;paused=false;cam.x=P.x;cam.y=P.y;
   const ns=npcs.length;bigToast(TOWNS[id].name.toUpperCase(),ns?`${ns} ${ns>1?'membros têm':'membro tem'} missões para ti`:'Bem-vindo de volta');store()}
-let pgLast='',pgT=0;function pagerTick(){const t=$('pgTxt').textContent+$('pgWho').textContent;if(t!=pgLast){pgLast=t;pgT=performance.now();$('pager').classList.remove('mini')}else if(performance.now()-pgT>8000)$('pager').classList.add('mini')}
+let pgLast='',pgT=0;function pagerTick(){const t=$('pgTxt').textContent+$('pgWho').textContent;if(t!=pgLast){pgLast=t;pgT=performance.now();$('pager').classList.remove('mini')}else if(performance.now()-pgT>8000)$('pager').classList.add('mini');$('pager').classList.toggle('gone',$('pager').classList.contains('mini')&&!M)}
 function idleTxt(){return LL('Abre o telemóvel (📱) para escolher missões, ou desafia os motoqueiros rivais (roxo no mapa).','Open your phone (📱) to pick missions, or challenge the rival riders (purple on the map).')}
-function resetWorld(){spawnTraffic();initLife();peds=[];for(let i=0;i<95;i++)peds.push(spawnPed());makePickups();hist=[];crew=[];helpEv=null;wanted=0;parts=[];P.vx=P.vy=0;P.ltx=0;P.lty=0;actKey='~';offerKey='~';$('pgWho').textContent='Telefone';$('pgTxt').textContent=idleTxt()}
+function resetWorld(){spawnTraffic();initLife();peds=[];for(let i=0;i<95;i++)peds.push(spawnPed());makePickups();hist=[];crew=[];helpEv=null;wanted=0;parts=[];P.vx=P.vy=0;P.ltx=0;P.lty=0;actKey='~';offerKey='~';$('pgWho').textContent=LL('Dica','Tip');$('pgTxt').textContent=idleTxt()}
 function makePickups(){pickups=[];if(W_.london)badgeSpots.forEach((p,i)=>{if(!save.badges.includes(i))pickups.push({...p,t:'badge',id:i})});
   for(let k=0;k<6;k++)pickups.push({...RP(),t:'wrench'});for(let k=0;k<9;k++)pickups.push({...RP(),t:'cash',v:pick([20,30,50])})}
 
@@ -1108,7 +1109,7 @@ function missionEnd(win,why){
   const m=M;cleanupMission();M=null;if(m.npc)npcCD[m.npc]=clockR+(win?90:15);shopLatch=true;boothCD=4;
   if(win){const pay=Math.round(m.def.pay*mult()*(ST.scoot&&m.bk=='loja'?1.25:1));money+=pay;rep=Math.min(100,rep+m.def.rp);P.lastWin={k:'win',once:1,t:`Ver anúncio · +£${pay}`,until:clockR+14,fn:()=>{money+=pay;bigToast('RECOMPENSA DUPLICADA',`+£${pay}`)}};if(m.npc){save.npcDone=save.npcDone||{};save.npcDone[m.npc]=(save.npcDone[m.npc]||0)+1}if(m.first)save.prog[m.bk]++;const L0=lic();save.done++;if(lic()!=L0)setTimeout(()=>bigToast('CARTA '+lic()+'!',lic()=='A'?'Já podes conduzir qualquer cilindrada':'Já podes conduzir motas até 700cc'),3000);happy();v3Win(m,pay);bigToast('MISSÃO CUMPRIDA',`+£${pay} · +${m.def.rp} respeito`);sfx('win')}
   else{rep-=4;bigToast('MISSÃO FALHADA',why||'');sfx('fail')}
-  $('pgWho').textContent='Telefone';$('pgTxt').textContent=idleTxt();$('pgTime').textContent='';$('pgExtra').textContent='';store();if(!win)setTimeout(midgame,3000);
+  $('pgWho').textContent=LL('Dica','Tip');$('pgTxt').textContent=idleTxt();$('pgTime').textContent='';$('pgExtra').textContent='';store();if(!win)setTimeout(midgame,3000);
 }
 function setupRace(s){const r=s.race;M.race={...r,k:0,cd:3.2,pos:1};const p0=r.path[0],p1=r.path[Math.min(1,r.path.length-1)];const a=Math.atan2(p1[1]-p0[1],p1[0]-p0[0]);
   const cx=r.start.x,cy=r.start.y,nx=-Math.sin(a),ny=Math.cos(a);P.x=cx-Math.cos(a)*20;P.y=cy-Math.sin(a)*20;P.a=a;P.vx=P.vy=0;P.lock=true;
@@ -1819,7 +1820,7 @@ function begin(fresh){if(fresh){save=DEF();try{STORE.removeItem(KEY())}catch(e){
   makePickups();idleOffline();if(fresh||!save.feed||!save.feed.length)addPost('Marco Martins','Bem-vindos ao grupo do RC Riding Club! Regras: respeito acima de tudo, capacete sempre e nada de spam de cripto.','Welcome to the RC Riding Club group! Rules: respect above all, helmets always and no crypto spam.',12);
   started=true;paused=false;audioInit();if(AC&&AC.state=='suspended')AC.resume();
   ['hudL','hudR','pager','gauge','padL','padR'].forEach(i=>$(i).classList.remove('hide'));document.body.classList.add('pager-on');$('start').classList.remove('on');
-  $('pgWho').textContent='Telefone';$('pgTxt').textContent=idleTxt();
+  $('pgWho').textContent=LL('Dica','Tip');$('pgTxt').textContent=idleTxt();
   bigToast('RC RIDING CLUB','Respeito acima de tudo');sdkInit();
   const today=new Date().toISOString().slice(0,10),yest=new Date(Date.now()-864e5).toISOString().slice(0,10);
   if(save.lastDay!=today){save.streak=save.lastDay==yest?Math.min(7,(save.streak||0)+1):1;save.lastDay=today;const g=50*save.streak+50;money+=g;
