@@ -113,6 +113,9 @@ body .buy[disabled]{background:#3a443d}
 
 body #offer{top:auto;left:8px;right:auto;transform:none;bottom:76px;width:auto;max-width:none;min-height:0;height:52px;padding:0;background:none;border:none;box-shadow:none;display:flex;align-items:center;gap:6px;white-space:nowrap;animation:bob 1.6s ease-in-out infinite}
 body #offer.hide{display:none}
+#futB{position:fixed;left:8px;bottom:136px;display:flex;align-items:center;gap:6px;background:none;border:none;padding:0;cursor:pointer;z-index:5;animation:bob 1.4s ease-in-out infinite}#futB.hide{display:none}#futB .tv{width:52px;height:52px;border-radius:12px;border:3px solid #fff;background:rgba(0,0,0,.75);display:grid;place-items:center;font-size:26px;box-shadow:3px 3px 0 #000}#futB .oc{font:700 12px 'Pixelify Sans',monospace;color:#fff;background:rgba(0,0,0,.7);padding:3px 7px;border-radius:8px;white-space:nowrap}body.ui-open #futB{display:none!important}
+@media(max-width:700px){#futB{bottom:calc(max(12px,env(safe-area-inset-bottom)) + min(80px,20vw) + 222px)}body.joy #futB{bottom:calc(max(12px,env(safe-area-inset-bottom)) + min(100px,25vw) + 222px)}}
+@media(max-height:460px) and (pointer:coarse){#futB{top:4px;bottom:auto;left:calc(50% - 232px)}}
 #offer .tv{width:52px;height:52px;border-radius:12px;border:3px solid #ffd02a;background:rgba(0,0,0,.75);display:grid;place-items:center;font-size:24px;box-shadow:3px 3px 0 #000}
 #offer .oc{font:700 12px 'Pixelify Sans',monospace;color:#fff;background:rgba(0,0,0,.65);padding:3px 7px;border-radius:8px;text-shadow:1px 1px 0 #000}
 @media(max-width:700px){body #offer{bottom:calc(max(12px,env(safe-area-inset-bottom)) + min(80px,20vw) + 162px)}body.joy #offer{bottom:calc(max(12px,env(safe-area-inset-bottom)) + min(100px,25vw) + 162px)}}
@@ -151,7 +154,7 @@ body.ui-open .pad,body.ui-open #act,body.ui-open #offer,body.ui-open #gauge{disp
 .buy[disabled]{background:#3a443d;color:#99a59c;cursor:default}
 .lv{display:inline-flex;gap:3px;margin-left:6px;vertical-align:middle}.lv i{width:10px;height:10px;background:#38443b;border:1px solid #000}.lv i.on{background:var(--g)}
 .sw{display:flex;flex-wrap:wrap;gap:8px}.sw button{width:48px;height:48px;border:3px solid #000;cursor:pointer}.sw button.on{outline:3px solid var(--y)}
-#bigmap{width:min(86vw,62vh,520px);aspect-ratio:1;image-rendering:pixelated;border:3px solid #000;display:block;margin:6px auto;background:#000}
+#mapOv .panel{max-width:640px;padding:12px}#bigmap{width:min(94vw,68vh,600px);aspect-ratio:1;image-rendering:pixelated;border:3px solid #000;display:block;margin:6px auto;background:#000}
 .leg{display:flex;flex-wrap:wrap;gap:6px 14px;font:700 13px 'Pixelify Sans',monospace;justify-content:center}
 .leg i{display:inline-block;width:11px;height:11px;border:1px solid #000;margin-right:5px;vertical-align:-1px}
 .stat{font:700 15px 'Pixelify Sans',monospace;color:#9fe39a}
@@ -167,6 +170,7 @@ body.ui-open .pad,body.ui-open #act,body.ui-open #offer,body.ui-open #gauge{disp
   <span>Gasolina</span><div class="b"><i id="bFuel" style="background:#ffd02a"></i></div></div>
 </div>
 <button id="phoneB" class="hide" type="button" aria-label="Telemóvel">📱</button>
+<button id="futB" class="hide" type="button"><span class="tv">⚽</span><span class="oc" id="futC"></span></button>
 <div id="hudR" class="hide">
   <div class="mrow"><div id="info" class="ts"></div><canvas id="mini" width="120" height="120" title="Abrir mapa"></canvas></div>
   <button class="hb" id="menuB" type="button">Menu</button>
@@ -224,11 +228,7 @@ body.ui-open .pad,body.ui-open #act,body.ui-open #offer,body.ui-open #gauge{disp
 <div class="ov" id="mapOv"><div class="panel">
   <h2 id="mapT">Mapa</h2>
   <canvas id="bigmap" width="264" height="264"></canvas>
-  <div class="leg">
-    <span><i style="background:#fff"></i>Tu</span><span><i style="background:#ffd02a"></i>Objetivo</span>
-    <span><i style="background:#3fbf3b"></i>Clube</span><span><i style="background:#ffb020"></i>Loja</span><span><i style="background:#ff4a3a"></i>Estrada</span>
-    <span><i style="background:#7ab8ff"></i>Garagem</span><span><i style="background:#ff8fe0"></i>Gasolina</span><span><i style="background:#7dffb0"></i>Membros</span><span><i style="background:#4a8aff"></i>M1</span>
-  </div>
+  <div class="leg" id="mapLeg"></div>
   <button class="go" id="mapClose" type="button">Fechar</button>
 </div></div>
 
@@ -1466,7 +1466,7 @@ function findAct(sp){if(sp>40||!started||P.lock)return null;const nr=(p,r)=>p&&h
   if(nr(places.garagem,28))return{k:'garagem',t:'Entrar na garagem'};
   for(const q of['posto','posto2'])if(nr(places[q],44)&&P.fuel<ST.fuelMax-2)return{k:'bomba',t:'Abastecer'};
   if(nr(places.saida,26))return{k:'viajar',t:'Autoestrada M1 · viajar'};
-  if(!M){const mi=matchInfo();if(mi&&mi.active&&!mi.played&&nr(mi.st,44))return{k:'fut',t:`⚽ ${LL('Entrar em campo','Take the pitch')}: ${mi.home} vs ${mi.away}`,mi}}
+  if(!M){const mi=matchInfo();if(mi&&mi.active&&!mi.played&&mi.playLeft>0&&nr(mi.st,44))return{k:'fut',t:`⚽ ${LL('Entrar em campo','Take the pitch')}: ${mi.home} vs ${mi.away}`,mi}}
   if(!M&&nr(places.apostas,34))return{k:'bet',t:LL('Casa de apostas','Betting shop')};
   if(!M)for(const v of V)if(v.rival&&nr(v,46))return{k:'rival',t:`${v.rival.n} · ${LL('desafio','challenge')}: ${rivalLabel(v.rival.k)}`,rv:v};
   if(!M)for(const n of npcs)if(npcOK(n)&&nr(n,24))return{k:'npc',t:'Falar com '+n.n,npc:n};
@@ -1722,7 +1722,7 @@ let dlgCB=null;
 function dialog(who,q,ans,cb){paused=true;P.vx=P.vy=0;$('dlgWho').textContent=who;$('dlgTxt').textContent=LL(q[0],q[1]);const o=$('dlgOpts');
   o.innerHTML=ans.map((a,i)=>[a,i]).sort(()=>Math.random()-.5).map(([a,i])=>`<button class="go alt qo" type="button" data-i="${i}">${LL(a[0][0],a[0][1])}</button>`).join('');
   dlgCB={ans,cb};$('dlg').classList.add('on')}
-$('dlgOpts').addEventListener('click',e=>{const b=e.target.closest('button');if(!b||!dlgCB)return;
+$('dlgOpts').addEventListener('click',e=>{const b=e.target.closest('button');if(b&&b.dataset.fa){$('dlg').classList.remove('on');paused=false;if(b.dataset.fa=='bet'){betTab='jogo';openBet()}else if(b.dataset.fa=='map')openMap();return}if(!b||!dlgCB)return;
   if(b.dataset.a=='ok'){const c=dlgCB;dlgCB=null;$('dlg').classList.remove('on');paused=false;if(c.cb)c.cb(c.k);return}
   const a=dlgCB.ans[+b.dataset.i],k=a[1];dlgCB.k=k;$('dlgTxt').textContent=LL(a[2][0],a[2][1]);
   let fx='';if(k=='good'){rep=Math.min(100,rep+3);save.members+=5;fx=LL('+3 respeito · +5 membros','+3 respect · +5 members')}else if(k=='bad'){rep=Math.max(0,rep-2);fx=LL('−2 respeito (mas foi engraçado)','−2 respect (but it was funny)')}else fx=LL('Nada muda.','Nothing changes.');
@@ -1879,10 +1879,11 @@ const MCYC=12,MLEN=4; // jogo de 4 min a cada 12 min (tempo real)
 function simRes(off,cyc){const a=hash(cyc,7+off),b=hash(cyc,13+off);return{h:Math.floor(a*a*5),a:Math.floor(b*b*4)}}
 function matchInfo(){const st=places.estadios||[];if(!st.length)return null;const off=Object.keys(TOWNS).indexOf(W_.id)*5,mins=Date.now()/60000+off,cyc=Math.floor(mins/MCYC),ph=mins-cyc*MCYC,active=ph<MLEN,
   stad=st[cyc%st.length],away=OPP[(cyc+off)%OPP.length],key=W_.id+':'+cyc,pr=(save.fut||{})[key],r=pr||simRes(off,cyc),f=Math.min(1,ph/MLEN);
-  return{st:stad,home:stad.team,away,active,minute:Math.min(90,Math.floor(f*90)),startsIn:Math.max(1,Math.ceil(MCYC-ph)),key,cyc,off,H:r.h,A:r.a,curH:active?Math.floor(r.h*f+(pr?1:0)*0):r.h,curA:active?Math.floor(r.a*f):r.a,played:!!pr}}
+  const betLeft=active?Math.max(0,(MLEN*60/90-ph)*60):0,playLeft=active?Math.max(0,(MLEN*80/90-ph)*60):0;
+  return{betLeft,playLeft,secsTo:Math.max(0,(MCYC-ph)*60),st:stad,home:stad.team,away,active,minute:Math.min(90,Math.floor(f*90)),startsIn:Math.max(1,Math.ceil(MCYC-ph)),key,cyc,off,H:r.h,A:r.a,curH:active?Math.floor(r.h*f+(pr?1:0)*0):r.h,curA:active?Math.floor(r.a*f):r.a,played:!!pr}}
 const ODDS={1:1.9,X:3.2,2:3.6};
 let futWas=null,betT=0;
-function futTick(dt){const mi=matchInfo();if(mi){if(futWas!==null&&mi.active&&!futWas)bigToast(LL('HÁ JOGO NO ESTÁDIO!','MATCH AT THE STADIUM!'),`${mi.home} vs ${mi.away}`);futWas=mi.active}
+function futTick(dt){const mi=matchInfo();futBtn(mi);if(mi){if(futWas!==null&&mi.active&&!futWas)bigToast(LL('HÁ JOGO NO ESTÁDIO!','MATCH AT THE STADIUM!'),`${mi.home} vs ${mi.away}`);futWas=mi.active}
   betT-=dt;if(betT>0||!save.bet)return;betT=3;const b=save.bet,now=Date.now()/60000+b.off;if(now<b.cyc*MCYC+MLEN)return;
   const pr=(save.fut||{})[b.key],r=pr||simRes(b.off,b.cyc),res=r.h>r.a?'1':r.h==r.a?'X':'2';save.bet=null;
   if(res==b.pick){const w=Math.round(b.stake*ODDS[b.pick]);money+=w;bigToast(LL('APOSTA GANHA!','BET WON!'),`${b.home} ${r.h}-${r.a} ${b.away} · +£${w}`);sfx('win')}else{bigToast(LL('APOSTA PERDIDA','BET LOST'),`${b.home} ${r.h}-${r.a} ${b.away}`);sfx('fail')}store()}
@@ -1892,6 +1893,14 @@ function playMatch(mi){mgOpen('futebol',{home:mi.home,away:mi.away},r=>{if(r.qui
     addPost('Marco Martins',`${save.name||'O novato'} entrou em campo e ganhou ${h}-${a} ao ${mi.away}! Grande jogo ⚽`,`${save.name||'The rookie'} took the pitch and beat ${mi.away} ${h}-${a}! What a match ⚽`,40)}
   else bigToast(LL('DERROTA','DEFEAT'),`${mi.home} ${h}-${a} ${mi.away}`);store()})}
 
+const mmss=t=>Math.floor(t/60)+':'+String(Math.floor(t%60)).padStart(2,'0');
+let futBT=0;function futBtn(mi){futBT-=1;if(futBT>0)return;futBT=20;const b=$('futB');if(!started||!mi||(!mi.active&&mi.secsTo>150)||(mi.active&&mi.playLeft<=0&&!save.bet)){b.classList.add('hide');return}b.classList.remove('hide');
+  $('futC').textContent=!mi.active?LL(`Jogo em ${mmss(mi.secsTo)}`,`Match in ${mmss(mi.secsTo)}`):mi.betLeft>0?`${mi.minute}' · ${LL('apostas','bets')} ${mmss(mi.betLeft)}`:mi.playLeft>0&&!mi.played?`${mi.minute}' · ${LL('jogar','play')} ${mmss(mi.playLeft)}`:`${mi.minute}' · ${mi.curH}-${mi.curA}`}
+$('futB').onclick=()=>{const mi=matchInfo();if(!mi)return;const lines=[`⚽ ${mi.home} ${mi.active?mi.curH+'-'+mi.curA:'vs'} ${mi.away}`,mi.active?`${mi.minute}' · ${mi.st.name}`:LL(`Começa daqui a ${mmss(mi.secsTo)} no ${mi.st.name}`,`Starts in ${mmss(mi.secsTo)} at ${mi.st.name}`),
+   mi.active&&mi.betLeft>0?LL(`Apostas abertas durante mais ${mmss(mi.betLeft)}.`,`Betting open for another ${mmss(mi.betLeft)}.`):LL('Apostas: abrem no início do jogo e fecham aos 60 minutos.','Betting: opens at kick-off and closes at 60 minutes.'),
+   mi.active&&mi.playLeft>0&&!mi.played?LL(`Podes entrar em campo durante mais ${mmss(mi.playLeft)}: vai ao estádio (ponto branco).`,`You can take the pitch for another ${mmss(mi.playLeft)}: go to the stadium (white dot).`):LL('Para jogar, vai ao estádio durante o jogo (até aos 80 minutos).','To play, go to the stadium during the match (until 80 minutes).')];
+  paused=true;P.vx=P.vy=0;$('dlgWho').textContent='⚽ '+LL('Jogo de futebol','Football match');$('dlgTxt').innerHTML=lines.map(esc).join('<br>');
+  $('dlgOpts').innerHTML=(mi.active&&mi.betLeft>0&&!save.bet?`<button class="go qo" type="button" data-fa="bet">${LL('Apostar agora','Bet now')}</button>`:'')+`<button class="go alt qo" type="button" data-fa="map">${LL('Ver o estádio no mapa','Show the stadium on the map')}</button><button class="go alt qo" type="button" data-fa="x">${LL('Fechar','Close')}</button>`;$('dlg').classList.add('on')}
 // ---------- mini-jogo: toques e remates ----------
 MGK.futebol={auto:()=>({win:true,goals:3,touches:10}),quit:s=>({win:false,quit:1,goals:s.goals||0,touches:s.touches||0}),
  build(s,sc,o){const day=darkness()<.3,bg=day?'#9cc8f0':'#0c1430';sc.background=new TH.Color(bg);sc.fog=new TH.Fog(bg,30,90);lights3(sc,day);if(!day){const l=new TH.PointLight('#ffffff',1.2,60);l.position.set(0,14,-6);sc.add(l)}
@@ -2072,10 +2081,27 @@ function vipHtml(){let h=`<p class="stat">💎 ${save.gems||0} ${LL('diamantes',
   h+=`<span class="grp">${LL('Com diamantes','With diamonds')}</span>`+IAP.map(it=>`<div class="it"><canvas width="30" height="18" data-up="vip"></canvas><div><b>${it.n}</b><span>${it.d}</span></div><button class="buy" data-a="gemiap" data-id="${it.sku}" ${owns(it.sku)||(save.gems||0)<GEMP[it.sku]?'disabled':''}>${owns(it.sku)?LL('Tens','Owned'):'💎'+GEMP[it.sku]}</button></div>`).join('');
   return h+`<p style="font-size:13px">${LL('Os diamantes servem para cosmética, desbloquear motas antes da carta e jogos da sorte no telemóvel.','Diamonds are for cosmetics, unlocking bikes before the licence and luck games on your phone.')}</p>`}
 // ================= menus =================
-function openMap(){$('mapT').textContent=W_.name;const c=$('bigmap'),x=c.getContext('2d');x.imageSmoothingEnabled=false;x.drawImage(MM,0,0,N*3,N*3,0,0,264,264);const s=264/(N*T);
-  const d=(p,col,z=7)=>{x.fillStyle='#000';x.fillRect(p.x*s-z/2-1,p.y*s-z/2-1,z+2,z+2);x.fillStyle=col;x.fillRect(p.x*s-z/2,p.y*s-z/2,z,z)};
-  booths.forEach(b=>d(b,b.col));npcs.forEach(n=>d(n,'#7dffb0',6));d(places.saida,'#4a8aff');d(places.garagem,'#7ab8ff');d(places.posto,'#ff8fe0');d(places.posto2,'#ff8fe0');const tg=target();if(tg)d(tg,'#ffd02a',9);if(helpEv)d(helpEv,'#9fe39a');d(P,'#fff',8);
-  x.font='700 8px "Pixelify Sans",monospace';x.fillStyle='#fff';if(W_.river)x.fillText(W_.riverName||(W_.london?'TAMISA':'RIO'),8,4.6*8*3+4);
+function mapPOI(){const L=[],add=(p,ic,n,c)=>{if(p)L.push({x:p.x,y:p.y,ic,n,c})};
+  add(places.garagem,'🔧',LL('Garagem do Tiago','Tiago\'s Garage'),'#7ab8ff');add(places.cafe,'☕','Café Lusitano','#c89048');add(places.loja,'🛍️',LL('Loja RC','RC Shop'),'#ffb020');
+  add(places.posto,'⛽',LL('Gasolina','Petrol'),'#ff8fe0');add(places.posto2,'⛽',LL('Gasolina','Petrol'),'#ff8fe0');add(places.mercearia,'🥖',LL('Mercearia','Deli'),'#e0c080');
+  add(places.esquadra,'🚓',LL('Polícia','Police'),'#5a8aff');add(places.encontro,'🏍️',LL('Ponto de encontro','Meeting point'),'#3fbf3b');add(places.pioes,'🌀',LL('Pista de piões','Donut pad'),'#ff9a2a');
+  add(places.apostas,'🎰',LL('Casa de apostas','Betting shop'),'#3fdf6a');(places.estadios||[]).forEach(e=>add(e,'⚽',e.name,'#ffffff'));add(places.saida,'🛣️',LL('Autoestrada M1','M1 motorway'),'#4a8aff');
+  const skip=new Set(['garagem','cafe','loja','posto','posto2','mercearia','esquadra','encontro','pioes','apostas','estadio','saida','cais','lago']);
+  for(const k in places){const p=places[k];if(skip.has(k)||!p||!p.name||Array.isArray(p))continue;add(p,k=='floresta'?'🌲':k=='lago2'?'🦆':'📍',p.name,'#e0e0e0')}
+  return L}
+function openMap(){$('mapT').textContent=W_.name;const c=$('bigmap'),x=c.getContext('2d'),Z=8,S=N*Z;c.width=S;c.height=S;x.imageSmoothingEnabled=false;
+  x.drawImage(MM,0,0,N*3,N*3,0,0,S,S);const k=Z/T;
+  for(const b of blds){x.fillStyle=b.roof||'#666';x.fillRect(b.x*k,b.y*k,b.w*k,b.h*k);x.strokeStyle='rgba(0,0,0,.55)';x.lineWidth=1;x.strokeRect(b.x*k+.5,b.y*k+.5,b.w*k-1,b.h*k-1)}
+  x.fillStyle='#2f6a2a';for(const t of trees){x.beginPath();x.arc(t.x*k,t.y*k,2.2,0,7);x.fill()}
+  x.font='700 11px "Pixelify Sans",monospace';x.textAlign='center';if(W_.river){x.fillStyle='#bfe0ff';x.fillText(W_.riverName||(W_.london?'TAMISA':'RIO'),S*.5,4.55*8*Z)}
+  const poi=mapPOI();x.textBaseline='middle';
+  for(const q of poi){const X=q.x*k,Y=q.y*k;x.fillStyle='#000';x.beginPath();x.arc(X,Y,10,0,7);x.fill();x.fillStyle=q.c;x.beginPath();x.arc(X,Y,8.5,0,7);x.fill();x.font='12px sans-serif';x.fillText(q.ic,X,Y+1)}
+  x.font='700 9px "Pixelify Sans",monospace';for(const q of poi){const X=q.x*k,Y=q.y*k+16,w=x.measureText(q.n).width+6;x.fillStyle='rgba(0,0,0,.72)';x.fillRect(X-w/2,Y-6,w,12);x.fillStyle='#fff';x.fillText(q.n,X,Y)}
+  for(const n of npcs){const X=n.x*k,Y=n.y*k,ok=npcOK(n);x.fillStyle='#000';x.fillRect(X-5,Y-5,10,10);x.fillStyle=ok?'#7dffb0':'#5a6a60';x.fillRect(X-4,Y-4,8,8);if(ok){x.font='700 9px "Pixelify Sans",monospace';const w=x.measureText(n.n).width+6;x.fillStyle='rgba(10,60,30,.85)';x.fillRect(X-w/2,Y-17,w,12);x.fillStyle='#bfffd0';x.fillText(n.n,X,Y-11)}}
+  for(const v of V)if(v.rival){const X=v.x*k,Y=v.y*k;x.fillStyle='#000';x.beginPath();x.arc(X,Y,6,0,7);x.fill();x.fillStyle='#c04aff';x.beginPath();x.arc(X,Y,4.5,0,7);x.fill()}
+  const tg=target();if(tg){x.strokeStyle='#ffd02a';x.lineWidth=3;x.beginPath();x.arc(tg.x*k,tg.y*k,11,0,7);x.stroke()}if(helpEv){x.fillStyle='#9fe39a';x.fillRect(helpEv.x*k-4,helpEv.y*k-4,8,8)}
+  x.save();x.translate(P.x*k,P.y*k);x.rotate(P.a);x.fillStyle='#000';x.beginPath();x.moveTo(11,0);x.lineTo(-7,-8);x.lineTo(-7,8);x.closePath();x.fill();x.fillStyle='#fff';x.beginPath();x.moveTo(8,0);x.lineTo(-5,-5);x.lineTo(-5,5);x.closePath();x.fill();x.restore();x.textAlign='left';x.textBaseline='alphabetic';
+  $('mapLeg').innerHTML=`<span>➤ ${LL('Tu','You')}</span><span>◯ ${LL('Objetivo','Objective')}</span><span><i style="background:#7dffb0"></i>${LL('Membros','Members')}</span><span><i style="background:#c04aff;border-radius:50%"></i>${LL('Rivais','Rivals')}</span>`+[...new Map(poi.map(q=>[q.ic+q.n,q])).values()].filter(q=>q.ic!='📍').map(q=>`<span>${q.ic} ${q.n}</span>`).join('');
   $('mapOv').classList.add('on');paused=true}
 $('mini').onclick=()=>{if(started)openMap()};$('mMap').onclick=()=>{$('menu').classList.remove('on');openMap()};
 $('mapClose').onclick=()=>{$('mapOv').classList.remove('on');paused=false};
